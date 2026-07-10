@@ -1,0 +1,1264 @@
+﻿@{
+    ViewBag.Title = "Add Asset";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+
+@section head{
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.common-material.min.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.material.min.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/datatables/media/css/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/datatables/media/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <style>
+/* Premium UI Custom Styles */
+        [ng\:cloak], [ng-cloak], .ng-cloak {
+            display: none !important;
+        }
+        .premium-page-banner {
+            background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
+            color: white;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .premium-page-banner .banner-icon {
+            font-size: 48px;
+            opacity: 0.9;
+            color: white;
+        }
+        .premium-page-banner h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 400;
+            color: white;
+        }
+        .premium-page-banner h1.text-white {
+            color: white;
+        }
+        .premium-page-banner .subtitle {
+            opacity: 0.85;
+            margin-top: 4px;
+            font-size: 14px;
+        }
+        .breadcrumb-nav {
+            background: rgba(255,255,255,0.15);
+            padding: 8px 16px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-top: 12px;
+            font-size: 12px;
+        }
+        .breadcrumb-nav a {
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+        }
+        .breadcrumb-nav span {
+            color: white;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-left: 4px solid #1a237e;
+            transition: all 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .stat-card .stat-icon {
+            font-size: 32px;
+            color: #1a237e;
+            opacity: 0.7;
+            float: left;
+            margin-right: 12px;
+        }
+        .stat-card .stat-value {
+            font-size: 28px;
+            font-weight: 600;
+            color: #1a237e;
+            margin: 0;
+        }
+        .stat-card .stat-label {
+            color: #666;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+        .stat-card.success { border-left-color: #2e7d32; }
+        .stat-card.success .stat-icon, .stat-card.success .stat-value { color: #2e7d32; }
+        .stat-card.warning { border-left-color: #ed6c02; }
+        .stat-card.warning .stat-icon, .stat-card.warning .stat-value { color: #ed6c02; }
+        .stat-card.info { border-left-color: #0288d1; }
+        .stat-card.info .stat-icon, .stat-card.info .stat-value { color: #0288d1; }
+
+        /* Section Cards */
+        .section-card {
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+        .section-card .section-header {
+            background: #f5f7fa;
+            padding: 16px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .section-card .section-header:hover {
+            background: #e8eaf6;
+        }
+        .section-card .section-header .section-icon {
+            font-size: 22px;
+            margin-right: 12px;
+            color: #1a237e;
+        }
+        .section-card .section-header h3 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 500;
+            flex: 1;
+        }
+        .section-card .section-header .toggle-icon {
+            font-size: 20px;
+            color: #666;
+            transition: transform 0.3s;
+        }
+        .section-card.collapsed .toggle-icon {
+            transform: rotate(-180deg);
+        }
+        .section-card .section-content {
+            padding: 20px;
+        }
+        .section-card.collapsed .section-content {
+            display: none;
+        }
+
+        /* Form Enhancements */
+        .premium-form-group {
+            margin-bottom: 16px;
+        }
+        .premium-form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #333;
+            font-size: 13px;
+        }
+        .premium-form-group label .required {
+            color: #d32f2f;
+            margin-left: 2px;
+        }
+        .premium-input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #cfd8dc;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.2s;
+            background: white;
+        }
+        .premium-input:focus {
+            outline: none;
+            border-color: #1a237e;
+            box-shadow: 0 0 0 3px rgba(26,35,126,0.1);
+        }
+        .premium-input-icon {
+            position: relative;
+        }
+        .premium-input-icon .input-icon-addon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+            font-size: 18px;
+        }
+        .premium-input-icon .premium-input {
+            padding-left: 40px;
+        }
+
+        /* Card based form section */
+        .form-section-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border: 1px solid #e0e0e0;
+        }
+        .form-section-card .section-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1a237e;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e8eaf6;
+            display: flex;
+            align-items: center;
+        }
+        .form-section-card .section-title i {
+            margin-right: 8px;
+        }
+
+        /* Premium Buttons */
+        .premium-btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+        .premium-btn i {
+            font-size: 18px;
+        }
+        .premium-btn-primary {
+            background: #1a237e;
+            color: white;
+        }
+        .premium-btn-primary:hover {
+            background: #283593;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(26,35,126,0.3);
+        }
+        .premium-btn-secondary {
+            background: #f5f7fa;
+            color: #333;
+            border: 1px solid #cfd8dc;
+        }
+        .premium-btn-secondary:hover {
+            background: #e8eaf6;
+        }
+        .premium-btn-success {
+            background: #2e7d32;
+            color: white;
+        }
+        .premium-btn-success:hover {
+            background: #388e3c;
+        }
+        .premium-btn-warning {
+            background: #ed6c02;
+            color: white;
+        }
+        .premium-btn-warning:hover {
+            background: #f57c00;
+        }
+        .premium-btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+        .premium-btn-sm i {
+            font-size: 16px;
+        }
+
+        /* Data Table */
+        .premium-table-container {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .premium-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .premium-table thead {
+            background: #f5f7fa;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .premium-table thead th {
+            padding: 14px 12px;
+            font-weight: 600;
+            color: #333;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #e0e0e0;
+            text-align: left;
+        }
+        .premium-table tbody td {
+            padding: 12px;
+            font-size: 13px;
+            color: #555;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .premium-table tbody tr {
+            transition: background 0.2s;
+        }
+        .premium-table tbody tr:nth-child(even) {
+            background: #fafafa;
+        }
+        .premium-table tbody tr:hover {
+            background: #e8eaf6;
+        }
+        .premium-table .actions {
+            display: flex;
+            gap: 6px;
+        }
+        .premium-table .action-btn {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Badge */
+        .premium-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .premium-badge-primary { background: #e8eaf6; color: #1a237e; }
+        .premium-badge-success { background: #e8f5e9; color: #2e7d32; }
+        .premium-badge-warning { background: #fff3e0; color: #ed6c02; }
+        .premium-badge-danger { background: #ffebee; color: #c62828; }
+        .premium-badge-info { background: #e1f5fe; color: #0288d1; }
+
+        /* Search Card */
+        .search-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        .search-card .search-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .search-card .search-title i {
+            color: #1a237e;
+        }
+
+        /* Wizard Steps */
+        .premium-wizard .step-item {
+            position: relative;
+            padding-left: 40px;
+            margin-bottom: 24px;
+        }
+        .premium-wizard .step-number {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #1a237e;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .premium-wizard .step-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a237e;
+            margin-bottom: 4px;
+        }
+
+/* Responsive */
+        @@media (max-width: 968px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .premium-page-banner h1 {
+                font-size: 22px;
+            }
+            .premium-page-banner .banner-icon {
+                font-size: 36px;
+            }
+        }
+        @@media (max-width: 640px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .premium-page-banner {
+                padding: 16px;
+            }
+            .premium-page-banner h1 {
+                font-size: 18px;
+            }
+        }
+        
+        /* Large padding for card content */
+        .large-padding {
+            padding: 20px !important;
+        }
+        
+        /* Hidden field utility */
+        .hidden-field {
+            display: none !important;
+        }
+        
+        /* Consistent input height for all form controls */
+        .form-control-uniform {
+            height: 40px !important;
+            line-height: 40px !important;
+        }
+        
+        /* Reader control button spacing */
+        .reader-btn-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .reader-btn-group .md-btn {
+            margin: 0;
+        }
+        
+        /* Form section spacing */
+        .form-section-card {
+            transition: box-shadow 0.3s ease;
+        }
+        
+        .form-section-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        /* Material Input Override */
+        .md-input-wrapper.md-input-filled label,
+        .md-input-wrapper label {
+            font-weight: 500;
+            color: #555;
+            font-size: 13px;
+        }
+        .md-input-wrapper.md-input-filled input,
+        .md-input-wrapper input {
+            border-color: #cfd8dc;
+            border-radius: 6px;
+            padding: 10px 14px;
+        }
+        .md-input-wrapper.md-input-filled input:focus,
+        .md-input-wrapper input:focus {
+            border-color: #1a237e;
+        }
+
+        /* Alert */
+        .premium-alert {
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .premium-alert-info {
+            background: #e1f5fe;
+            color: #0277bd;
+            border-left: 4px solid #0288d1;
+        }
+        .premium-alert-warning {
+            background: #fff3e0;
+            color: #ef6c00;
+            border-left: 4px solid #ed6c02;
+        }
+
+        /* Tab styling */
+        .uk-tab {
+            border-bottom: 2px solid #e0e0e0;
+        }
+        .uk-tab > li > a {
+            color: #666;
+            font-weight: 500;
+            padding: 10px 20px;
+        }
+        .uk-tab > li.uk-active > a {
+            color: #1a237e;
+            border-bottom: 2px solid #1a237e;
+            background: transparent;
+        }
+        .uk-tab > li > a:hover {
+            color: #1a237e;
+        }
+
+        /* Modal */
+        .uk-modal-dialog {
+            border-radius: 8px;
+        }
+        .uk-modal-header {
+            background: #f5f7fa;
+            border-radius: 8px 8px 0 0;
+            padding: 16px 20px;
+        }
+        .uk-modal-footer {
+            padding: 12px 20px;
+        }
+        .uk-badge-primary {
+            background: #1a237e;
+        }
+
+        /* Table toolbar */
+        .md-card-toolbar {
+            background: #f5f7fa;
+            padding: 12px 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .md-card-toolbar-heading-text {
+            font-weight: 600;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .md-card-toolbar-heading-text i {
+            color: #1a237e;
+        }
+        .md-card-content {
+            padding: 20px;
+        }
+
+        /* Required asterisk */
+        .req {
+            color: #d32f2f;
+            font-weight: bold;
+        }
+
+        /* Help block */
+        .uk-form-help-block {
+            font-weight: 500;
+            color: #444;
+            margin-bottom: 6px;
+            display: block;
+        }
+        .uk-input-group-addon {
+            background: #f5f7fa;
+            border: 1px solid #cfd8dc;
+            border-radius: 6px 0 0 6px;
+            color: #666;
+        }
+
+        /* Card container */
+        .md-card {
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            background: white;
+            margin-bottom: 20px;
+        }
+
+        /* Card content padding consistency */
+        .md-card .md-card-content {
+            padding: 20px;
+        }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255,255,255,0.8);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .loading-content {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .loading-content i {
+            font-size: 48px;
+            color: #1a237e;
+        }
+        .loading-content span {
+            display: block;
+            margin-top: 10px;
+            color: #666;
+        }
+    </style>
+}
+
+<div id="page_content_inner" ng-controller="AssetTagCtrl">
+    <!-- Premium Page Banner -->
+    <div class="premium-page-banner">
+        <div class="uk-grid" data-uk-grid-margin>
+            <div class="uk-width-small-1-1 uk-width-medium-1-8">
+                <i class="material-icons banner-icon">&#xE873;</i>
+            </div>
+            <div class="uk-width-small-1-1 uk-width-medium-7-8">
+                <h1 class="text-white">Add Asset</h1>
+                <p class="subtitle">Fill all mandatory fields marked with <span class="req">*</span> to register a new asset</p>
+                <div class="breadcrumb-nav">
+                    <a href="@Url.Action("", "EnterpriseAnalyticsDashboard")"><i class="material-icons">&#xE88A;</i> Home</a> /
+                    <a href="#">Assets</a> /
+                    <span>Add Asset</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="stats-grid" ng-cloak>
+        <div class="stat-card">
+            <i class="material-icons stat-icon">&#xE86E;</i>
+            <div>
+                <div class="stat-value" ng-bind="statTotal">0</div>
+                <div class="stat-label">Total Assets</div>
+            </div>
+        </div>
+        <div class="stat-card success">
+            <i class="material-icons stat-icon">&#xE86C;</i>
+            <div>
+                <div class="stat-value" ng-bind="statActive">0</div>
+                <div class="stat-label">Active Assets</div>
+            </div>
+        </div>
+        <div class="stat-card warning">
+            <i class="material-icons stat-icon">&#xE001;</i>
+            <div>
+                <div class="stat-value" ng-bind="statPending">0</div>
+                <div class="stat-label">Pending</div>
+            </div>
+        </div>
+        <div class="stat-card info">
+            <i class="material-icons stat-icon">&#xE86E;</i>
+            <div>
+                <div class="stat-value" ng-bind="statUnderMaintenance">0</div>
+                <div class="stat-label">Under Maintenance</div>
+            </div>
+        </div>
+    </div>
+    <div class="loading-overlay" ng-if="statsLoading">
+        <div class="loading-content">
+            <i class="material-icons">&#xE86A;</i>
+            <span>Loading statistics...</span>
+        </div>
+    </div>
+
+    <!-- Main Form Card -->
+    <div class="md-card">
+        <div class="md-card-toolbar">
+            <h3 class="md-card-toolbar-heading-text">
+                <i class="material-icons">&#xE873;</i> Asset Registration Form
+            </h3>
+        </div>
+        <div class="md-card-content">
+            <div class="premium-alert premium-alert-warning">
+                <i class="material-icons">&#xE8B2;</i>
+                <span><strong>Note:</strong> All <span class="req">*</span> are mandatory fields</span>
+            </div>
+
+            <form class="uk-form-stacked" id="wizard_advanced_form" ng-submit="submitForm()">
+                <div id="wizard_advanced">
+                    <!-- Section 1: Asset Information -->
+                    <h3>Asset Information</h3>
+                    <section>
+                        <div class="form-section-card">
+                            <div class="section-title">
+                                <i class="material-icons">&#xE873;</i>
+                                Basic Asset Details
+                            </div>
+                            <div class="uk-grid uk-grid-width-medium-1-1 uk-grid-width-large-1-5" data-uk-grid-margin>
+                                <input type="text" name="tAssetTagId" id="tAssetTagId" style="display:none;" />
+                                <div class="uk-input-group premium-form-group">
+                                    <span class="uk-form-help-block"><b>Asset Category</b> <span class="required">*</span></span>
+                                    <input class="md-btn md-btn-wave waves-effect waves-button premium-input" id="mGroupMasterId" name="mGroupMasterId" ng-model="mGroupMasterId" placeholder="Select Asset Category" />
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <span class="uk-form-help-block"><b>Asset Sub Category</b> <span class="required">*</span></span>
+                                    <input class="md-btn md-btn-wave waves-effect waves-button premium-input" id="mIteamTypeMasterId" name="mIteamTypeMasterId" ng-model="mIteamTypeMasterId" placeholder="Select Asset Type" />
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <span class="uk-form-help-block"><b>Asset Type</b> <span class="required">*</span></span>
+                                    <input class="md-btn md-btn-wave waves-effect waves-button premium-input" id="mIteamMasterId" name="mIteamMasterId" ng-model="mIteamMasterId" placeholder="Select Asset" />
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <div class="md-input-wrapper md-input-filled">
+                                        <label for="product_edit_quantity_control"><b>Asset Name</b> <span class="required">*</span></label>
+                                        <input type="text" name="IteamName" id="IteamName" ng-model="IteamName" required class="md-input label-fixed" />
+                                        <span class="md-input-bar"></span>
+                                    </div>
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <label for="wizard_fullname"><b>Model</b> <span class="required">*</span></label>
+                                    <input type="text" name="Model" id="Model" ng-model="Model" required class="md-input label-fixed" />
+                                </div>
+                            </div>
+
+                            <div class="uk-grid uk-grid-width-medium-1-1 uk-grid-width-large-1-5" data-uk-grid-margin>
+                                <div class="uk-input-group premium-form-group">
+                                    <label for="wizard_fullname"><b>Model No.</b> <span class="required">*</span></label>
+                                    <input type="text" name="ModelNo" id="ModelNo" ng-model="ModelNo" required class="md-input label-fixed" />
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <label for="wizard_address"><b>Serial No</b> <span class="required">*</span></label>
+                                    <input type="text" name="SerialNo" id="SerialNo" ng-model="SerialNo" required class="md-input label-fixed" />
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <label for="wizard_address"><b>Manufacturer</b> <span class="required">*</span></label>
+                                    <input type="text" name="Manufacturer" id="Manufacturer" ng-model="Manufacturer" required class="md-input label-fixed" />
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <div class="md-input-wrapper md-input-filled">
+                                        <label for="product_edit_quantity_control">Bar Code</label>
+                                        <input type="text" class="md-input label-fixed" ng-model="BarCode" name="BarCode" id="BarCode">
+                                        <span class="md-input-bar"></span>
+                                    </div>
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <label for="wizard_address"><b>Purchase Cost</b> <span class="required">*</span></label>
+                                    <input type="number" min="0" name="PurchaseCost" id="PurchaseCost" ng-model="PurchaseCost" required class="md-input label-fixed" />
+                                </div>
+                            </div>
+
+                            <div class="uk-grid uk-grid-width-medium-1-1 uk-grid-width-large-1-5" data-uk-grid-margin>
+                                <div class="uk-input-group premium-form-group">
+                                    <label for="wizard_address"><b>Sl No</b></label>
+                                    <input type="number" name="SlNo" id="SlNo" ng-model="SlNo" class="md-input label-fixed" />
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <label for="wizard_address"><b>BLE TAG No</b></label>
+                                    <input type="number" name="BleTagNo" id="BleTagNo" ng-model="BleTagNo" class="md-input label-fixed" />
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <label for="wizard_address"><b>Battery Level</b></label>
+                                    <input type="number" name="BatteryLevel" id="BatteryLevel" ng-model="BatteryLevel" class="md-input label-fixed" />
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <label for="wizard_address"><b>Length</b></label>
+                                    <input type="number" step="0.01" name="Length" id="Length" ng-model="Length" class="md-input label-fixed" />
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <label for="wizard_address"><b>Width</b></label>
+                                    <input type="number" step="0.01" name="Width" id="Width" ng-model="Width" class="md-input label-fixed" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section-card">
+                            <div class="section-title">
+                                <i class="material-icons">&#xE8CB;</i>
+                                Physical Specifications
+                            </div>
+                            <div class="uk-grid uk-grid-width-medium-1-1 uk-grid-width-large-1-5" data-uk-grid-margin>
+                                <div class="uk-input-group premium-form-group">
+                                    <label for="wizard_address"><b>Height</b></label>
+                                    <input type="number" step="0.01" name="Height" id="Height" ng-model="Height" class="md-input label-fixed" />
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <label for="wizard_address"><b>Weight</b></label>
+                                    <input type="number" step="0.01" name="Weight" id="Weight" ng-model="Weight" class="md-input label-fixed" />
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <label for="wizard_address"><b>Set No</b></label>
+                                    <input type="number" name="SetNo" id="SetNo" ng-model="SetNo" class="md-input label-fixed" />
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <label for="wizard_address"><b>Plant Name</b></label>
+                                    <input type="text" name="PlantName" id="PlantName" ng-model="PlantName" maxlength="25" class="md-input label-fixed" />
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <label for="wizard_address"><b>Owner Department</b></label>
+                                    <input type="text" name="OwnerDepartment" id="OwnerDepartment" ng-model="OwnerDepartment" maxlength="25" class="md-input label-fixed" />
+                                </div>
+                            </div>
+
+                            <div class="uk-grid uk-grid-width-medium-1-1 uk-grid-width-large-1-5" data-uk-grid-margin>
+                                <div class="uk-input-group premium-form-group">
+                                    <label for="wizard_address"><b>POC</b></label>
+                                    <input type="text" name="POC" id="POC" ng-model="POC" maxlength="25" class="md-input label-fixed" />
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <label for="wizard_address"><b>Program</b></label>
+                                    <input type="text" name="Program" id="Program" ng-model="Program" maxlength="25" class="md-input label-fixed" />
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <label for="wizard_address"><b>Module</b></label>
+                                    <input type="text" name="Module" id="Module" ng-model="Module" maxlength="25" class="md-input label-fixed" />
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <label for="wizard_address"><b>Building Name</b></label>
+                                    <input type="text" name="BuildingName" id="BuildingName" ng-model="BuildingName" maxlength="25" class="md-input label-fixed" />
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <label for="wizard_address"><b>Storage Location</b></label>
+                                    <input type="text" name="StorageLocation" id="StorageLocation" ng-model="StorageLocation" maxlength="25" class="md-input label-fixed" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section-card">
+                            <div class="section-title">
+                                <i class="material-icons">&#xE8B0;</i>
+                                Important Dates
+                            </div>
+                            <div class="uk-grid uk-grid-width-medium-1-2 uk-grid-width-large-1-3" data-uk-grid-margin>
+                                <div class="uk-input-group premium-form-group">
+                                    <span class="uk-input-group-addon">
+                                        <i class="material-icons">&#xE873;</i>
+                                    </span>
+                                    <label for="PhaseInDate"><b>Phase In Date</b></label>
+                                    <input type="date" name="PhaseInDate" id="PhaseInDate" ng-model="PhaseInDate" class="md-input label-fixed" />
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <span class="uk-input-group-addon">
+                                        <i class="material-icons">&#xE872;</i>
+                                    </span>
+                                    <label for="PhaseOutDate"><b>Phase Out Date</b></label>
+                                    <input type="date" name="PhaseOutDate" id="PhaseOutDate" ng-model="PhaseOutDate" class="md-input label-fixed" />
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <span class="uk-input-group-addon">
+                                        <i class="material-icons">&#xE8B0;</i>
+                                    </span>
+                                    <label for="CalibrationDate"><b>Calibration Date</b></label>
+                                    <input type="date" name="CalibrationDate" id="CalibrationDate" ng-model="CalibrationDate" class="md-input label-fixed" />
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <span class="uk-input-group-addon">
+                                        <i class="material-icons">&#xE645;</i>
+                                    </span>
+                                    <label for="CalibrationDueDate"><b>Calibration Due Date</b></label>
+                                    <input type="date" name="CalibrationDueDate" id="CalibrationDueDate" ng-model="CalibrationDueDate" class="md-input label-fixed" />
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <span class="uk-input-group-addon">
+                                        <i class="material-icons">&#xE86E;</i>
+                                    </span>
+                                    <label for="PreventiveMaintenanceDate"><b>Preventive Maintenance Date</b></label>
+                                    <input type="date" name="PreventiveMaintenanceDate" id="PreventiveMaintenanceDate" ng-model="PreventiveMaintenanceDate" class="md-input label-fixed" />
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <span class="uk-input-group-addon">
+                                        <i class="material-icons">&#xE665;</i>
+                                    </span>
+                                    <label for="PreventiveMaintenanceDueDate"><b>Preventive Maintenance Due Date</b></label>
+                                    <input type="date" name="PreventiveMaintenanceDueDate" id="PreventiveMaintenanceDueDate" ng-model="PreventiveMaintenanceDueDate" class="md-input label-fixed" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section-card">
+                            <div class="section-title">
+                                <i class="material-icons">&#xE8B6;</i>
+                                Purchase Information
+                            </div>
+                            <div class="uk-grid uk-grid-width-medium-1-1 uk-grid-width-large-1-5" data-uk-grid-margin>
+                                <div class="uk-input-group premium-form-group" style="display:none;">
+                                    <span class="uk-input-group-addon"></span>
+                                    <div class="uk-input-group">
+                                        <span class="uk-form-help-block"><b>Vendor</b></span>
+                                        <input class="md-btn md-btn-wave waves-effect waves-button premium-input" id="mVendorId" name="mVendorId" ng-model="mVendorId" placeholder="Select Vendor" />
+                                    </div>
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <label for="wizard_fullname"><b>Purchase Date</b></label>
+                                    <input type="date" name="PurchaseDate" id="PurchaseDate" ng-model="PurchaseDate" class="md-input label-fixed" />
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <label for="wizard_address"><b>Purchase Inv.No</b></label>
+                                    <input type="text" name="InvNo" id="InvNo" ng-model="InvNo" class="md-input label-fixed" />
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <label for="wizard_address"><b>Depreciation Period (Months)</b></label>
+                                    <input type="number" name="Depreciation" min="0" id="Depreciation" ng-model="Depreciation" class="md-input label-fixed" />
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <label for="wizard_address"><b>Received by</b></label>
+                                    <input type="text" name="Receivedby" id="Receivedby" ng-model="Receivedby" class="md-input label-fixed" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section-card">
+                            <div class="section-title">
+                                <i class="material-icons">&#xE887;</i>
+                                Additional Information
+                            </div>
+                            <div class="uk-grid uk-grid-width-medium-1-1 uk-grid-width-large-1-5" data-uk-grid-margin>
+                                <div class="uk-input-group premium-form-group">
+                                    <label for="wizard_address"><b>Number</b></label>
+                                    <input type="text" name="Number" id="Number" ng-model="Number" maxlength="25" class="md-input label-fixed" />
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <label for="wizard_address"><b>Sub Category-1</b></label>
+                                    <input type="text" name="SubCategory1" id="SubCategory1" ng-model="SubCategory1" maxlength="25" class="md-input label-fixed" />
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <label for="wizard_address"><b>Sub Category-2</b></label>
+                                    <input type="text" name="SubCategory2" id="SubCategory2" ng-model="SubCategory2" maxlength="25" class="md-input label-fixed" />
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <label for="wizard_address"><b>Material</b></label>
+                                    <input type="text" name="Material" id="Material" ng-model="Material" maxlength="25" class="md-input label-fixed" />
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <label for="wizard_address"><b>Current Location</b></label>
+                                    <input type="text" name="CurrentLocation" id="CurrentLocation" ng-model="CurrentLocation" maxlength="25" class="md-input label-fixed" />
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                     <!-- Section 2: Other Information -->
+                     <h3>Other Information</h3>
+                     <section>
+                         <div class="form-section-card">
+                             <div class="section-title">
+                                 <i class="material-icons">&#xE8C8;</i>
+                                 Asset Details
+                             </div>
+                             <div class="uk-grid uk-grid-width-medium-1-2 uk-grid-width-large-1-4" data-uk-grid-margin>
+                                 <!-- Unit -->
+                                 <div class="uk-input-group premium-form-group">
+                                     <span class="uk-input-group-addon">
+                                         <i class="material-icons">&#xE86C;</i>
+                                     </span>
+                                     <input class="md-btn md-btn-wave waves-effect waves-button premium-input" id="mUnitMasterId" name="mUnitMasterId" ng-model="mUnitMasterId" placeholder="Search Unit" />
+                                     <span class="uk-form-help-block"><b>Unit</b></span>
+                                 </div>
+                                 
+<!-- Stock Quantity -->
+                                 <div class="uk-input-group premium-form-group">
+                                     <span class="uk-input-group-addon">
+                                         <i class="material-icons">&#xE2C7;</i>
+                                     </span>
+                                     <input type="number" class="md-input label-fixed" ng-model="Stock" name="Stock" id="Stock" />
+                                     <span class="uk-form-help-block"><b>Stock Quantity</b></span>
+                                 </div>
+                                 
+                                 <!-- Default Warranty -->
+                                 <div class="uk-input-group premium-form-group">
+                                     <span class="uk-input-group-addon">
+                                         <i class="material-icons">&#xE8B0;</i>
+                                     </span>
+                                     <input type="number" name="DefaultWarranty" id="DefaultWarranty" ng-model="DefaultWarranty" required class="md-input label-fixed" min="0" />
+                                     <span class="uk-form-help-block"><b>Default Warranty (Months)</b> <span class="required">*</span></span>
+                                 </div>
+                                 
+                                 <!-- Asset Description -->
+                                 <div class="uk-input-group premium-form-group">
+                                     <span class="uk-input-group-addon">
+                                         <i class="material-icons">&#xE86E;</i>
+                                     </span>
+                                     <input type="text" name="IteamDescription" id="IteamDescription" ng-model="IteamDescription" required class="md-input label-fixed" />
+                                     <span class="uk-form-help-block"><b>Asset Description</b> <span class="required">*</span></span>
+                                 </div>
+                             </div>
+                         </div>
+                     </section>
+
+                    <!-- Section 3: Location Information -->
+                    <h3>Location Information</h3>
+                    <section>
+                        <div class="form-section-card">
+                            <div class="section-title">
+                                <i class="material-icons">&#xE0C8;</i>
+                                Asset Location
+                            </div>
+                            <div class="uk-grid uk-grid-width-medium-1-1 uk-grid-width-large-1-1" data-uk-grid-margin>
+                                <div class="uk-width-medium-1-2">
+                                    <div class="uk-form-row">
+                                        <div class="uk-grid" data-uk-grid-margin>
+                                            <div class="uk-width-medium-1-2">
+                                                <div class="uk-input-group premium-form-group">
+                                                    <input class="md-btn md-btn-wave waves-effect waves-button premium-input" id="mSiteMasterId" name="mSiteMasterId" ng-model="mSiteMasterId" placeholder="Select Location" />
+                                                    <span class="uk-form-help-block"><b>Location</b> <span class="required">*</span></span>
+                                                </div>
+                                            </div>
+                                            <div class="uk-width-medium-1-2">
+                                                <div class="uk-input-group premium-form-group">
+<span class="uk-input-group-addon">
+                                                        <i class="material-icons">&#xE88A;</i>
+                                                    </span>
+                                                    <input id="mZoneId" name="mZoneId" ng-model="mZoneId" placeholder="Select Zone" class="md-input label-fixed" />
+                                                    <span class="uk-form-help-block"><b>Zone</b> <span class="required">*</span></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="uk-width-medium-1-2">
+                                    <div class="uk-form-row">
+                                        <div class="uk-grid" data-uk-grid-margin>
+                                            <div class="uk-width-medium-1-2">
+                                                <div class="uk-input-group premium-form-group">
+                                                    <input id="mFloorMasterId" name="mFloorMasterId" ng-model="mFloorMasterId" placeholder="Select Sub Zone" class="md-input label-fixed" />
+                                                    <span class="uk-form-help-block"><b>Sub Zone/Rack</b> <span class="required">*</span></span>
+                                                </div>
+                                            </div>
+                                            <div class="uk-width-medium-1-2">
+                                                <div class="uk-input-group premium-form-group">
+                                                    <span class="uk-input-group-addon">
+                                                        <i class="material-icons">&#xE8C7;</i>
+                                                    </span>
+                                                    <input id="mRoomMasterId" name="mRoomMasterId" ng-model="mRoomMasterId" placeholder="Select Area" class="md-input label-fixed" />
+                                                    <span class="uk-form-help-block"><b>Attn. Location/Shelf</b> <span class="required">*</span></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Section 4: RFID Tagging -->
+                    <h3>RFID Tagging</h3>
+                    <section>
+                        <div class="form-section-card">
+                            <div class="section-title">
+                                <i class="material-icons">&#xE2C7;</i>
+                                RFID Tag Assignment
+                            </div>
+
+                            <div class="premium-alert premium-alert-info">
+                                <i class="material-icons">&#xE8B6;</i>
+                                <span>Assign RFID Tag through Desktop Reader</span>
+                            </div>
+
+                            <div class="uk-grid uk-grid-width-medium-1-1 uk-grid-width-large-1-2" data-uk-grid-margin>
+                                <div class="uk-input-group premium-form-group">
+<span class="uk-input-group-addon">
+                                        <i class="material-icons">&#xE2C7;</i>
+                                    </span>
+                                    <label for="product_edit_sku_control"><b>RFID</b> <span class="required">*</span></label>
+                                    <input type="text" id="RFID" name="RFID" ng-model="RFID" required class="md-input label-fixed" />
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <label for="product_edit_sku_control"><b>PORT ID</b></label>
+                                    <input type="text" id="PORTID" ng-model="PORTID" disabled class="md-input label-fixed" />
+                                </div>
+                            </div>
+
+                            <div class="uk-grid uk-grid-width-medium-1-1 uk-grid-width-large-1-2" data-uk-grid-margin>
+                                <div class="uk-input-group premium-form-group">
+                                    <div class="md-card" title="Reader Port">
+                                        <div class="md-card-toolbar">
+                                            <h3 class="md-card-toolbar-heading-text">
+                                                <b>Port</b>
+                                            </h3>
+                                        </div>
+                                        <div class="md-card-content" title="Port">
+                                            <input class="md-btn md-btn-wave waves-effect waves-button premium-input" id="ddTapRfid" ng-model="ddTapRfid" required placeholder="Select Port" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <div class="md-card" title="Reader Control">
+                                        <div class="md-card-toolbar">
+                                            <h3 class="md-card-toolbar-heading-text">
+                                                Desktop Reader Control
+                                            </h3>
+                                        </div>
+                                        <div class="md-card-content large-padding">
+                                            <div class="uk-input-group">
+                                                <a title="Start" onclick="putPorts()" class="md-btn md-btn-primary md-btn-sm"><i class="material-icons">&#xE037;</i></a>
+                                                <a title="Stop" ng-click="putStop()" class="md-btn md-btn-primary md-btn-sm"><i class="material-icons">&#xE047;</i></a>
+<a title="Get RFID" onclick="DataTap()" class="md-btn md-btn-primary md-btn-sm"><i class="material-icons">&#xE2C7;</i></a>
+                                            </div>
+                                        </div>
+                                        <div class="md-card-toolbar">
+                                            <h3 class="md-card-toolbar-heading-text">
+                                                {{msg}}<label id="errdtr"></label>
+                                            </h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="premium-alert premium-alert-info">
+                                <i class="material-icons">&#xE8B6;</i>
+                                <span>Assign RFID Tag through Antenna</span>
+                            </div>
+
+                            <div class="uk-grid uk-grid-width-medium-1-1 uk-grid-width-large-1-2" data-uk-grid-margin>
+                                <div class="uk-input-group premium-form-group">
+                                    <div class="md-card" title="Reader Port">
+                                        <div class="md-card-toolbar">
+                                            <h3 class="md-card-toolbar-heading-text">
+                                                IP Address of Impinj Reader
+                                            </h3>
+                                        </div>
+                                        <div class="md-card-content" title="Last Tracked Time">
+                                            <div class="uk-input-group">
+                                                <input class="md-btn md-btn-wave waves-effect waves-button premium-input" id="Reader" ng-model="Reader" required placeholder="IP" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <div class="md-card" title="Reader Control">
+                                        <div class="md-card-toolbar">
+                                            <h3 class="md-card-toolbar-heading-text">
+                                                Impinj R420 Reader Control
+                                            </h3>
+                                        </div>
+                                        <div class="md-card-content large-padding">
+                                            <div class="uk-input-group">
+                                                <a title="Start" onclick="startImpinj()" class="md-btn md-btn-primary md-btn-sm"><i class="material-icons">&#xE037;</i></a>
+                                                <a title="Stop" onclick="stopImpinj()" class="md-btn md-btn-primary md-btn-sm"><i class="material-icons">&#xE047;</i></a>
+                                                <a title="Clear" onclick="clearImpinj()" class="md-btn md-btn-primary md-btn-sm"><i class="material-icons">&#xE14C;</i></a>
+<a title="Get RFID" onclick="getImpinjRFID()" class="md-btn md-btn-primary md-btn-sm"><i class="material-icons">&#xE2C7;</i></a>
+                                            </div>
+                                        </div>
+                                        <div class="md-card-toolbar">
+                                            <h3 class="md-card-toolbar-heading-text">
+                                                {{msg}}<lan id="lblerr"></lan>
+                                            </h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Search Section -->
+    <div class="search-card">
+        <div class="search-title">
+            <i class="material-icons">&#xE8B6;</i>
+            Search Assets
+        </div>
+        <div class="uk-grid" data-uk-grid-margin>
+            <div class="uk-width-medium-1-1">
+                <div class="uk-input-group">
+<span class="uk-input-group-addon">
+                        <i class="material-icons">&#xE8B6;</i>
+                    </span>
+                    <div class="md-input-wrapper md-input-filled">
+                        <label for="product_edit_quantity_control">Search by Asset Name, RFID, Barcode, UID...</label>
+                        <input type="text" class="md-input" name="search" id="global_filter">
+                        <span class="md-input-bar"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registered Assets Table -->
+    <div class="premium-table-container">
+        <div class="md-card-toolbar">
+            <h3 class="md-card-toolbar-heading-text">
+                <i class="material-icons">&#xE8EF;</i> Registered Assets
+            </h3>
+        </div>
+        <div class="md-card-content" style="padding: 0;">
+            <div class="table-responsive">
+                <table id="dt_tableExport" class="premium-table" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th class="uk-text-nowrap">Id</th>
+                            <th class="uk-text-nowrap">Asset Name</th>
+                            <th class="uk-text-nowrap">Asset UID</th>
+                            <th class="uk-text-nowrap">Asset Code</th>
+                            <th class="uk-text-nowrap">Description</th>
+                            <th class="uk-text-nowrap">RFID</th>
+                            <th class="uk-text-nowrap">BarCode</th>
+                            <th class="uk-text-nowrap">Stock</th>
+                            <th class="uk-text-nowrap">Zone</th>
+                            <th class="uk-text-nowrap">Location</th>
+                            <th class="uk-text-nowrap">Actions</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Stock Modal -->
+    <div>
+        <input type="hidden" id="custid" />
+        <form class="uk-form-stacked">
+            <div class="uk-modal" id="mailbox_new_message">
+                <div class="uk-modal-dialog uk-modal-dialog">
+                    <button class="uk-modal-close uk-close" type="button"></button>
+                    <div class="uk-modal-header">
+                        <span id="lbltext" class="uk-badge uk-badge-primary">Add Stock</span>
+                    </div>
+                    <div class="uk-grid" data-uk-grid-margin>
+                        <div class="parsley-row" hidden="hidden">
+                            <input type="hidden" id="tAssetTagIds" class="md-input" />
+                            <input type="hidden" id="UIDs" class="md-input" />
+                            <input type="hidden" id="RFIDs" class="md-input" />
+                        </div>
+                        <div class="uk-width-medium-1-2">
+<div class="uk-input-group">
+                                <span class="uk-input-group-addon">
+                                    <i class="material-icons">&#xE2C7;</i>
+                                </span>
+                                <div class="md-input-wrapper md-input-filled">
+                                    <label for="product_edit_quantity_control">Add Stock Quantity</label>
+                                    <input type="number" class="md-input" min="1" name="Stockup" id="Stockup">
+                                    <span class="md-input-bar"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="uk-modal-footer">
+                        <div class="md-fab-wrapper">
+                            <div class="md-fab md-fab-toolbar md-fab-small md-fab-accent">
+                                <i class="material-icons">&#xE8BE;</i>
+                                <div class="md-fab-toolbar-actions">
+                                    <button type="button" ng-click="setQuantity()" style="display: block" data-uk-tooltip="{cls:'uk-tooltip-small',pos:'bottom'}" title="Save"><i class="material-icons md-color-white">&#xE161;</i></button>
+                                    <button type="reset" data-uk-tooltip="{cls:'uk-tooltip-small',pos:'bottom'}" title="Delete"><i class="material-icons md-color-white">&#xE872;</i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section foot{
+    <!-- page specific plugins -->
+    <script src="~/Content/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/bower_components/datatables/media/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/Content/assets/js/kendoui_custom.min.js"></script>
+    <!-- kendoui functions -->
+    <script src="~/Content/assets/js/pages/kendoui.min.js"></script>
+    <script src="~/Content/bower_components/parsleyjs/dist/parsley.min.js"></script>
+    <!-- jquery steps -->
+    <script src="~/Content/assets/js/custom/wizard_steps.min.js"></script>
+    <!-- forms wizard functions -->
+    <script src="~/Scripts/HexaAgular/AssetTag.js"></script>
+    <script src="~/Scripts/HexaAgular/AssetForm.js"></script>
+    <!-- notifications -->
+    <script src="~/AppJs/CRM/Notification.js"></script>
+}

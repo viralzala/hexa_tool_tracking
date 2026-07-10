@@ -1,0 +1,70 @@
+﻿  var obj = JsonConvert.DeserializeObject<TC_Customer>(Json);
+                //using (var context = new ERPdbEntities())
+                //{
+                //    var courses = context.spCrateLead(obj.Uid, obj.Name, obj.LastName, obj.Gender, obj.EmailId, obj.Contact, obj.Address, obj.City, obj.State, Convert.ToInt32(obj.PinCode));                  
+                //}
+
+                //List<TC_Customer> helper = new List<TC_Customer>();
+                //helper = db.Database.SqlQuery<TC_Customer>("EXEC spCrateLead @userId, @start, @end", new SqlParameter("@userId", userName), new SqlParameter("@start", startdate), new SqlParameter("@end", endDate)).Where(x => x.regId == _regId).ToList();
+
+
+                using (var context = new ERPdbEntities())
+                {
+                  var st =  context.Database.ExecuteSqlCommand(
+                        "INSERT INTO TC_Customer(Name) VALUES('" + obj.Name + "')");
+                }
+                db.SaveChanges();
+                //using (var context = new ERPdbEntities())
+                //{
+                //    var blogs = context.TC_Customer.SqlQuery("SELECT TC_CustomerId FROM TC_Customer Where Name='" + obj.Name + "'").ToList();
+                //}
+
+                using (var context = new ERPdbEntities())
+                {
+                    var secondProfessor = context.TC_Customer.Find(16);
+                    int kk = secondProfessor.TC_CustomerId;
+
+                  
+
+                    // Query for the Blog named ADO.NET Blog 
+                    var ww = context.TC_Customer
+                                    .Where(b => b.Name == obj.Name)
+                                     .Select(p => new { p.TC_CustomerId, p.Uid }).ToList();
+
+                    var professor = ww.Single();
+                    int id = professor.TC_CustomerId;
+
+                    foreach (var TC_Customer in ww)
+                    {
+                        var ID = TC_Customer.TC_CustomerId;
+                    }
+
+                    //var jDatam = <TC_Customer>(ww);
+
+                }
+                //var mydb = db.TC_Customer.Select(x => x.Name == obj.Name);
+                //foreach (TC_Customer d in mydb)
+                //{
+                //    var ID = d.TC_CustomerId;
+                //}
+                // List<string> blog = db.TC_Customer.Where(b => b.Name == obj.Name).Select(p => new { p.TC_CustomerId, p.Uid });
+
+
+                //using (var context = new ERPdbEntities())
+                //{
+                //    var blogId = 1;
+
+                //    var blogs = context.TC_Customer.SqlQuery("dbo.Name @p0", blogId).Single();
+                //}
+
+                //var jDatam = JsonConvert.DeserializeObject<TC_Customer>(Json);
+                //jDatam.Contact = "dada";
+
+
+
+                //db.TC_Customer.Add(jDatam.Uid, jDatam.Name);
+                //db.SaveChanges();
+
+
+				  var required = $("#selectedFilters").kendoMultiSelect().data("kendoMultiSelect");
+         required.value(["Laura Fuller", "Laura Peacock"]);

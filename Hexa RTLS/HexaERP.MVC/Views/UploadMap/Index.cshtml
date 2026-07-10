@@ -1,0 +1,203 @@
+﻿
+@model HexaERP.MVC.Models.mIndooMap
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+
+@section head{
+
+}
+
+<div id="page_content_inner" ng-controller="UploadMapCtrl">
+
+    <div class="uk-grid uk-grid-medium" data-uk-grid-margin>
+        <div class="uk-width-xLarge-2-10 uk-width-large-3-10">
+            @using (Html.BeginForm("Index", "UploadMap", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.ValidationSummary(true)
+                <div class="scrum_task critical">
+                    <h3 class="scrum_task_title"> Upload Floor Map </h3>
+                    <p class="scrum_task_description"> Add all detail to upload new floor plan</p>
+                </div>
+                <div class="md-card">
+                    <div class="md-card-toolbar">
+                        <h3 class="md-card-toolbar-heading-text"></h3>
+                    </div>
+                    <div class="md-card-content">
+                        <div class="uk-grid" data-uk-grid-margin="">
+                            <div class="uk-width-medium-1-1 uk-row-first">
+                                <div class="uk-grid" data-uk-grid-margin="">
+                                    <div class="uk-width-medium-1-1 uk-row-first">
+                                        <div class="parsley-row">
+                                            <div class="md-input-wrapper md-input-filled">
+                                                <label>  <b>  Floor Name</b><span class="req"> </span></label>
+                                                @Html.TextBoxFor(m => m.FloorName, new { @class = "md-input label-fixed" })
+
+                                                <span class="md-input-bar "></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="uk-width-medium-1-1">
+                                        <div class="parsley-row">
+                                            <div class="md-input-wrapper md-input-filled">
+                                                <label><b>  Floor No</b><span class="req"> </span></label>
+                                                @Html.TextBoxFor(m => m.FloorNo, new { @class = "md-input label-fixed" })
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="uk-width-medium-1-1">
+                                        <div class="parsley-row">
+                                            <div class="md-input-wrapper md-input-filled">
+                                                <label><b>  Description</b><span class="req"> </span></label>
+                                                @Html.TextBoxFor(m => m.Description, new { @class = "md-input label-fixed" })
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="uk-width-large-1-1">
+                                        <label><b>  Choose Indoor Map</b><span class="req"> </span></label>
+                                        <div class="md-input-wrapper md-input-filled">
+                                            <input type="file" name="file" id="file" class="md-btn label-fixed">
+                                        </div>
+                                    </div>
+                                    <div class="uk-width-large-1-1">
+                                        <div class="uk-input-group">
+                                            <button title="Upload" value="Upload" name="actionType" type="submit" ng-hide="isAdd" class="md-btn md-btn-primary ng-binding">
+                                                Upload
+                                            </button>
+                                            <button title="Update" value="Update" name="actionType" type="button" ng-init="isEdit=true" ng-hide="isEdit" class="md-btn md-btn-primary ng-binding ng-hide">
+                                                Update
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="uk-width-xLarge-8-10  uk-width-large-7-10">
+            <div class="scrum_task critical">
+                @*<a id="start" title="Start Monitoring">   <i class="material-icons md-36">&#xE8F4;</i></a>
+                    <a id="stop" title="Stop Monitoring"> <i class="material-icons md-36">&#xE8F5;</i></a>   <span id="_timerMsg"></span>*@
+                <h3 class="scrum_task_title">All Floors Map</h3>
+                <p class="scrum_task_description">Scroll down for get all maps</p>
+
+            </div>
+            <div ng-repeat="Iteam in IndoorMaps">
+                <div class="md-card">
+                    <div class="md-card-toolbar">
+                        <div class="md-card-toolbar-actions" ng-click="deleteMap(Iteam.mIndooMapsId)">
+                            <i class="md-icon material-icons">&#xE92B;</i>
+                        </div>
+                        <h3 class="md-card-toolbar-heading-text">
+                            {{Iteam.FloorName}}, {{Iteam.FloorNo}} <span class="route_km"></span>
+                        </h3>
+                    </div>
+                    <div class="md-card-content mydiv" id="{{Iteam.mIndooMapsId}}" name="{{Iteam.ImgPath}}" onclick="point_it(event,this)">
+                        <img src="{{Iteam.ImgPath}}" ng-click="setImgPara(Iteam)" class="mydiv" data-uk-modal="{target:'#modal_overflow'}" />
+                    </div>
+                </div>
+                <div class="uk-modal" id="gmap_route_modal">
+                    <div class="uk-modal-dialog">
+                        <button type="button" class="uk-modal-close uk-close"></button>
+                        <div class="uk-modal-header">
+                            <h3 class="uk-modal-title">{{Iteam.FloorName}}, {{Iteam.Description}}<span class="route_km"></span></h3>
+                        </div>
+                        <div class="uk-overflow-container">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*<div class="uk-grid" data-uk-grid-margin>
+            <div ng-repeat="Iteam in IndoorMaps">
+                <div class="uk-width-large-1-1">
+
+                </div>
+            </div>
+        </div>*@
+
+    <div id="modal_overflow" class="uk-modal">
+        <div class="uk-modal-dialog uk-modal-dialog-large">
+            <button type="button" class="uk-modal-close uk-close"></button>
+            <div class="uk-grid" data-uk-grid-margin data-uk-grid-match id="user_profile">
+                <input type="text" ng-model="SetmIndooMapsId" ng-hide="true" class="ng-pristine ng-untouched ng-valid ng-empty ng-hide">
+
+                <div class="uk-width-large-1-2">
+                    <div class="md-card">
+                        <div class="user_heading">
+                            <h4>Set attena location for indoor map location.  x = <span id="form_x"></span> , y = <span id="form_y"></span></h4>
+                            <div class="user_heading_avatar">
+                                <img src="{{_thumImg}}" alt="user avatar" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="uk-width-large-1-2">
+                    <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
+                        <div class="uk-width-large-1-1">
+                            <div class="uk-overflow-container">
+                                <table class="uk-table">
+                                    <thead>
+                                        <tr>
+                                            <th class="uk-text-nowrap uk-text-left">Sub Zone</th>
+                                            <th class="uk-text-nowrap uk-text-left">Attena Loc.</th>
+                                            <th class="uk-text-nowrap" title="Assigned Map">Asg. Map</th>
+                                            <th class="uk-text-nowrap"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="uk-table-middle" ng-repeat="tr in AttenasData">
+                                            <td class="uk-width-3-10 uk-text-nowrap">{{tr.subZone}}</td>
+                                            <td class="uk-width-2-10 uk-text-left uk-text-muted uk-text-small">
+                                                {{tr.RoomName}}
+                                            </td>
+                                            <td class="uk-width-3-10 uk-text-nowrap">{{tr.FloorName}}</td>
+                                            <td class="uk-width-3-10 uk-text-nowrap">
+                                                <a ng-if="tr.FloorName == null" ng-click="putLocationInd(tr.mReaderSettupId)">set</a> <a ng-click="putLocationInd(tr.mReaderSettupId)" ng-if="tr.FloorName != null">update</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="2"><h2>{{AttenasData.length?AttenasData.length:0}}</h2></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section foot{
+
+    <script src="~/Scripts/HexaAgular/UploadMap.js"></script>
+    <!-- page specific plugins -->
+    <!--  forms_file_upload functions -->
+    <script src="~/Content/assets/js/pages/forms_file_upload.min.js"></script>
+    <style type="text/css">
+
+        /*canvas {
+            height: 100vh;
+            width: 100vw;
+        }*/
+        /*#pointer_div {
+            position: relative;
+        }*/
+        .mydiv {
+            position: relative;
+        }
+    </style>
+}

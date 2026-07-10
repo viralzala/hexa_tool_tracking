@@ -1,0 +1,234 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Site.cshtml";
+}
+
+
+
+@section head
+{
+    <!-- htmleditor (codeMirror) -->
+    <link href="@Url.Content("~/Content/bower_components/codemirror/lib/codemirror.css")"
+          rel="stylesheet" type="text/css" media="all" />
+
+    <link href="@Url.Content("~/Content/bower_components/kendo-ui/styles/kendo.common-material.min.css")"
+          rel="stylesheet" type="text/css" media="all" />
+
+    <link href="@Url.Content("~/Content/bower_components/kendo-ui/styles/kendo.material.min.css")"
+          rel="stylesheet" type="text/css" media="all" />
+
+    <link href="@Url.Content("~/Content/bower_components/datatables/media/css/jquery.dataTables.min.css")"
+          rel="stylesheet" type="text/css" media="all" />
+
+    <link href="@Url.Content("~/Content/bower_components/datatables/media/css/dataTables.bootstrap.css")"
+          rel="stylesheet" type="text/css" media="all" />
+
+
+}
+
+<div id="page_content_inner" ng-controller="ManageReaderCtrl">
+    <h3 class="heading_b uk-margin-bottom">Employee Monitoring</h3>
+
+    @*<a ng-click="GetData()">Get Data</a>*@
+    <div class="uk-grid" data-uk-grid-margin>
+        <div class="uk-width-medium-1-4">
+            <div class="md-card">
+                <div class="md-card-content">
+                    <div class="uk-grid" data-uk-grid-margin title="Enter IP & click to Start Reader ">
+                        <div class="uk-width-large-1-1">
+                            <div class="uk-input-group">
+                                <div class="md-input-wrapper">
+                                    @*<label>IP Address</label>*@
+                                    @*<input type="text" id="ReaderIp" ng-model="ReaderIp" placeholder="IP Address" name="ReaderIp" class="md-input"><span class="md-input-bar "></span>*@
+                                </div>
+                                <span class="uk-input-group-addon">
+                                    <a title="Start" class="md-btn md-btn-primary md-btn-small" ng-show="startbtn" ng-init="startbtn=true" ng-click="StartReader()"><i class="material-icons"></i></a>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="uk-width-medium-1-3">
+            <div class="md-card">
+                <div class="md-card-content">
+                    <div class="uk-grid" data-uk-grid-margin title="Clear Track Data & Stop Reader">
+                        <div class="uk-width-medium-1-2 parsley-row">
+                            <div class="uk-input-group">
+                                <span class="uk-input-group-addon">
+                                    <label for="product_edit_sku_control">Stop</label>
+                                </span>
+                                <a title="Stop" ng-click="StopReader()" class="md-btn md-btn-primary md-btn-small"><i class="material-icons">&#xE036;</i></a>
+                            </div>
+                        </div>
+                        <div class="uk-width-medium-1-2 parsley-row">
+                            <div class="uk-input-group">
+                                <span class="uk-input-group-addon">
+                                    <label for="product_edit_sku_control">Clear Data</label>
+                                </span>
+                                <a title="Clear" ng-click="ClearData()" class="md-btn md-btn-primary md-btn-small"><i class="material-icons">&#xE14C;</i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="uk-width-medium-1-3">
+            <div class="uk-grid uk-grid-medium" data-uk-grid-margin="">
+                <div class="uk-width-xLarge-3-10 uk-width-large-4-10 uk-row-first">
+                    <div class="md-card">
+                        <div class="md-card-content" title="Last Tracked Time">
+                            @*<div class="uk-float-right">
+                                    <input type="checkbox" data-switchery checked name="product_edit_active_control" id="product_edit_active_control" />
+                                </div>*@
+                            <label for="wizard_fullname">Last Tracked <span class="req"></span></label>
+                            <div class="md-list-content">
+                                <i class="md-list-addon-icon material-icons"></i>
+                            </div>
+
+                            <label class="uk-display-block uk-margin-small-top" for="product_edit_active_control"><b>{{lastTracked | date:'dd MMMM HH:MM:SS'}}</b></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="uk-width-xLarge-7-10 uk-width-large-6-10">
+                    <div class="md-card" title="Reader Notifiction/Error Details">
+                        <div class="md-card-toolbar">
+                            <h3 class="md-card-toolbar-heading-text">
+                                Reader Details
+                            </h3>
+                        </div>
+                        <div class="md-card-content large-padding">
+
+                            <div class="uk-input-group">
+                                <span>{{lblMsg}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="md-card uk-margin-medium-bottom">
+        <div class="md-card-content">
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-medium-1-1">
+                    <div class="uk-vertical-align">
+                        <div class="uk-vertical-align-middle">
+                            <ul id="contact_list_filter" class="uk-subnav uk-subnav-pill uk-margin-remove">
+                                <li class="uk-active" data-uk-filter=""><a href="#">All</a></li>
+                                <div ng-repeat="Iteam in Location">
+                                    <li data-uk-filter="{{Iteam.FloorName}}">
+                                        <a href="#">{{Iteam.FloorName}}</a>
+                                    </li>
+                                </div>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h3 class="heading_b uk-text-center grid_no_results" style="display:none">No results found</h3>
+    <div class="uk-grid-width-small-1-2 uk-grid-width-medium-1-3 uk-grid-width-large-1-4 uk-grid-width-xlarge-1-5 hierarchical_show" id="contact_list">
+
+        <div data-uk-filter="{{Iteam.FloorName}},{{Iteam.RoomName}},mudassarinamdar@gmail.com" ng-repeat="Iteam in Areas">
+            <div class="md-card md-card-hover">
+                <div class="md-card-content">
+                    <div class="md-card-head head_background" style="background-image: url('Content/assets/img/gallery/Image17.jpg')">
+                        <div class="md-card-head-menu">
+                            @*<i class="md-icon material-icons md-icon-light">&#xE5D5;</i>*@
+                        </div>
+                        <h3 class="md-card-head-text">
+                            {{Iteam.RoomName}}
+                        </h3>
+                        <div class="md-card-head-subtext" ng-repeat="mI in PortColl | filter:{RoomName: Iteam.RoomName}">
+                            <i class="md-card-head-icon wi wi-day-sunny-overcast uk-margin-right"></i>
+                            <span>{{(FillterIData | filter:{Reader: mI.ReaderNo, PortId:mI.AttPortId}).length}}</span>
+                        </div>
+                    </div>
+                    <ul class="md-list">
+                        <li>
+                            <div class="md-list-content">
+                                <span class="md-list-heading">{{Iteam.RoomName}}</span>
+                                <span class="uk-text-small uk-text-muted">{{Iteam.FloorName}}</span>
+                                <span ng-if="Iteam.ReaderNo != null">{{getReaderCount(Iteam.ReaderNo,Iteam.mAttPortId)}}</span>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="md-list-content">
+                                <span class="md-list-heading">Reader-Port No</span>
+                                <div ng-repeat="mI in PortColl | filter:{RoomName: Iteam.RoomName, mRoomMasterId : Iteam.mRoomMasterId}">
+                                    <span class="uk-text-small uk-text-muted">{{mI.ReaderNo}} <b> {{mI.AttPortId}}</b></span>
+
+                                    <div ng-repeat="rIds in FillterIData | filter:{Reader: mI.ReaderNo, PortId:mI.AttPortId}">
+                                        <span class="uk-text-small uk-text-muted uk-text-truncate" ng-if="rIds.MastePort != rIds.PortId || rIds.MasteReader != rIds.Reader"><p class="uk-text-danger uk-margin-remove uk-text-bold">{{rIds.Name}}</p></span>
+                                        <span class="uk-text-small uk-text-muted uk-text-truncate" ng-if="rIds.MastePort == rIds.PortId && rIds.MasteReader == rIds.Reader"><p class="uk-text-success uk-margin-remove uk-text-bold">{{rIds.Name}}</p></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        @*<li>
+                                <div class="md-list-content" ng-repeat="mI in PortColl | filter:{RoomName: Iteam.RoomName}">
+                                    <span class="md-list-heading">Data</span>
+                                    <div ng-repeat="rIds in FillterIData | filter:{Reader: mI.ReaderNo, PortId:mI.AttPortId}">
+                                        <span>{{rIds.Name}}</span>
+                                    </div>
+                                </div>
+                            </li>*@
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section foot
+{
+    <!-- page specific plugins -->
+    @*<script src="@Url.Content("~/Content/bower_components/dragula.js/dist/dragula.min.js")"
+        type="text/javascript"></script>*@
+
+    <!--  sortable functions -->
+    @*<script src="@Url.Content("~/Content/assets/js/pages/components_sortable.min.js")"
+        type="text/javascript"></script>*@
+
+    <!-- functions -->
+    <script src="@Url.Content("~/Content/assets/js/kendoui_custom.min.js")"
+            type="text/javascript"></script>
+
+    <script src="@Url.Content("~/Content/assets/js/pages/kendoui.min.js")"
+            type="text/javascript"></script>
+
+
+    <!--  mailbox functions -->
+    @*<script src="@Url.Content("~/Content/assets/js/pages/page_mailbox.min.js")"
+        type="text/javascript"></script>*@
+
+    <!-- page specific plugins -->
+    <!--  contact list functions -->
+    <script src="@Url.Content("~/Content/assets/js/pages/page_contact_list.min.js")"
+            type="text/javascript"></script>
+
+    <!-- product edit functions -->
+    <script src="@Url.Content("~/Content/assets/js/pages/ecommerce_product_edit.min.js")"
+            type="text/javascript"></script>
+
+    <script src="~/Scripts/HexaAgular/ManageReader.js"></script>
+
+
+
+    @*<script src="@Url.Content("~/AppJs/Tools/ToolsTrackDemo.js")"
+        type="text/javascript"></script>*@
+
+    <!-- inputmask-->
+    @*<script src="@Url.Content("~/Content/bower_components/jquery.inputmask/dist/jquery.inputmask.bundle.js")"
+                type="text/javascript"></script>
+
+        <script src="@Url.Content("~/Content/assets/js/uikit_htmleditor_custom.min.js")"
+                type="text/javascript"></script>*@
+}
+
+

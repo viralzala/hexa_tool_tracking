@@ -1,0 +1,358 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Site.cshtml";
+}
+
+
+
+@section head
+{
+    <!-- htmleditor (codeMirror) -->
+    <link href="@Url.Content("~/Content/bower_components/codemirror/lib/codemirror.css")"
+          rel="stylesheet" type="text/css" media="all" />
+
+    <!-- kendo UI -->
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.common-material.min.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.material.min.css" rel="stylesheet" />
+
+    <link href="@Url.Content("~/Content/bower_components/datatables/media/css/jquery.dataTables.min.css")"
+          rel="stylesheet" type="text/css" media="all" />
+
+    <link href="@Url.Content("~/Content/bower_components/datatables/media/css/dataTables.bootstrap.css")"
+          rel="stylesheet" type="text/css" media="all" />
+
+
+}
+<div id="page_heading" data-uk-sticky="{ top: 48, media: 960 }">
+    <h1>Real Time Employee Tracking</h1>
+    <span class="uk-text-muted uk-text-upper uk-text-small">IT Asset Management</span>
+</div>
+<div id="page_content_inner" ng-controller="ToolsTrackDemoCtrl">
+    @*<h6 class="heading_b uk-margin-bottom">Employee Monitoring</h6>*@
+
+
+
+    <div class="uk-grid uk-grid-medium" data-uk-grid-margin>
+        <div class="uk-width-xLarge-2-10 uk-width-large-3-10">
+            <div class="md-card">
+                <div class="md-card-toolbar">
+                    <h3 class="md-card-toolbar-heading-text">
+                        Start/Stop Readers
+                    </h3>
+                </div>
+                <div class="md-card-content">
+                    <ul class="uk-grid uk-grid-width-small-1-3 uk-text-center" data-uk-grid-margin>
+                        <li>
+                            <a title="Start" class="md-btn md-btn-success md-btn-small" ng-show="startbtn" ng-init="startbtn=true" ng-click="StartReader()">Start<i class="material-icons"></i></a>
+                        </li>
+                        <li>
+                            <a title="Stop" ng-click="StopReader()" ng-show="stopbtn" ng-init="stopbtn=true" class="md-btn md-btn-danger md-btn-small">Stop<i class="material-icons">&#xE036;</i></a>
+                        </li>
+                        <li>
+                            <a title="Clear" ng-click="ClearData()" class="md-btn md-btn-warning md-btn-small">Clear<i class="material-icons">&#xE14C;</i></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="md-card">
+                <div class="md-card-toolbar">
+                    <h3 class="md-card-toolbar-heading-text">
+                        Setting Rx Sensitivity to dBm
+                    </h3>
+                </div>
+                <div class="md-card-content">
+                    <ul class="md-list">
+                        <li>
+                            <div class="md-list-content">
+                                <span class="uk-text-small uk-text-muted uk-display-block">dBm</span><br />
+                                <input type="text" id="ionslider_1" name="ionslider_1" ng-model="TxVal" class="ion-slider" ng-change="TxValw()" data-min1="10" data-max="31" data-from="31" />
+                            </div>
+                        </li>
+                        <li>
+                            <div class="md-list-content">
+
+                                <h2> {{_Txval}} </h2>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="md-list-content">
+                                <span class="uk-text-small uk-text-muted uk-display-block">Peak RSSI</span><br />
+                                <input type="text" id="ionslider_2" name="ionslider_2" ng-model="RssiVal" class="ion-slider" ng-change="RssiVal()" data-min="1" data-min1="50" data-max="90" data-from="65" />
+                            </div>
+                        </li>
+                        <li>
+                            <div class="md-list-content">
+
+                                <h2>-{{_Rssival}} </h2>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="uk-width-xLarge-8-10  uk-width-large-7-10">
+            <div class="md-card">
+                <div class="md-card-toolbar">
+                    <h3 class="md-card-toolbar-heading-text">
+                        Readers Connection  Details
+                    </h3>
+                </div>
+                <div class="md-card-content large-padding">
+                    <div class="uk-grid uk-grid-divider uk-grid-medium">
+                        <div class="uk-width-large-7-10">
+                            <div class="uk-overflow-container">
+                                <table class="uk-table">
+                                    <thead>
+                                        @*<tr>
+                                                <th></th>
+                                                <th colspan="4" class="uk-text-nowrap">Reader Status Information</th>
+                                            </tr>*@
+                                        <tr>
+                                            <th class="uk-text-nowrap">Reader MAC</th>
+                                            <th class="uk-text-nowrap">IP</th>
+                                            <th class="uk-text-nowrap">Reader Status</th>
+                                            <th class="uk-text-nowrap uk-text-right">Att Port</th>
+                                            <th class="uk-text-nowrap uk-text-right">IsPort Connect</th>
+                                            <th class="uk-text-nowrap uk-text-right">DateTime</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="uk-table-middle" ng-repeat="st in ReaderStatus">
+                                            <td class="uk-width-3-10 uk-text-nowrap"><a>{{st.Name}}</a></td>
+                                            <td class="uk-width-2-10 uk-text-nowrap"><span class="uk-badge">{{st.Address}}</span></td>
+                                            <td class="uk-width-3-10">
+                                                <div ng-if="st.IsConnected == true" title="Connected" class="uk-progress uk-progress-success uk-progress-striped uk-active uk-progress-mini">
+                                                    <div class="uk-progress-bar" style="width: 100%;"></div>
+                                                </div>
+
+                                                <div ng-if="st.IsConnected == false" title="Disconnected" class="uk-progress uk-progress-mini uk-progress-danger uk-margin-remove">
+                                                    <div class="uk-progress-bar" style="width: 100%;"></div>
+                                                </div>
+                                            </td>
+
+                                            <td class="uk-width-2-10 uk-text-nowrap">{{st.PortNumber}}</td>
+                                            <td class="uk-width-2-10 uk-text-nowrap">
+                                                <i ng-if="st.IsPortConnected == true" class="material-icons uk-text-success md-24">&#xE5CA;</i>
+                                            </td>
+                                            <td class="uk-width-2-10 uk-text-nowrap">{{st.sDate}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                            <p>
+                                <span class="uk-text-muted uk-text-small uk-display-block uk-margin-small-bottom">
+                                    * Reader Notifications *
+                                </span>
+
+
+                            </p>
+                            <p class="uk-text-muted uk-text-small uk-display-block uk-margin-small-bottom"> <code>{{lblMsg}}</code></p>
+                            <ul id="Lia"></ul>
+                            <hr class="uk-grid-divider uk-hidden-large">
+                        </div>
+                        <div class="uk-width-large-3-10">
+                            <span class="uk-text-muted uk-text-small uk-display-block uk-margin-small-bottom">Reader Health</span>
+                            <div ng-repeat="rdrphy in readerPhysic | unique:'Name'">
+                                <span class="uk-badge uk-badge-success">{{rdrphy.Name}}</span> : <span class="uk-badge uk-badge-primary">{{rdrphy.Readertemperature}}° C</span>:
+                                <i ng-if="rdrphy.IsConnected == true" class="material-icons uk-text-success md-24">&#xE5CA;</i> <i ng-if="rdrphy.IsConnected == false" class="material-icons uk-text-danger md-24">&#xE5CD;</i>
+                            </div>
+                            <p>
+
+
+                                @*<span class="uk-badge uk-badge-success">LTE</span>*@
+
+
+                            </p>
+                            <hr class="uk-grid-divider">
+                            <p>
+                                <span class="uk-text-muted uk-text-small uk-display-block uk-margin-small-bottom">Last Track</span>
+
+                            </p>
+                            <b> <i class="md-list-addon-icon material-icons"></i> {{lastTracked | date:'dd MMMM HH:MM:SS'}}</b>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+    <div class="md-card uk-margin-medium-bottom">
+        <div class="md-card-content">
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-medium-1-1">
+                    <div class="uk-vertical-align">
+                        <div class="uk-vertical-align-middle">
+                            <ul id="contact_list_filter" class="uk-subnav uk-subnav-pill uk-margin-remove">
+                                <li class="uk-active" data-uk-filter=""><a href="#">All</a></li>
+                                <div ng-repeat="Iteam in Location">
+                                    <li data-uk-filter="{{Iteam.mZoneId}}">
+                                        <a href="#">{{Iteam.Zone}}</a>
+                                    </li>
+                                </div>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3 class="heading_b uk-text-center grid_no_results" style="display:none">No results found</h3>
+    <div class="uk-grid-width-small-1-2 uk-grid-width-medium-1-3 uk-grid-width-large-1-4 uk-grid-width-xlarge-1-5 hierarchical_show" id="contact_list">
+
+        <div data-uk-filter="{{Iteam.mZoneId}},{{Iteam.mFloorMasterId}},mudassarinamdar@gmail.com" ng-repeat="Iteam in Areas">
+            <div class="md-card md-card-hover">
+                <div class="md-card-content">
+                    <div class="md-card-head head_background" style="background-image: url('Content/assets/img/gallery/Image17.jpg')">
+                        <div class="md-card-head-menu">
+                            @*<i class="md-icon material-icons md-icon-light">&#xE5D5;</i>*@
+                        </div>
+                        <h3 class="md-card-head-text">
+                            {{Iteam.FloorName}}
+                        </h3>
+
+
+
+                        <div class="md-card-head-subtext" ng-repeat="mI in PortColl | filter:{mFloorMasterId: Iteam.mFloorMasterId}">
+                            <i class="md-card-head-icon wi wi-day-sunny-overcast uk-margin-right"></i>
+                            <span>{{(FillterIData | filter:{mFloorMasterId:mI.mFloorMasterId}).length}}</span>
+                        </div>
+
+                    </div>
+
+                    <ul class="md-list">
+                        <li>
+                            <div class="md-list-content">
+                                <span class="md-list-heading">{{Iteam.FloorName}}</span>
+                                <span class="uk-text-small uk-text-muted">{{Iteam.Zone}}</span>
+                                @*<span ng-if="Iteam.ReaderNo != null">{{getReaderCount(Iteam.ReaderNo,Iteam.mAttPortId)}}</span>*@
+                            </div>
+                        </li>
+
+                        <li>
+                            <div>
+                                @*<span class="md-list-heading">Employee Tracked</span>*@
+                                @*<span class="md-list-heading">Reader-Port No</span>*@
+                                <div ng-repeat="mI in Areas | filter:{mFloorMasterId : Iteam.mFloorMasterId}">
+
+                                    @*<span class="uk-text-small uk-text-muted">{{mI.ReaderNo}} <b> {{mI.AttPortId}}</b></span>*@
+
+                                    <div class="md-list" ng-repeat="rIds in FillterIData | filter:{mFloorMasterId : mI.mFloorMasterId}">
+                                        <a data-uk-tooltip="{cls:'long-text'}" title="Name :{{rIds.Name}}</br> Agency: {{rIds.Agency}}</br> Designation: {{rIds.Designation}}</br> SkillCategory :{{rIds.SkillCategory}}</br> WorkCategory :{{rIds.WorkCategory}}</br> Activity :{{rIds.Activity}}"> <b> {{rIds.Name}}</b></a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section foot
+{
+    <!-- page specific plugins -->
+    @*<script src="@Url.Content("~/Content/bower_components/dragula.js/dist/dragula.min.js")"
+        type="text/javascript"></script>*@
+
+    <!--  sortable functions -->
+    @*<script src="@Url.Content("~/Content/assets/js/pages/components_sortable.min.js")"
+        type="text/javascript"></script>*@
+
+    <!-- functions -->
+    <script src="@Url.Content("~/Content/assets/js/kendoui_custom.min.js")"
+            type="text/javascript"></script>
+
+    <script src="@Url.Content("~/Content/assets/js/pages/kendoui.min.js")"
+            type="text/javascript"></script>
+    <!-- page specific plugins -->
+    <!-- ionrangeslider -->
+    <script src="@Url.Content("~/Content/bower_components/ion.rangeslider/js/ion.rangeSlider.min.js")"
+            type="text/javascript"></script>
+    <!--  forms advanced functions -->
+    <script src="~/Content/assets/js/pages/forms_advanced.min.js"></script>
+
+    <!--  mailbox functions -->
+    @*<script src="@Url.Content("~/Content/assets/js/pages/page_mailbox.min.js")"
+        type="text/javascript"></script>*@
+
+    <!-- page specific plugins -->
+    <!--  contact list functions -->
+    <script src="@Url.Content("~/Content/assets/js/pages/page_contact_list.min.js")"
+            type="text/javascript"></script>
+
+    <!-- product edit functions -->
+    <script src="@Url.Content("~/Content/assets/js/pages/ecommerce_product_edit.min.js")"
+            type="text/javascript"></script>
+
+
+
+
+
+    @*<script>
+            $(window).on('mouseover', (function () {
+                window.onbeforeunload = null;
+            }));
+            $(window).on('mouseout', (function () {
+                window.onbeforeunload = ConfirmLeave;
+            }));
+            function ConfirmLeave() {
+                //StopReader
+
+                var url = "../ToolsTrackDemo/StopReaders";
+                $.get(url, function (response) {
+                    console.log(response.data);
+                    if (response.Flag == true) {
+                        // $scope.lblMsg = response.Message;
+                        clearInterval(myVar);
+                        window.location.href = '../ToolsTrackDemo';
+                    }
+                    else if (response.Flag == false) {
+                        window.location.href = '../ToolsTrackDemo';
+                    }
+                });
+
+                // var conf = alert.confirm();
+
+
+                return "";
+            }
+            var prevKey = "";
+            $(document).keydown(function (e) {
+                if (e.key == "F5") {
+                    window.onbeforeunload = ConfirmLeave;
+                }
+                else if (e.key.toUpperCase() == "W" && prevKey == "CONTROL") {
+                    window.onbeforeunload = ConfirmLeave;
+                }
+                else if (e.key.toUpperCase() == "R" && prevKey == "CONTROL") {
+                    window.onbeforeunload = ConfirmLeave;
+                }
+                else if (e.key.toUpperCase() == "F4" && (prevKey == "ALT" || prevKey == "CONTROL")) {
+                    window.onbeforeunload = ConfirmLeave;
+                }
+                prevKey = e.key.toUpperCase();
+            });
+        </script>*@
+
+    <script src="~/AppJs/Tools/ToolsTrackDemo.js"></script>
+
+    @*<script src="@Url.Content("~/AppJs/Tools/ToolsTrackDemo.js")"
+        type="text/javascript"></script>*@
+
+    <!-- inputmask-->
+    @*<script src="@Url.Content("~/Content/bower_components/jquery.inputmask/dist/jquery.inputmask.bundle.js")"
+                type="text/javascript"></script>
+
+        <script src="@Url.Content("~/Content/assets/js/uikit_htmleditor_custom.min.js")"
+                type="text/javascript"></script>*@
+
+
+}

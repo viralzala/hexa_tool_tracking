@@ -1,0 +1,419 @@
+﻿@{
+    ViewBag.Title = "Index";
+
+    if (!string.IsNullOrWhiteSpace(Convert.ToString(Session["SortCode"])))
+    {
+        Layout = "~/Views/Shared/_Admin.cshtml";
+    }
+    else
+    {
+        Response.Redirect("/AppUser");
+    }
+}
+
+@section head
+{
+    <!-- additional styles for plugins -->
+    <!-- metrics graphics (charts) -->
+    <link rel="stylesheet" href="~/Content/bower_components/metrics-graphics/dist/metricsgraphics.css">
+    <!-- c3.js (charts) -->
+    <link rel="stylesheet" href="~/Content/bower_components/c3js-chart/c3.min.css">
+    <!-- chartist -->
+    @*<link rel="stylesheet" href="~/Content/bower_components/chartist/dist/chartist.min.css">*@
+
+    <!-- htmleditor (codeMirror) -->
+    <link href="@Url.Content("~/Content/bower_components/codemirror/lib/codemirror.css")"
+          rel="stylesheet" type="text/css" media="all" />
+
+    <link href="@Url.Content("~/Content/bower_components/kendo-ui/styles/kendo.common-material.min.css")"
+          rel="stylesheet" type="text/css" media="all" />
+
+    <link href="@Url.Content("~/Content/bower_components/kendo-ui/styles/kendo.material.min.css")"
+          rel="stylesheet" type="text/css" media="all" />
+
+    <link href="@Url.Content("~/Content/bower_components/datatables/media/css/jquery.dataTables.min.css")"
+          rel="stylesheet" type="text/css" media="all" />
+
+    <link href="@Url.Content("~/Content/bower_components/datatables/media/css/dataTables.bootstrap.css")"
+          rel="stylesheet" type="text/css" media="all" />
+}
+
+<div id="page_content_inner" ng-controller="AdminHomeCtrl">
+    <h3 class="heading_b uk-margin-bottom">Visteon Corporation | Dashboard</h3>
+    <div class="uk-grid uk-grid-width-large-1-10 uk-grid-width-large-1-1 uk-grid-medium uk-sortable sortable-handler hierarchical_show" data-uk-sortable data-uk-grid-margin>
+        <div>
+            <div class="md-card">
+                <div class="md-card-content">
+                    <span class="md-list-heading uk-text-nowrap">Total Shelf</span>
+                    <h1 class="uk-text-center">{{_shelfDashboard.TotalShelf}}</h1>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="md-card">
+                <div class="md-card-content">
+                    <span class="md-list-heading">Occupied Shelf</span>
+                    <h1 class="uk-text-center">{{_shelfDashboard.AllocatedShelf}}</h1>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="md-card">
+                <div class="md-card-content">
+                    <span class="md-list-heading">Available Shelf</span>
+                    <h1 class="uk-text-center">{{_shelfDashboard.AvailableShelf}}</h1>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="md-card">
+                <div class="md-card-content">
+                    <span class="md-list-heading uk-text-nowrap">Total Product</span>
+                    <h1 class="uk-text-center">{{_smtProcutData.TotalProduct}}</h1>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="md-card">
+                <div class="md-card-content">
+                    <span class="md-list-heading uk-text-nowrap">Total Bin IN</span>
+                    <h1 class="uk-text-center">{{_smtProcutData.TotalPutaway}}</h1>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="md-card">
+                <div class="md-card-content">
+                    <span class="md-list-heading uk-text-nowrap">Total Bin Out</span>
+                    <h1 class="uk-text-center">{{_smtProcutData.TotalTakeaway}}</h1>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="md-card">
+                <div class="md-card-content">
+                    <span class="md-list-heading uk-text-nowrap">Total Assembly</span>
+                    <h1 class="uk-text-center">{{_smtProcutData.TotalAssembly}}</h1>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="md-card">
+                <div class="md-card-content">
+                    <span class="uk-text-center uk-text-nowrap">Direct Assembly</span>
+                    <h1 class="uk-text-center">{{_smtProcutData.TotalMaster}}</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="uk-grid" data-uk-grid-margin>
+        <div class="uk-width-medium-1-2">
+            <div class="md-card">
+                <div class="md-card-content">
+                    <div class="uk-overflow-container">
+                        <table class="uk-table">
+                            <thead>
+                                <tr>
+                                    <th class="uk-text-nowrap">Part Number</th>
+                                    <th class="uk-text-nowrap">Status</th>
+                                    <th class="uk-text-nowrap uk-text-right">Quantity</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="uk-table-middle" ng-repeat="i in PartNumberData">
+                                    <td class="uk-width-3-10 uk-text-nowrap"><a href="">{{i.PartNumber}}</a></td>
+                                    <td class="uk-width-2-10 uk-text-nowrap">
+                                        <span class="uk-badge">{{i.Status}}</span>
+                                    </td>
+                                    <td class="uk-width-2-10 uk-text-right">
+                                        <strong class="uk-margin-remove">
+                                            {{i.Q}}
+                                        </strong>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="uk-width-medium-1-4">
+            <div class="md-card">
+                <div class="md-card-content">
+                    <div class="md-card md-card-hover">
+                        <div class="md-card-head md-bg-cyan-600">
+                            <div class="uk-text-center">
+                                <h1 class="md-card-head-text uk-text-center md-color-white">
+                                    <span class="uk-text-truncate">
+                                        In transit to assembly
+                                    </span>
+                                </h1>
+                                <h1 class="uk-text-center md-color-white" style="font-size: 10em">
+                                    {{_smtProcutData.TotalTakeaway - _smtProcutData.TotalAssembly}}
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="uk-width-medium-1-4">
+            <div class="md-card">
+                <div class="md-card-content">
+                    <div class="uk-grid" data-uk-grid-margin="" data-uk-grid-match="" id="user_profile">
+                        <div class="uk-grid-width-large-1-1 uk-row-first">
+                            <div class="uk-margin-medium-bottom">
+                                <h3 class="heading_c uk-margin-bottom">Important Alerts</h3>
+                                <ul class="md-list md-list-addon">
+                                    <li ng-repeat="i in Notifications">
+                                        <div class="md-list-addon-element">
+                                            <i class="md-list-addon-icon material-icons uk-text-danger"></i>
+                                        </div>
+                                        <div class="md-list-content">
+                                            <span class="md-list-heading">{{i.UID}}</span>
+                                            <span class="uk-text-small uk-text-muted uk-text-truncate">
+                                                {{i.RFID}}
+                                            </span>
+                                            <span class="uk-margin-left">
+                                                <i class="material-icons"></i>  <span class="uk-text-muted uk-text-small">{{i.tDate | jsonDate:'dd MMMM yy hh:mm a'}}</span>
+                                            </span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="uk-grid" data-uk-grid-margin style="display:none">
+        <div class="uk-width-medium-1-4">
+            <div class="md-card">
+                <div class="md-card-content">
+                    <h4 class="heading_c uk-margin-bottom">Total number of SMT Product & Employee</h4>
+                    <div id="epmChart" class="c3chart"></div>
+                </div>
+            </div>
+        </div>
+        <div class="uk-width-medium-1-4">
+            <div class="uk-grid uk-grid-medium uk-grid-width-medium-1-1 uk-grid-width-large-1-1" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
+                <div>
+                    <div class="md-card">
+                        <div class="md-card-head" style="height:80px">
+                            <div>
+                                <i class="md-card-head-icon uk-margin-right"></i>
+                                <span class="heading_a uk-margin-bottom">
+                                    {{CurrentDate | date:'dd-MMM-yyyy'}}
+                                    {{CurrentDate | date:'hh:mm a'}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="md-card-content">
+                            <ul class="md-list md-list-addon">
+                                <li>
+                                    <div class="md-list-addon-element">
+                                        <i class="md-list-addon-icon wi wi-day-sunny-overcast"></i>
+                                    </div>
+                                    <div class="md-list-content">
+                                        <span class="md-list-heading">{{sitCount}}</span>
+                                        <span class="uk-text-small uk-text-muted">Location</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="md-list-addon-element">
+                                        <i class="uk-icon-home"></i>
+                                    </div>
+                                    <div class="md-list-content">
+                                        <span class="md-list-heading"> {{zCount}}</span>
+                                        <span class="uk-text-small uk-text-muted">Zone</span>
+                                    </div>
+                                </li>
+                                <li style="display:none">
+                                    <div class="md-list-addon-element">
+                                        <i class="md-list-addon-icon wi wi-day-rain"></i>
+                                    </div>
+                                    <div class="md-list-content">
+                                        <span class="md-list-heading">{{subzCount}}</span>
+                                        <span class="uk-text-small uk-text-muted">Sub Zone</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="md-list-addon-element">
+                                        <i class="md-list-addon-icon wi wi-day-sunny uk-text-warning"></i>
+                                    </div>
+                                    <div class="md-list-content">
+                                        <span class="md-list-heading">{{rCount}}</span>
+                                        <span class="uk-text-small uk-text-muted">RFID Reader</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="md-list-addon-element">
+                                        <i class="material-icons">&#xE8C7;</i>
+                                    </div>
+                                    <div class="md-list-content">
+                                        <span class="md-list-heading">{{aCount}}</span>
+                                        <span class="uk-text-small uk-text-muted">Antenna</span>
+                                    </div>
+                                </li>
+                                <li>
+
+                                    <div class="md-list-content">
+                                        <ul id="spAPI">
+                                        </ul>
+                                        <span class="uk-text-small uk-text-muted">API Status</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="uk-width-medium-1-3">
+            <div class="md-card">
+                <div class="md-card-content">
+                    <h4 class="heading_c uk-margin-bottom">Total Percentage of Assets & Employee</h4>
+                    <div id="asssetper" class="c3chart"></div>
+                </div>
+            </div>
+        </div>
+        <div class="uk-width-medium-1-3">
+            <div class="md-card">
+                <div class="md-card-content">
+                    <h4 class="heading_c uk-margin-bottom">Asset Assigned To Employee Due Days Left</h4>
+                    <div id="noOfdaysLeft" class="c3chart"></div>
+                </div>
+            </div>
+        </div>
+        <div class="uk-width-medium-1-3">
+            <div class="md-card">
+                <div class="md-card-content">
+                    <h4 class="heading_c uk-margin-bottom">Asset Check Rescent Checkin</h4>
+                    <div id="issuedDate" class="c3chart"></div>
+                </div>
+            </div>
+        </div>
+        <div class="uk-width-large-1-4">
+
+        </div>
+    </div>
+
+
+    <!-- Old-->
+    <div class="uk-grid uk-grid-medium uk-grid-width-medium-1-2 uk-grid-width-large-1-2" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}" style="display:none">
+        <div>
+            <div class="md-card">
+                <div class="md-card-content">
+                    <h4 class="heading_a uk-margin-bottom">Reader Notification</h4>
+                    <ul class="md-list md-list-addon md-list-interactive" ng-repeat="rs in _ReaderLog">
+                        <li data-video-src="-CYs99M7hzA">
+                            <div class="md-list-addon-element">
+                                <i class="md-list-addon-icon material-icons">&#xE037;</i>
+                            </div>
+                            <div class="md-list-content" ng-if="rs.Status == true">
+                                <span class="md-list-heading uk-text-success">Reader Log : {{rs.name}}</span>
+                                <span class="uk-text-small uk-text-muted uk-text-success">{{rs.Reason}} , {{rs.CreatedDate | jsonDate:'dd MM yyyy HH:mm a'}}</span>
+                            </div>
+                            <div class="md-list-content" ng-if="rs.Status == false">
+                                <span class="md-list-heading uk-text-danger">Reader Log : {{rs.name}}</span>
+                                <span class="uk-text-small uk-text-muted uk-text-danger">{{rs.Reason}} , {{rs.CreatedDate | jsonDate:'dd MM yyyy HH:mm a'}}</span>
+                            </div>
+                        </li>
+                    </ul>
+                    <ul class="md-list md-list-addon md-list-interactive" ng-repeat="pc in _portLog">
+                        <li data-video-src="-CYs99M7hzA">
+                            <div class="md-list-addon-element">
+                                <i class="md-list-addon-icon material-icons">&#xE037;</i>
+                            </div>
+                            <div class="md-list-content">
+                                <span class="md-list-heading uk-text-danger">Port Change Log : {{pc.name}}</span>
+                                <span class="uk-text-small uk-text-muted uk-text-danger">Port :{{pc.PortNumber}} , {{pc.ChangeStatus}} {{pc.CreatedDate | jsonDate:'dd MM yyyy hh:mm a'}}</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div class="md-card">
+                <div class="md-card-content">
+                    <h4 class="heading_c uk-margin-bottom">
+                        Asset Depreciation With No of Months Left & Last Life Date
+
+
+                    </h4>
+                    <div id="assetDesp" class="c3chart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*<div>
+            <div>
+                <hr />
+                <div class="uk-width-large-8-10 uk-float-right">
+                    <div class="uk-clearfix">
+                        <div class="md-top-bar-actions-right">
+                            <div class="md-top-bar-icons">
+                                <a id="start" title="Start Monitoring">   <i class="material-icons md-36">&#xE8F4;</i></a>
+                                <a id="stop" title="Stop Monitoring"> <i class="material-icons md-36">&#xE8F5;</i></a>   <span id="_timerMsg"></span>
+                            </div>
+
+                            <hr />
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>*@
+
+
+</div>
+
+@section foot
+{
+
+
+    <!--  tour functions -->
+    <script src="~/Content/bower_components/enjoyhint/enjoyhint.js"></script>
+    <script src="~/Content/assets/js/pages/plugins_tour.min.js"></script>
+
+    @*<script src="~/AppJs/HexaDash.js"></script>*@
+    @*<script type="text/javascript" src="~/Content/loader.js"></script>*@
+    <!-- CLNDR -->
+    <script src="~/Content/bower_components/clndr/clndr.min.js"></script>
+
+
+        <!-- countUp -->
+    <script src="~/Content/bower_components/countUp.js/dist/countUp.min.js"></script>
+
+    <!-- peity (small charts) -->
+    <script src="~/Content/bower_components/peity/jquery.peity.min.js"></script>
+    <!--  dashbord functions -->
+    @*<script src="~/Content/assets/js/pages/dashboard.min.js"></script>*@
+    <!-- page specific plugins -->
+    <!-- d3 -->
+    <script src="~/Content/bower_components/d3/d3.min.js"></script>
+    <!-- metrics graphics (charts) -->
+    <script src="~/Content/bower_components/metrics-graphics/dist/metricsgraphics.min.js"></script>
+    <!-- c3.js (charts) -->
+    <script src="~/Content/bower_components/c3js-chart/c3.min.js"></script>
+    <script src="~/Content/bower_components/c3js-chart/c3.js"></script>
+    <!--  dashbord functions -->
+    <script src="~/Content/assets/js/pages/dashboard.min.js"></script>
+    @*chartist*@
+    <script src="~/Content/bower_components/chartist/dist/chartist.min.js"></script>
+    <!--  charts functions -->
+    @*<script src="~/Content/assets/js/pages/plugins_charts.min.js"></script>*@
+
+
+}

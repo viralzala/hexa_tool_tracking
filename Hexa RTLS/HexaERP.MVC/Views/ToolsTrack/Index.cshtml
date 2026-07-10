@@ -1,0 +1,584 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!doctype html>
+<!--[if lte IE 9]> <html class="lte-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 9]><!-->
+<html lang="en">
+<!--<![endif]-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Remove Tap Highlight on Windows Phone IE -->
+    <meta name="msapplication-tap-highlight" content="no" />
+    <title>Tools Monitoring</title>
+
+    <!-- uikit -->
+    <link rel="stylesheet" href="../Content/bower_components/uikit/css/uikit.almost-flat.min.css" media="all">
+    <!-- flag icons -->
+    <link rel="stylesheet" href="../Content/assets/icons/flags/flags.min.css" media="all">
+    <!-- style switcher -->
+    <link rel="stylesheet" href="../Content/assets/css/style_switcher.min.css" media="all">
+
+    <!-- altair admin -->
+    <link rel="stylesheet" href="../Content/assets/css/main.min.css" media="all">
+    <!-- themes -->
+    <link rel="stylesheet" href="../Content/assets/css/themes/themes_combined.min.css" media="all">
+
+  
+    <link href="../Content/bower_components/datatables/media/css/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="../Content/bower_components/datatables/media/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+    <!-- additional styles for plugins -->
+    <!-- kendo UI -->
+
+    <link href="@Url.Content("~/Content/bower_components/kendo-ui/styles/kendo.common-material.min.css")"
+          rel="stylesheet" type="text/css" media="all" />
+
+
+    <link href="@Url.Content("~/Content/bower_components/kendo-ui/styles/kendo.material.min.css")"
+          rel="stylesheet" type="text/css" media="all" id="kendoCSS" />
+
+    @Scripts.Render("~/bundles/AngularJS")
+    @Scripts.Render("~/bundles/AngularJSTranslate")
+    <!-- matchMedia polyfill for testing media queries in JS -->
+    <!--[if lte IE 9]>
+        <script type="text/javascript" src="bower_components/matchMedia/matchMedia.js"></script>
+        <script type="text/javascript" src="bower_components/matchMedia/matchMedia.addListener.js"></script>
+        <link rel="stylesheet" href="assets/css/ie.css" media="all">
+    <![endif]-->
+</head>
+<body class="sidebar_main_swipe" ng-app="app" ng-controller="ctrl" >
+    <!-- main header -->
+    <header id="header_main">
+        <div class="header_main_content">
+            <nav class="uk-navbar">
+                <div id="menu_top_dropdown" class="uk-float-left uk-hidden-small">
+                    <div class="uk-button-dropdown" data-uk-dropdown="{mode:'click'}">
+                        <a href="#" class="top_menu_toggle"><i class="material-icons md-24">&#xE8F0;</i></a>
+                        <div class="uk-dropdown uk-dropdown-width-1">
+                            <div class="uk-grid uk-dropdown-grid">
+                                <div class="uk-width-2-4">
+                                    <ul>
+                                        <li>
+                                            <a href="@Url.Action("","AdminMaster")" class="uk-margin-top">
+                                                <span class="uk-text-muted uk-display-block">Home</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a ng-click="setLang('en_US')">English</a> 
+                                        </li>
+                                        <li>
+                                            <a ng-click="setLang('ar-AR')">عربى</a>
+                                        </li>
+                                    </ul>                                   
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+    </header>
+    <!-- main header end -->
+    <!-- main sidebar -->
+    <!-- main sidebar end -->
+    <div id="page_content" ng-controller="ToolsTrackCtrl">
+        <div id="page_content_inner">
+            <h3 class="heading_b uk-margin-bottom" ng-bind="'MonitorTools'|translate"></h3>
+           
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-medium-1-3">
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <div class="uk-grid" data-uk-grid-margin>
+                                <div class="uk-width-large-1-1">
+                                    <div class="uk-input-group">
+                                        <div class="md-input-wrapper">
+                                            @*<label>IP Address</label>*@
+                                            <input type="text" id="ReaderIp" ng-model="ReaderIp" placeholder="{{'IPAddress'|translate}}" name="ReaderIp"><span class="md-input-bar "></span>
+                                        </div>
+                                        <span class="uk-input-group-addon">
+                                            <a class="md-btn md-btn-primary md-btn-small" ng-click="StartReader()"><i class="material-icons"></i></a>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="uk-width-medium-1-3">
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <div class="uk-grid" data-uk-grid-margin>
+                                <div class="uk-width-medium-1-2 parsley-row">
+                                    <div class="uk-input-group">
+                                        <span class="uk-input-group-addon">
+                                            <label for="product_edit_sku_control" ng-bind="'Stop'|translate"></label>
+                                        </span>
+                                        <a ng-click="StopReader()" class="md-btn md-btn-primary md-btn-small"><i class="material-icons">&#xE036;</i></a>
+                                    </div>
+                                </div>
+                                <div class="uk-width-medium-1-2 parsley-row">
+                                    <div class="uk-input-group">
+                                        <span class="uk-input-group-addon">
+                                            <label for="product_edit_sku_control" ng-bind="'ClearData'|translate"></label>
+                                        </span>
+                                        <a ng-click="ClearData()" class="md-btn md-btn-primary md-btn-small"><i class="material-icons">&#xE14C;</i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="uk-width-medium-1-3">
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <div class="uk-grid" data-uk-grid-margin>
+                                <div class="uk-width-medium-1-2 parsley-row">
+                                    <label for="contact_list_search" ng-bind="'ReaderStatus'|translate"></label>
+                                    <div class="uk-input-group">
+                                        <span>{{lblMsg}}</span>
+                                    </div>
+                                </div>                               
+                            </div>
+                        </div>
+                    </div>                   
+                </div>
+            </div>       
+          
+            <div class="uk-grid uk-grid-width-large-1-4 uk-grid-width-medium-1-2 uk-grid-medium uk-sortable sortable-handler hierarchical_show" data-uk-sortable data-uk-grid-margin>
+                <div>
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="peity_visitors peity_data"></span></div>
+                            <span class="uk-text-muted uk-text-small" ng-bind="'TotalTools'|translate"></span>
+                            <h2 class="uk-margin-remove"><span id="txtTot" ng-model="getAllCount" class="countUpMe">{{getAllCount?getAllCount:0}}<noscript></noscript></span></h2>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="peity_live peity_data"></span></div>
+                            <span class="uk-text-muted uk-text-small" ng-bind="'Tracked'|translate"></span>
+                            <h2 class="uk-margin-remove" ng-model="TrackedData" id="peity_live_text">{{TrackedData?TrackedData:0}}</h2>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="peity_sale peity_data"></span></div>
+                            <span class="uk-text-muted uk-text-small"  ng-bind="'Missing'|translate"></span>
+                            <h2 class="uk-margin-remove"><span id="txtmix" ng-model="MissingData" class="countUpMe">{{MissingData=(getAllCount-TrackedData)}}<noscript></noscript></span></h2>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="peity_orders peity_data">64/100</span></div>
+                            <span class="uk-text-muted uk-text-small" ng-bind="'LastTrack'|translate"></span>
+                            <h2 class="uk-margin-remove"><span id="lbldt" ng-model="lastTracked" class="countUpMe">{{lastTracked | date: 'yyyy-MM-dd HH:mm'}}<noscript></noscript></span></h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="uk-grid" data-uk-grid-margin="" data-uk-grid-match="{target:'.md-card-content'}">
+                <div class="uk-width-medium-1-1 uk-row-first">
+                    <h6 class="heading_b uk-margin-bottom" ng-bind="'TrackingList'|translate"></h6>
+                    <div class="md-card">
+                        <div class="md-card-content" style="min-height: 280px;">
+                            <div class="uk-overflow-container">
+                                <table id="dt_tableTrack" class="uk-table">
+                                    <thead>
+                                        <tr>
+                                            <th ng-bind="'RFID'|translate"></th>
+                                            <th ng-bind="'General.Date'|translate"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="Iteam in TrackedList">
+                                            <td>{{Iteam.RFID}}</td>
+                                            <td>{{ Iteam.tDate | jsonDate: "yyyy-MM-dd HH:mm:ss" }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+
+            @*<h3 class="heading_b uk-margin-bottom">Contact List</h3>*@
+            @*<div class="md-card uk-margin-medium-bottom">
+                    <div class="md-card-content">
+                        <div class="uk-grid" data-uk-grid-margin>
+                            <div class="uk-width-medium-1-2">
+                                <div class="uk-vertical-align">
+                                    <div class="uk-vertical-align-middle">
+                                        <ul id="contact_list_filter" class="uk-subnav uk-subnav-pill uk-margin-remove">
+                                            <li class="uk-active" data-uk-filter=""><a href="#">All</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="uk-width-medium-1-2">
+                                <label for="contact_list_search">Search... (min 3 char.)</label>
+                                <input class="md-input" type="text" id="contact_list_search" />
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+            <h3 class="heading_b uk-text-center grid_no_results" style="display: none">No results found</h3>
+            @*<div class="uk-grid-width-small-1-2 uk-grid-width-medium-1-3 uk-grid-width-large-1-4 uk-grid-width-xlarge-1-5 hierarchical_show" id="contact_list">
+                    <div data-uk-filter="schamberger plc ,antonietta witting,hkeeling@hotmail.com">
+                        <div class="md-card md-card-hover">
+                            <div class="md-card-head">
+                                <div class="md-card-head-menu" data-uk-dropdown="{pos:'bottom-right'}">
+                                    <i class="md-icon material-icons">&#xE5D4;</i>
+                                    <div class="uk-dropdown uk-dropdown-small">
+                                        <ul class="uk-nav">
+                                            <li><a href="#">Edit</a></li>
+                                            <li><a href="#">Remove</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="uk-text-center">
+                                    <img class="md-card-head-avatar" src="../Content/assets/img/avatars/avatar_02.png" alt="" />
+                                </div>
+                                <h3 class="md-card-head-text uk-text-center">
+                                    Antonietta Witting                                <span class="uk-text-truncate">Schamberger PLC </span>
+                                </h3>
+                            </div>
+                            <div class="md-card-content">
+                                <ul class="md-list">
+                                    <li>
+                                        <div class="md-list-content">
+                                            <span class="md-list-heading">Info</span>
+                                            <span class="uk-text-small uk-text-muted">Id eum culpa sunt aspernatur dolor ducimus quisquam tenetur earum recusandae ut.</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="md-list-content">
+                                            <span class="md-list-heading">Email</span>
+                                            <span class="uk-text-small uk-text-muted uk-text-truncate">hkeeling@hotmail.com</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="md-list-content">
+                                            <span class="md-list-heading">Phone</span>
+                                            <span class="uk-text-small uk-text-muted">(308)456-6832</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>*@
+        </div>
+        @*<div class="md-fab-wrapper">
+                <a class="md-fab md-fab-accent" href="#">
+                    <i class="material-icons">&#xE145;</i>
+                </a>
+            </div>*@
+    </div>
+    <!-- google web fonts -->
+    <script>
+        WebFontConfig = {
+            google: {
+                families: [
+                    'Source+Code+Pro:400,700:latin',
+                    'Roboto:400,300,500,700,400italic:latin'
+                ]
+            }
+        };
+        (function () {
+            var wf = document.createElement('script');
+            wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+            '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+            wf.type = 'text/javascript';
+            wf.async = 'true';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(wf, s);
+        })();
+    </script>
+    <!-- common functions -->
+    <script src="../Content/assets/js/common.min.js"></script>
+    <!-- uikit functions -->
+    <script src="../Content/assets/js/uikit_custom.min.js"></script>
+    <!-- altair common functions/helpers -->
+    <script src="../Content/assets/js/altair_admin_common.min.js"></script>
+    <!-- page specific plugins -->
+    <!--  contact list functions -->
+    <script src="../Content/assets/js/pages/page_contact_list.min.js"></script>
+
+    <script src="~/Scripts/HexaAgular/HexaTranslateProvider.js"></script>
+
+    <script>
+
+        //var d = new Date();
+        //document.getElementById("lbldt").innerHTML = d.toLocaleTimeString();
+
+        $(function () {
+            if (isHighDensity()) {
+                $.getScript("../Content/bower_components/dense/src/dense.js", function () {
+                    // enable hires images
+                    altair_helpers.retina_images();
+                });
+            }
+            if (Modernizr.touch) {
+                // fastClick (touch devices)
+                FastClick.attach(document.body);
+            }
+        });
+        $window.load(function () {
+            // ie fixes
+            altair_helpers.ie_fix();
+        });
+    </script>
+
+    <div id="style_switcher">
+        <div id="style_switcher_toggle"><i class="material-icons">&#xE8B8;</i></div>
+        <div class="uk-margin-medium-bottom">
+            <h4 class="heading_c uk-margin-bottom">Colors</h4>
+            <ul class="switcher_app_themes" id="theme_switcher">
+                <li class="app_style_default active_theme" data-app-theme="">
+                    <span class="app_color_main"></span>
+                    <span class="app_color_accent"></span>
+                </li>
+                <li class="switcher_theme_a" data-app-theme="app_theme_a">
+                    <span class="app_color_main"></span>
+                    <span class="app_color_accent"></span>
+                </li>
+                <li class="switcher_theme_b" data-app-theme="app_theme_b">
+                    <span class="app_color_main"></span>
+                    <span class="app_color_accent"></span>
+                </li>
+                <li class="switcher_theme_c" data-app-theme="app_theme_c">
+                    <span class="app_color_main"></span>
+                    <span class="app_color_accent"></span>
+                </li>
+                <li class="switcher_theme_d" data-app-theme="app_theme_d">
+                    <span class="app_color_main"></span>
+                    <span class="app_color_accent"></span>
+                </li>
+                <li class="switcher_theme_e" data-app-theme="app_theme_e">
+                    <span class="app_color_main"></span>
+                    <span class="app_color_accent"></span>
+                </li>
+                <li class="switcher_theme_f" data-app-theme="app_theme_f">
+                    <span class="app_color_main"></span>
+                    <span class="app_color_accent"></span>
+                </li>
+                <li class="switcher_theme_g" data-app-theme="app_theme_g">
+                    <span class="app_color_main"></span>
+                    <span class="app_color_accent"></span>
+                </li>
+                <li class="switcher_theme_h" data-app-theme="app_theme_h">
+                    <span class="app_color_main"></span>
+                    <span class="app_color_accent"></span>
+                </li>
+                <li class="switcher_theme_i" data-app-theme="app_theme_i">
+                    <span class="app_color_main"></span>
+                    <span class="app_color_accent"></span>
+                </li>
+                <li class="switcher_theme_dark" data-app-theme="app_theme_dark">
+                    <span class="app_color_main"></span>
+                    <span class="app_color_accent"></span>
+                </li>
+            </ul>
+        </div>
+        <div class="uk-visible-large uk-margin-medium-bottom">
+            <h4 class="heading_c">Sidebar</h4>
+            <p>
+                <input type="checkbox" name="style_sidebar_mini" id="style_sidebar_mini" data-md-icheck />
+                <label for="style_sidebar_mini" class="inline-label">Mini Sidebar</label>
+            </p>
+            <p>
+                <input type="checkbox" name="style_sidebar_slim" id="style_sidebar_slim" data-md-icheck />
+                <label for="style_sidebar_slim" class="inline-label">Slim Sidebar</label>
+            </p>
+        </div>
+        <div class="uk-visible-large uk-margin-medium-bottom">
+            <h4 class="heading_c">Layout</h4>
+            <p>
+                <input type="checkbox" name="style_layout_boxed" id="style_layout_boxed" data-md-icheck />
+                <label for="style_layout_boxed" class="inline-label">Boxed layout</label>
+            </p>
+        </div>
+        <div class="uk-visible-large">
+            <h4 class="heading_c">Main menu accordion</h4>
+            <p>
+                <input type="checkbox" name="accordion_mode_main_menu" id="accordion_mode_main_menu" data-md-icheck />
+                <label for="accordion_mode_main_menu" class="inline-label">Accordion mode</label>
+            </p>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            var $switcher = $('#style_switcher'),
+                $switcher_toggle = $('#style_switcher_toggle'),
+                $theme_switcher = $('#theme_switcher'),
+                $mini_sidebar_toggle = $('#style_sidebar_mini'),
+                $slim_sidebar_toggle = $('#style_sidebar_slim'),
+                $boxed_layout_toggle = $('#style_layout_boxed'),
+                $accordion_mode_toggle = $('#accordion_mode_main_menu'),
+                $html = $('html'),
+                $body = $('body');
+
+
+            $switcher_toggle.click(function (e) {
+                e.preventDefault();
+                $switcher.toggleClass('switcher_active');
+            });
+
+            $theme_switcher.children('li').click(function (e) {
+                e.preventDefault();
+                var $this = $(this),
+                    this_theme = $this.attr('data-app-theme');
+
+                $theme_switcher.children('li').removeClass('active_theme');
+                $(this).addClass('active_theme');
+                $html
+                    .removeClass('app_theme_a app_theme_b app_theme_c app_theme_d app_theme_e app_theme_f app_theme_g app_theme_h app_theme_i app_theme_dark')
+                    .addClass(this_theme);
+
+                if (this_theme == '') {
+                    localStorage.removeItem('altair_theme');
+                    $('#kendoCSS').attr('href', '../Content/bower_components/kendo-ui/styles/kendo.material.min.css');
+                } else {
+                    localStorage.setItem("altair_theme", this_theme);
+                    if (this_theme == 'app_theme_dark') {
+                        $('#kendoCSS').attr('href', '../Content/bower_components/kendo-ui/styles/kendo.materialblack.min.css')
+                    } else {
+                        $('#kendoCSS').attr('href', '../Content/bower_components/kendo-ui/styles/kendo.material.min.css');
+                    }
+                }
+
+            });
+
+            // hide style switcher
+            $document.on('click keyup', function (e) {
+                if ($switcher.hasClass('switcher_active')) {
+                    if (
+                        (!$(e.target).closest($switcher).length)
+                        || (e.keyCode == 27)
+                    ) {
+                        $switcher.removeClass('switcher_active');
+                    }
+                }
+            });
+
+            // get theme from local storage
+            if (localStorage.getItem("altair_theme") !== null) {
+                $theme_switcher.children('li[data-app-theme=' + localStorage.getItem("altair_theme") + ']').click();
+            }
+
+
+            // toggle mini sidebar
+
+            // change input's state to checked if mini sidebar is active
+            if ((localStorage.getItem("altair_sidebar_mini") !== null && localStorage.getItem("altair_sidebar_mini") == '1') || $body.hasClass('sidebar_mini')) {
+                $mini_sidebar_toggle.iCheck('check');
+            }
+
+            $mini_sidebar_toggle
+                .on('ifChecked', function (event) {
+                    $switcher.removeClass('switcher_active');
+                    localStorage.setItem("altair_sidebar_mini", '1');
+                    localStorage.removeItem('altair_sidebar_slim');
+                    location.reload(true);
+                })
+                .on('ifUnchecked', function (event) {
+                    $switcher.removeClass('switcher_active');
+                    localStorage.removeItem('altair_sidebar_mini');
+                    location.reload(true);
+                });
+
+            // toggle slim sidebar
+
+            // change input's state to checked if mini sidebar is active
+            if ((localStorage.getItem("altair_sidebar_slim") !== null && localStorage.getItem("altair_sidebar_slim") == '1') || $body.hasClass('sidebar_slim')) {
+                $slim_sidebar_toggle.iCheck('check');
+            }
+
+            $slim_sidebar_toggle
+                .on('ifChecked', function (event) {
+                    $switcher.removeClass('switcher_active');
+                    localStorage.setItem("altair_sidebar_slim", '1');
+                    localStorage.removeItem('altair_sidebar_mini');
+                    location.reload(true);
+                })
+                .on('ifUnchecked', function (event) {
+                    $switcher.removeClass('switcher_active');
+                    localStorage.removeItem('altair_sidebar_slim');
+                    location.reload(true);
+                });
+
+            // toggle boxed layout
+
+            if ((localStorage.getItem("altair_layout") !== null && localStorage.getItem("altair_layout") == 'boxed') || $body.hasClass('boxed_layout')) {
+                $boxed_layout_toggle.iCheck('check');
+                $body.addClass('boxed_layout');
+                $(window).resize();
+            }
+
+            $boxed_layout_toggle
+                .on('ifChecked', function (event) {
+                    $switcher.removeClass('switcher_active');
+                    localStorage.setItem("altair_layout", 'boxed');
+                    location.reload(true);
+                })
+                .on('ifUnchecked', function (event) {
+                    $switcher.removeClass('switcher_active');
+                    localStorage.removeItem('altair_layout');
+                    location.reload(true);
+                });
+
+            // main menu accordion mode
+            if ($sidebar_main.hasClass('accordion_mode')) {
+                $accordion_mode_toggle.iCheck('check');
+            }
+
+            $accordion_mode_toggle
+                .on('ifChecked', function () {
+                    $sidebar_main.addClass('accordion_mode');
+                })
+                .on('ifUnchecked', function () {
+                    $sidebar_main.removeClass('accordion_mode');
+                });
+        });
+    </script>
+
+
+    <!-- page specific plugins -->
+    <script src="../Content/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="../Content/bower_components/datatables/media/js/dataTables.bootstrap.min.js"></script>
+
+
+
+    <script src="../Content/bower_components/parsleyjs/dist/parsley.min.js"></script>
+
+    @*<script src="~/AppJs/Tools/ToolsTrack.js"></script>*@
+    <!-- page specific plugins -->
+    <!-- kendo UI -->
+    <script src="@Url.Content("~/Content/assets/js/kendoui_custom.min.js")"
+            type="text/javascript"></script>
+
+    <!--  kendoui functions -->
+    <script src="@Url.Content("~/Content/assets/js/pages/kendoui.min.js")"
+            type="text/javascript"></script>
+
+    <script src="~/Scripts/HexaAgular/ToolsTrack.js"></script>
+</body>
+</html>

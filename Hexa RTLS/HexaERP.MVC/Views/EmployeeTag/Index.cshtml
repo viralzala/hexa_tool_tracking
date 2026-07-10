@@ -1,0 +1,445 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+
+@section head
+{
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.common-material.min.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.material.min.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/datatables/media/css/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/datatables/media/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+}
+
+<div id="page_content_inner" ng-controller="EmployeeTagCtrl">
+    <h3 class="heading_b uk-margin-bottom">Employee Tag</h3>
+
+
+    <div class="md-card uk-margin-large-bottom">
+        <div class="md-card-content">
+            <form class="uk-form-stacked" id="wizard_advanced_form">
+                <div id="wizard_advanced">
+                    <div class="scrum_task critical">
+                        <h3 class="scrum_task_title">Note: </h3>
+                        <p class="scrum_task_description"> All * are mandatory field</p>
+
+                    </div>
+
+                    <!-- first section -->
+                    <h3>Employee Information</h3>
+                    <section>
+
+                        <div class="uk-grid" data-uk-grid-margin>
+                            <input type="text" name="tEmployeeTagId" id="tEmployeeTagId" style="display:none;" />
+                            <div class="uk-width-1-4">
+                                <div class="md-card">
+                                    <div class="md-card-content">
+                                        <h3 class="heading_a uk-margin-bottom">Search User Detail From Active Directory.</h3>
+                                        <div class="uk-width-1-1">
+                                            <input type="text" id="adUser" class="uk-width-1-1" placeholder="Min 2 char">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="uk-width-1-4">
+                                <div class="md-card">
+                                    <div class="md-card-content">
+                                        <div class="uk-input-group">
+                                            <span class="uk-input-group-addon">
+                                                <i class="uk-icon-user"></i>
+                                            </span>
+                                            <label for="wizard_fullname"><b>Employee Name</b> <span class="req">*</span></label>
+                                            <input type="text" id="EmployeeName" name="EmployeeName" ng-model="EmployeeName" class="md-input label-fixed" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="uk-width-1-4">
+                                <div class="md-card">
+                                    <div class="md-card-content">
+                                        <div class="uk-input-group">
+                                            <span class="uk-input-group-addon">
+                                                <i class="uk-icon-credit-card-alt"></i>
+                                            </span>
+                                            <label for="wizard_address"><b>Employee Id</b> <span class="req">*</span></label>
+                                            <input type="text" id="EmployeeId" name="EmployeeId" ng-model="EmployeeId" required class="md-input label-fixed" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="uk-width-1-4">
+                                <div class="md-card">
+                                    <div class="md-card-content">
+                                        <div class="uk-input-group">
+                                            <span class="uk-input-group-addon">
+                                                <i class="uk-icon-mobile-phone"></i>
+                                            </span>
+                                            <label for="wizard_address"><b>Contact No</b> <span class="req">*</span></label>
+                                            <input type="text" id="ContactNo" name="ContactNo" ng-model="ContactNo" required class="md-input label-fixed" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="uk-grid" data-uk-grid-margin>
+                            <div class="uk-width-1-4">
+                                <div class="md-card">
+                                    <div class="md-card-content">
+                                        <div class="uk-input-group">
+                                            <span class="uk-input-group-addon">
+                                                <i class="uk-icon-envelope"></i>
+                                            </span>
+                                            <label for="wizard_address"><b>Email Id</b> <span class="req">*</span></label>
+                                            <input type="text" id="EmailId" name="EmailId" ng-model="EmailId" required class="md-input label-fixed" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="uk-width-1-4">
+                                <div class="md-card">
+                                    <div class="md-card-content">
+                                        <div class="uk-input-group">
+                                            <input class="md-btn md-btn-wave waves-effect waves-button" id="mAgencyId" name="mAgencyId" ng-model="mAgencyId" placeholder="Select Agency" />
+                                            <span class="uk-form-help-block"><b>Agency Name</b></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="uk-width-1-4">
+                                <div class="md-card">
+                                    <div class="md-card-content">
+                                        <div class="uk-input-group">
+                                            <div class="uk-input-group">
+                                                <input class="md-btn md-btn-wave waves-effect waves-button" id="mDesignationId" name="mDesignationId" ng-model="mDesignationId" placeholder="Select Designation" />
+                                                <span class="uk-form-help-block"><b>Designation</b></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="uk-width-1-4">
+                                <div class="md-card">
+                                    <div class="md-card-content">
+                                        <div class="uk-input-group">
+                                            <div class="uk-input-group">
+                                                <input class="md-btn md-btn-wave waves-effect waves-button" id="mSkillCategoryId" name="mSkillCategoryId" ng-model="mSkillCategoryId" placeholder="Select Skill" />
+                                                <span class="uk-form-help-block"><b>Skill Category</b></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="uk-grid uk-grid-width-medium-1-2 uk-grid-width-large-1-4" data-uk-grid-margin>
+                            
+
+
+
+
+
+
+
+                        </div>
+
+
+                        <div class="uk-grid uk-grid-width-medium-1-2 uk-grid-width-large-1-4" data-uk-grid-margin>
+                            @*<div class="uk-input-group">
+                                    <span class="uk-input-group-addon">
+                                        <i class="material-icons">&#xE0CD;</i>
+                                    </span>
+                                    <label for="wizard_phone"><b>Phone Number</b></label>
+                                    <input type="text" id="ContactNo" class="md-input label-fixed" name="ContactNo" ng-model="ContactNo" />
+                                </div>*@
+
+
+                            @*<div class="uk-input-group">
+                                    <span class="uk-input-group-addon">
+                                        <i class="material-icons">&#xE0BE;</i>
+                                    </span>
+                                    <label for="wizard_email"><b>Email</b></label>
+                                    <input type="email" id="EmailId" class="md-input label-fixed" name="EmailId" ng-model="EmailId" required />
+                                </div>*@
+
+
+
+                           
+
+                        </div>
+                    </section>
+
+                    <!-- second section -->
+                    <h3>Work Area Information</h3>
+                    <section>
+
+                        <div class="uk-grid" data-uk-grid-margin>
+                            <div class="uk-width-medium-1-2">
+                                <div class="uk-form-row">
+                                    <div class="uk-grid" data-uk-grid-margin>
+                                        <div class="uk-width-medium-1-2">
+                                            <div class="uk-input-group">
+                                                <span class="uk-input-group-addon">
+
+                                                </span>
+                                                <input class="md-btn md-btn-wave waves-effect waves-button" id="mSiteMasterId" name="mSiteMasterId" ng-model="mSiteMasterId" placeholder="Select Location" />
+                                                <span class="uk-form-help-block"><b>Location</b>*</span>
+                                            </div>
+                                        </div>
+                                        <div class="uk-width-medium-1-2">
+                                            <div class="uk-input-group">
+                                                <span class="uk-input-group-addon">
+                                                    <i class="uk-icon-home"></i>
+                                                </span>
+                                                <input id="mZoneId" name="mZoneId" ng-model="mZoneId" placeholder="Select Zone" />
+                                                <span class="uk-form-help-block"><b> Zone</b>*</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="uk-grid" data-uk-grid-margin>
+                                        <div class="uk-width-medium-1-2">
+                                            <div class="uk-input-group">
+                                                <span class="uk-input-group-addon">
+
+                                                </span>
+                                                <input id="mFloorMasterId" name="mFloorMasterId" ng-model="mFloorMasterId" placeholder="Select Sub Zone" />
+                                                <span class="uk-form-help-block"><b>Sub Zone</b> *</span>
+                                            </div>
+                                        </div>
+                                        <div class="uk-width-medium-1-2">
+                                            <div class="uk-input-group">
+                                                <span class="uk-input-group-addon">
+                                                    <i class="material-icons">&#xE8C7;</i>
+                                                </span>
+                                                <input id="mRoomMasterId" name="mRoomMasterId" ng-model="mRoomMasterId" placeholder="Select Area" />
+                                                <span class="uk-form-help-block"><b>Antenna Location</b> *</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="uk-width-medium-1-2">
+                                <div class="uk-grid" data-uk-grid-margin>
+
+                                    <div class="uk-width-medium-1-2">
+                                        <div class="uk-input-group">
+                                            <input id="mWorkCategoryId" class="md-btn md-btn-wave waves-effect waves-button" name="mWorkCategoryId" ng-model="mWorkCategoryId" placeholder="Select Work" />
+                                            <span class="uk-form-help-block"><b>Work Category</b></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="uk-width-medium-1-2">
+                                        <div class="uk-input-group">
+                                            <input id="mActivityId" class="md-btn md-btn-wave waves-effect waves-button" name="mActivityId" ng-model="mActivityId" placeholder="Select Activity" />
+                                            <span class="uk-form-help-block"><b>Activity</b></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="uk-grid" data-uk-grid-margin>
+                                    <div class="uk-width-medium-1-2">
+                                        <div class="uk-input-group">
+                                            <input id="mShiftId" class="md-btn md-btn-wave waves-effect waves-button" name="mShiftId" ng-model="mShiftId" placeholder="Select Shift" />
+                                            <span class="uk-form-help-block"><b>Shift</b></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </section>
+
+                    <!-- third section -->
+                    <h3>Assign RFID Tag</h3>
+                    <section>
+
+
+                        <span class="uk-alert uk-alert-info">Assign RFID Tag through Destop Reader</span>
+                        <div class="uk-grid uk-grid-width-medium-1-1 uk-grid-width-large-1-2" data-uk-grid-margin>
+
+                            <div class="uk-input-group">
+                                <span class="uk-input-group-addon">
+                                    <i class="uk-icon-barcode"></i>
+                                </span>
+                                <label for="product_edit_sku_control"><b>RFID</b> *</label>
+                                <input type="text" id="RFID" name="RFID" ng-model="RFID" class="md-input label-fixed" />
+                            </div>
+                            <div class="uk-input-group">
+                                <label for="product_edit_sku_control"><b> PORT ID </b></label>
+                                <input type="text" id="PORTID" ng-model="PORTID" disabled class="md-input label-fixed" />
+                            </div>
+
+                            <div class="uk-input-group">
+                                <div class="md-card" title="Reader Port">
+                                    <div class="md-card-toolbar">
+                                        <h3 class="md-card-toolbar-heading-text">
+                                            <b> Port</b>
+                                        </h3>
+                                    </div>
+                                    <div class="md-card-content" title="Port">
+                                        <input class="md-btn md-btn-wave waves-effect waves-button" id="ddTapRfid" ng-model="ddTapRfid" placeholder="Select Port" />
+                                        @*<select ng-model="ddTapRfid" id="ddTapRfid" ng-options="Iteam.Key for Iteam in ListPort track by Iteam.Value"></select>*@
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <div class="uk-input-group">
+                                <div class="md-card" title="Reader Control">
+                                    <div class="md-card-toolbar">
+                                        <h3 class="md-card-toolbar-heading-text">
+                                            Desktop  Reader Control
+                                        </h3>
+                                    </div>
+                                    <div class="md-card-content large-padding">
+                                        <div class="uk-input-group">
+                                            <a title="Start" onclick="putPorts()" class="md-btn md-btn-primary md-btn-small"><i class="material-icons"></i></a>
+                                            &nbsp;&nbsp; <a title="Stop" ng-click="putStop()" class="md-btn md-btn-primary md-btn-small"><i class="material-icons">&#xE036;</i></a>
+                                            &nbsp;&nbsp; <a title="Get RFID" onclick="DataTap()" class="md-btn md-btn-primary md-btn-small"><i class="uk-icon-barcode"></i></a>
+                                        </div>
+                                    </div>
+
+                                    <div class="md-card-toolbar">
+                                        <h3 class="md-card-toolbar-heading-text">
+                                            {{msg}}<label id="errdtr"></label>
+                                        </h3>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+
+                        <span class="uk-alert uk-alert-info">Assign RFID Tag through Antenna</span>
+
+                        <div class="uk-grid uk-grid-width-medium-1-1 uk-grid-width-large-1-2" data-uk-grid-margin>
+                            <div class="uk-input-group">
+                                <div class="md-card" title="Reader Port">
+                                    <div class="md-card-toolbar">
+                                        <h3 class="md-card-toolbar-heading-text">
+                                            IP Address of Impinj Reader
+                                        </h3>
+                                    </div>
+                                    <div class="md-card-content" title="Last Tracked Time">
+                                        <div class="uk-input-group">
+                                            <input class="md-btn md-btn-wave waves-effect waves-button" id="Reader" ng-model="Reader" placeholder="IP" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="uk-input-group">
+                                <div class="md-card" title="Reader Control">
+                                    <div class="md-card-toolbar">
+                                        <h3 class="md-card-toolbar-heading-text">
+                                            Impinj R420  Reader Control
+                                        </h3>
+                                    </div>
+                                    <div class="md-card-content large-padding">
+                                        <div class="uk-input-group">
+                                            <a title="Start" onclick="startImpinj()" class="md-btn md-btn-primary md-btn-small"><i class="material-icons"></i></a>
+                                            &nbsp;&nbsp; <a title="Stop" onclick="stopImpinj()" class="md-btn md-btn-primary md-btn-small"><i class="material-icons">&#xE036;</i></a>
+                                            &nbsp;&nbsp; <a title="Clear" onclick="clearImpinj()" class="md-btn md-btn-primary md-btn-small"><i class="material-icons">&#xE14C;</i></a>
+                                            &nbsp;&nbsp; <a title="Get RFID" onclick="getImpinjRFID()" class="md-btn md-btn-primary md-btn-small"><i class="uk-icon-barcode"></i></a>
+                                        </div>
+                                    </div>
+
+                                    <div class="md-card-toolbar">
+                                        <h3 class="md-card-toolbar-heading-text">
+                                            {{msg}}<lan id="lblerr"></lan>
+                                        </h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="md-card uk-margin-medium-bottom">
+        <div class="md-card-content">
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-medium-1-1">
+                    <div class="uk-input-group">
+                        <span class="uk-input-group-addon">
+                            <i class="uk-icon-search"></i>
+                        </span>
+                        <div class="md-input-wrapper md-input-filled">
+                            <label for="product_edit_quantity_control">Search</label>
+                            <input type="text" class="md-input" name="search" id="global_filter">
+                            <span class="md-input-bar "></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h4 class="heading_a uk-margin-bottom">Edit Employee Detail</h4>
+
+    <div class="md-card uk-margin-medium-bottom">
+        <div class="md-card-content">
+            <div class="dt_colVis_buttons"></div>
+            <div class="table-responsive">
+                <table id="tbl" class="uk-table" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Employee Name</th>
+                            <th>Employee ID</th>
+                            <th>Agency Name</th>
+                            <th>Designation</th>
+                            <th>Skill Category</th>
+                            <th>RFID</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+@section foot
+{
+
+
+    <!-- page specific plugins -->
+    <script src="~/Content/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/bower_components/datatables/media/js/dataTables.bootstrap.min.js"></script>
+
+    <script src="~/Content/assets/js/kendoui_custom.min.js"></script>
+    <!--  kendoui functions -->
+    <script src="~/Content/assets/js/pages/kendoui.min.js"></script>
+
+    <script src="~/Content/bower_components/parsleyjs/dist/parsley.min.js"></script>
+
+    <!-- jquery steps -->
+    <script src="~/Content/assets/js/custom/wizard_steps.min.js"></script>
+
+
+    <!--  forms wizard functions -->
+    <script src="~/Scripts/HexaAgular/EmployeeForm.js"></script>
+    <script src="~/Scripts/HexaAgular/EmployeeTag.js"></script>
+
+    <!--  notifications -->
+    <script src="~/AppJs/CRM/Notification.js"></script>
+
+}

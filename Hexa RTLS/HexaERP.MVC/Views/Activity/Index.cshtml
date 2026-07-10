@@ -1,0 +1,104 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+
+
+@section head
+{
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.common-material.min.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.material.min.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/datatables/media/css/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/datatables/media/css/jquery.dataTables.min.css" rel="stylesheet" />
+}
+<div ng-controller="ActivityCtrl">
+    <div id="page_content">
+        <div id="page_content_inner">
+            <h3 class="heading_b uk-margin-bottom">Activity Master</h3>
+
+            @using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "_formColl", @name = "_formColl" }))
+            {
+                @*@Html.AntiForgeryToken()*@
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="md-card uk-margin-medium-bottom">
+                    <div class="md-card-content">
+                        <div class="uk-grid" data-uk-grid-margin>
+                            <div class="uk-width-medium-1-1">
+                                <div class="uk-grid" data-uk-grid-margin>
+                                    <div class="uk-width-medium-1-4">
+                                        <input type="text" name="mActivityId" ng-model="mActivityId" ng-hide="true" />
+                                        <div class="parsley-row">
+                                            <label><b> Activity </b><span class="req"> *</span></label>
+                                            <input type="text" required name="Activity" ng-model="Activity" class="md-input label-fixed" />
+                                        </div>
+                                    </div>
+                                    <div class="uk-width-large-1-3 uk-width-medium-1-1">
+                                        <div class="uk-input-group">
+                                            <button title="Add" type="button" ng-click="SaveFormCollData()" ng-hide="isAdd"
+                                                    class="md-btn md-btn-primary">
+                                                {{loading ? loading : 'Add'}}
+                                            </button>
+
+                                            <button title="Update" type="button" ng-click="EditFormCollData();" ng-init="isEdit=true" ng-hide="isEdit"
+                                                    class="md-btn md-btn-primary">
+                                                {{loading ? loading : 'Update'}}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div class="md-card uk-margin-medium-bottom">
+                <div class="md-card-content">
+                    <div class="uk-grid" data-uk-grid-margin>
+                        <div class="uk-width-medium-1-1">
+                            <div class="uk-input-group">
+                                <span class="uk-input-group-addon">
+                                    <i class="uk-icon-search"></i>
+                                </span>
+                                <div class="md-input-wrapper md-input-filled">
+                                    <label for="product_edit_quantity_control">Search</label>
+                                    <input type="text" class="md-input" name="search" id="global_filter">
+                                    <span class="md-input-bar "></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="md-card uk-margin-medium-bottom">
+                <div class="md-card-content">
+                    <div class="dt_colVis_buttons"></div>
+                    <table id="tbls" class="uk-table" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Activity</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section foot
+{
+
+    <!-- page specific plugins -->
+    <script src="~/Content/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/bower_components/datatables/media/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/Content/assets/js/kendoui_custom.min.js"></script>
+    <!--  kendoui functions -->
+    <script src="~/Content/assets/js/pages/kendoui.min.js"></script>
+    <script src="~/Scripts/HexaAgular/Activity.js"></script>
+}
+

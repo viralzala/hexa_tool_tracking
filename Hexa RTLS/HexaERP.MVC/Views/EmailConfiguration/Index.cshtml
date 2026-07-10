@@ -1,0 +1,271 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+
+@section head
+{
+
+}
+
+<div id="page_content_inner">
+
+
+    <div class="md-card uk-margin-medium-bottom">
+        <div class="md-card-content">
+            <div class="uk-grid">
+                <div class="uk-width-1-1">
+                    <ul class="uk-tab" data-uk-tab="{connect:'#tabs_1_content'}" id="tabs_1">
+                        <li aria-expanded="true" class="uk-active"><a href="#">Get Notification</a></li>
+                        <li><a class="" aria-expanded="false" href="#">OutGoing Mail Server Config..</a></li>
+                    </ul>
+                    <form id="rmailsetup">
+                        <input type="hidden" name="mMailConfigId" id="mMailConfigId" />
+                        <ul id="tabs_1_content" class="uk-switcher uk-margin">
+                            <li aria-hidden="false" class="uk-active">
+                                <div class="scrum_task critical">
+                                    <p class="scrum_task_description"><b> Note:</b> Incooming Mails Configuration</p>
+                                </div>
+                                <div class="md-card">
+                                    <div class="md-card-content">
+                                        <div class="md-card uk-margin-medium-bottom">
+                                            <div class="md-card-content">
+                                                <div class="uk-grid" data-uk-grid-margin="">
+                                                    <div class="uk-width-medium-1-4 uk-row-first">
+                                                        <div class="md-input-wrapper md-input-filled">
+                                                            <label for="user_edit_uname_control">Email Id</label>
+                                                            <input type="text" required class="md-input label-fixed" name="EmailId" id="EmailId" value="">
+                                                            <span class="md-input-bar "></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="md-card-content">
+                                                <div class="uk-grid" data-uk-grid-margin="">
+                                                    <div class="uk-width-medium-1-4">
+                                                        <label for="user_edit_position_control">Is Add</label>
+                                                        <span class="icheck-inline">
+                                                            <input type="radio" value="True" name="IsAdd" />
+                                                            <label for="radio_demo_inline_1" class="inline-label">Yes</label>
+                                                        </span>
+                                                        <span class="icheck-inline">
+                                                            <input type="radio" value="False" checked name="IsAdd" />
+                                                            <label for="radio_demo_inline_2" class="inline-label">No</label>
+                                                        </span>
+                                                    </div>
+                                                    <div class="uk-width-medium-1-4">
+                                                        <label for="user_edit_position_control">Is Modify</label>
+                                                        <span class="icheck-inline">
+                                                            <input type="radio" value="True" name="IsModify" />
+                                                            <label for="radio_demo_inline_1" class="inline-label">Yes</label>
+                                                        </span>
+                                                        <span class="icheck-inline">
+                                                            <input type="radio" value="False" checked name="IsModify" />
+                                                            <label for="radio_demo_inline_2" class="inline-label">No</label>
+                                                        </span>
+                                                    </div>
+                                                    <div class="uk-width-medium-1-4">
+                                                        <label for="user_edit_position_control">Is Delete</label>
+                                                        <span class="icheck-inline">
+                                                            <input type="radio" value="True" name="IsDelete" />
+                                                            <label for="radio_demo_inline_1" class="inline-label">Yes</label>
+                                                        </span>
+                                                        <span class="icheck-inline">
+                                                            <input type="radio" value="False" checked name="IsDelete" />
+                                                            <label for="radio_demo_inline_2" class="inline-label">No</label>
+                                                        </span>
+                                                    </div>
+                                                    <div class="uk-width-medium-1-4">
+                                                        <label for="user_edit_position_control">Check-in/out</label>
+                                                        <span class="icheck-inline">
+                                                            <input type="radio" value="True" name="IsNotify" />
+                                                            <label for="radio_demo_inline_1" class="inline-label">Yes</label>
+                                                        </span>
+                                                        <span class="icheck-inline">
+                                                            <input type="radio" value="False" checked name="IsNotify" />
+                                                            <label for="radio_demo_inline_2" class="inline-label">No</label>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </li>
+                            <li aria-hidden="true" class="">
+                                <div class="uk-grid" data-uk-grid-match="{target:'.md-card'}" data-uk-grid-margin>
+                                    <div class="uk-width-medium-1-1">
+                                        <div class="scrum_task critical">
+                                            <p class="scrum_task_description"><b> Note:</b> Outgoing Mails Configuration</p>
+                                        </div>
+                                        <div class="md-card">
+                                            <div class="md-card-content">
+                                                <div class="md-card uk-margin-medium-bottom">
+                                                    <div class="md-card-content">
+                                                        <div class="uk-grid" data-uk-grid-margin="">
+                                                            <div class="uk-width-medium-1-4">
+                                                                <div class="md-input-wrapper md-input-filled">
+                                                                    <label for="user_edit_position_control">Email Server</label>
+                                                                    <input type="text" class="md-input label-fixed" name="EmailServer" id="EmailServer" value="">
+                                                                    <span class="md-input-bar "></span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="uk-width-medium-1-4 uk-row-first">
+                                                                <div class="md-input-wrapper md-input-filled">
+                                                                    <label for="user_edit_uname_control">Display Name</label>
+                                                                    <input type="text" class="md-input label-fixed" name="DisplayName" id="DisplayName" value="">
+                                                                </div>
+                                                            </div>
+                                                            <div class="uk-width-medium-1-4">
+                                                                <div class="md-input-wrapper md-input-filled">
+                                                                    <label for="user_edit_position_control">Login Password</label>
+                                                                    <input type="password" class="md-input label-fixed" name="Password" id="Password" value="">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="md-card-content">
+                                                        <div class="uk-grid" data-uk-grid-margin="">
+
+                                                            <div class="uk-width-medium-1-4">
+                                                                <div class="md-input-wrapper md-input-filled">
+                                                                    <label for="user_edit_position_control">Port</label>
+                                                                    <input type="text" class="md-input label-fixed" name="Port" id="Port" value="">
+                                                                </div>
+                                                            </div>
+                                                            <div class="uk-width-medium-1-4">
+                                                                <label for="user_edit_position_control">Is Outgoing Mail?</label>
+                                                                <span class="icheck-inline">
+                                                                    <input type="radio" value="True"  name="IsOut" />
+                                                                    <label for="radio_demo_inline_1" class="inline-label">Yes</label>
+                                                                </span>
+                                                                <span class="icheck-inline">
+                                                                    <input type="radio" value="False" checked name="IsOut" />
+                                                                    <label for="radio_demo_inline_2" class="inline-label">No</label>
+                                                                </span>
+                                                            </div>
+
+                                                            <div class="uk-width-medium-1-4">
+                                                                <label for="user_edit_position_control">Is SSL</label>
+                                                                <span class="icheck-inline">
+                                                                    <input type="radio" value="True" checked name="IsSSL" />
+                                                                    <label for="radio_demo_inline_1" class="inline-label">Yes</label>
+                                                                </span>
+                                                                <span class="icheck-inline">
+                                                                    <input type="radio" value="False" name="IsSSL" />
+                                                                    <label for="radio_demo_inline_2" class="inline-label">No</label>
+                                                                </span>
+                                                            </div>
+                                                            <div class="uk-width-medium-1-4">
+                                                                <label for="user_edit_position_control">Is Active</label>
+                                                                <span class="icheck-inline">
+                                                                    <input type="radio" value="True" checked name="IsAction" />
+                                                                    <label for="radio_demo_inline_1" class="inline-label">Yes</label>
+                                                                </span>
+                                                                <span class="icheck-inline">
+                                                                    <input type="radio" value="False" name="IsAction" />
+                                                                    <label for="radio_demo_inline_2" class="inline-label">No</label>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="md-card uk-margin-medium-bottom">
+        <div class="md-card-content">
+            <div class="uk-grid">
+                <div class="uk-width-medium-1-4">
+                    <div id="showData"></div>
+                    <input type="button" value="Setup" id="btnSave" class="md-btn md-btn-primary" />
+                    <input type="button" value="Update" id="btnupdate" class="md-btn md-btn-primary" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="uk-grid" data-uk-grid-match="{target:'.md-card'}" data-uk-grid-margin>
+        <div class="uk-width-medium-1-1">
+            <div class="md-card">
+                <div class="md-card-content">
+                    <div class="md-card uk-margin-medium-bottom">
+                        <div class="md-card-content">
+                            <div class="dt_colVis_buttons"></div>
+                            <table id="tblData" class="uk-table" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Email Id</th>
+                                        <th>Email Server</th>
+                                        <th>Display Name</th>
+                                        <th>Outgoing?</th>
+                                        <th>Active</th>
+                                        <th>Add</th>
+                                        <th>Modify</th>
+                                        <th>Delete</th>
+                                        <th>Check-in/out</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section foot
+{
+    <!-- page specific plugins -->
+    <!-- ionrangeslider -->
+    <script src="~/Content/bower_components/ion.rangeslider/js/ion.rangeSlider.min.js"></script>
+    <!-- htmleditor (codeMirror) -->
+    <script src="~/Content/assets/js/uikit_htmleditor_custom.min.js"></script>
+    <!-- inputmask-->
+    <script src="~/Content/bower_components/jquery.inputmask/dist/jquery.inputmask.bundle.js"></script>
+
+    <!--  forms advanced functions -->
+    <script src="~/Content/assets/js/pages/forms_advanced.min.js"></script>
+
+    <!-- page specific plugins -->
+    <!-- datatables -->
+    <script src="~/Content/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+    <!-- datatables buttons-->
+    <script src="~/Content/bower_components/datatables-buttons/js/dataTables.buttons.js"></script>
+    <script src="~/Content/assets/js/custom/datatables/buttons.uikit.js"></script>
+    <script src="~/Content/bower_components/jszip/dist/jszip.min.js"></script>
+    <script src="~/Content/bower_components/pdfmake/build/pdfmake.min.js"></script>
+    <script src="~/Content/bower_components/pdfmake/build/vfs_fonts.js"></script>
+    <script src="~/Content/bower_components/datatables-buttons/js/buttons.colVis.js"></script>
+    <script src="~/Content/bower_components/datatables-buttons/js/buttons.html5.js"></script>
+    <script src="~/Content/bower_components/datatables-buttons/js/buttons.print.js"></script>
+
+    <!-- datatables custom integration -->
+    <script src="~/Content/assets/js/custom/datatables/datatables.uikit.min.js"></script>
+
+    <!--  datatables functions -->
+    <script src="~/Content/assets/js/pages/plugins_datatables.min.js"></script>
+
+    <script src="~/Content/data/jquery.tabletojson.js"></script>
+
+    <!--  notifications -->
+    <script src="~/AppJs/CRM/Notification.js"></script>
+    <!--  EmailConfiguration -->
+    <script src="~/AppJs/CRM/EmailConfiguration.js"></script>
+}

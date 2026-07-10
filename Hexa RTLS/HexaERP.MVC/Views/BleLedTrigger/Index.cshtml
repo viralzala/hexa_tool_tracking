@@ -1,0 +1,196 @@
+﻿@{
+    /**/
+
+    ViewBag.Title = "Index";
+
+    if (Session["SortCode"] != null)
+    {
+        if (Convert.ToString(Session["SortCode"]) == "SA")
+        {
+            Layout = "~/Views/Shared/_Site.cshtml";
+        }
+        else if (Convert.ToString(Session["SortCode"]) == "AD")
+        {
+            Layout = "~/Views/Shared/_Admin.cshtml";
+        }
+        else if (new string[] { "OT", "SA" }.Contains(Convert.ToString(Session["SortCode"])))
+        {
+            Layout = "~/Views/Shared/_Users.cshtml";
+        }
+        else if (Convert.ToString(Session["SortCode"]) == "NAP")
+        {
+            Layout = "~/Views/Shared/_NormalApproval.cshtml";
+        }
+        else if (Convert.ToString(Session["SortCode"]) == "QAP")
+        {
+            Layout = "~/Views/Shared/_QualityApproval.cshtml";
+        }
+    }
+    else
+    {
+        Response.Redirect("/AppUser");
+    }
+}
+
+@section head
+{
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.common-material.min.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.material.min.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/datatables/media/css/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/datatables/media/css/jquery.dataTables.min.css" rel="stylesheet" />
+}
+
+<div ng-controller="BleLedTriggerCtrl">
+    <div id="page_content">
+        <div id="page_content_inner">
+
+            <h3 class="heading_b uk-margin-bottom">Ble Led Trigger</h3>
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-large-3-10 hidden-print">
+                    <div class="md-card">
+                        @*<div class="scrum_task critical">
+                            <h3 class="scrum_task_title">Note:</h3>
+                            <p class="scrum_task_description">Put curser on textbox and scan QR Code</p>
+                        </div>*@
+                        <div class="md-card-content">
+                            <div class="uk-form-row">
+                                <div class="uk-grid" data-uk-grid-margin="">
+                                    <div class="uk-width-1-1">
+                                        <div class="parsley-row">
+                                            <span class="uk-form-help-block">
+                                                <i class="uk-icon-barcode"></i>
+                                                <b>
+                                                    Scan (Ble)
+                                                </b>
+                                            </span>
+                                            <input type="text" class="md-input label-fixed" focus-on="PartNumber" name="PartNumber" id="PartNumber" ng-model="PartNumber" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="uk-width-large-7-10 uk-row-first">
+                    @*<div class="md-card">
+                            <div class="md-card-content">
+                                dd
+                            </div>
+                        </div>*@
+                </div>
+            </div>
+            <div class="uk-grid" data-uk-grid-margin style="display:none">
+                <div class="uk-width-large-8-10 uk-row-first">
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <div class="uk-form-row">
+                                <div class="uk-grid" data-uk-grid-margin="">
+                                    <div class="uk-width-medium-1-1 uk-row-first">
+                                        <div class="uk-overflow-container">
+                                            <table id="example1" class="uk-table uk-table-nowrap table_check">
+                                                <thead>
+                                                    <tr>
+
+                                                        <th><b>Ble Tag</b></th>
+                                                        <th><b>Lot</b></th>
+                                                        <th><b>Staus</b></th>
+                                                        <th><b> Part Number</b></th>
+                                                        <th><b>Qty</b></th>
+                                                        <th><b>Serial/Lot No</b></th>
+
+                                                        <td>Remark</td>
+                                                        <td>Comment</td>
+
+                                                        <td>Shelf Name</td>
+                                                        <td>Last Seen</td>
+                                                        <td>Location</td>
+                                                        <td>CreatedBy</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat="i in SmtProducts">
+                                                        <td>{{i.Ble}}</td>
+                                                        <td>{{i.Lot}}</td>
+                                                        <td>
+                                                            <span class="uk-badge uk-badge-primary">
+                                                                {{i.Status}}
+                                                            </span>
+                                                        </td>
+                                                        <td> {{i.PartNumber}}</td>
+                                                        <td>{{i.Quantity}}</td>
+                                                        @*<td>{{i.DateAndTime | jsonDate:'dd MMMM yy'}}</td>*@
+                                                        <td>
+                                                            {{i.SerialNumber}}
+                                                        </td>
+                                                        <td>
+                                                            <span class="uk-badge uk-badge-primary">
+                                                                {{i.Remark}}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span class="uk-badge uk-badge-primary">
+                                                                {{i.Comment}}
+                                                            </span>
+                                                        </td>
+                                                        <td class="uk-text-nowrap" style="background:#333">
+                                                            <p class="uk-text-contrast uk-margin-remove" style="font-size:x-large">
+                                                                {{i.ShelfName}}
+                                                            </p>
+                                                        </td>
+                                                        <td>
+                                                            <span class="uk-badge uk-badge-warning">
+                                                                {{i.tDate  | jsonDate:'dd MMMM yy hh.mm a' }}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            {{i.Zone}}
+                                                        </td>
+                                                        <td>
+                                                            <span class="uk-badge uk-text-small uk-badge-primary">
+                                                                {{i.CreatedBy}}
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <td colspan="7"></td>
+                                                        <td>
+                                                            <div class="uk-input-group">
+                                                                {{i.ShelfName}}
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section foot
+{
+
+    <!-- page specific plugins -->
+    <script src="~/Content/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/bower_components/datatables/media/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/Content/assets/js/kendoui_custom.min.js"></script>
+    <!--  kendoui functions -->
+    <script src="~/Content/assets/js/pages/kendoui.min.js"></script>
+    <script src="~/Scripts/HexaAgular/BleLedTrigger.js"></script>
+    @*<script type="text/javascript">
+            $(function () {
+                document.getElementById('ReaderNo').focus();
+            });
+
+        </script>*@
+
+}

@@ -1,0 +1,133 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Site.cshtml";
+}
+
+
+@section head
+{
+    <!-- additional styles for plugins -->
+    <!-- htmleditor (codeMirror) -->
+    <link rel="stylesheet" href="~/Content/bower_components/codemirror/lib/codemirror.css">
+
+    <script src="~/Scripts/HexaAgular/ControllReader.js"></script>
+    <!-- additional styles for plugins -->
+    <!-- kendo UI -->
+
+
+    <link href="@Url.Content("~/Content/bower_components/kendo-ui/styles/kendo.common-material.min.css")"
+          rel="stylesheet" type="text/css" media="all" />
+
+
+    <link href="@Url.Content("~/Content/bower_components/kendo-ui/styles/kendo.material.min.css")"
+          rel="stylesheet" type="text/css" media="all" id="kendoCSS" />
+
+}
+<div id="page_content_inner" ng-controller="ControllReaderCtrl">
+
+    <h3 class="heading_a">Control Reader</h3>
+
+    <div class="uk-grid" data-uk-grid-margin data-uk-grid-match id="user_profile">
+        <div class="uk-width-large-10-12">
+            <div class="md-card" id="printablediv">
+                <div class="user_heading">
+                    <div class="user_heading_menu hidden-print">
+                        <div class="uk-display-inline-block" data-uk-dropdown="{pos:'left-top'}">
+                            <i class="md-icon material-icons md-icon-light" onclick="javascript:printDiv('printablediv')" ;>&#xE5D4;</i>
+                            <div class="uk-dropdown uk-dropdown-small">
+                                <ul class="uk-nav">
+                                    <li><a target="_blank" onclick="javascript:printDiv('printablediv')" id="btnprint" class="md-btn md-btn-flat md-btn-flat-primary"><i class="fa fa-print"></i>Print</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="uk-display-inline-block"><i class="md-icon md-icon-light material-icons" id="page_print">&#xE8ad;</i></div>
+                    </div>
+                    <div class="user_heading_content">
+                        <h2 class="heading_b uk-margin-bottom">
+                            <span class="uk-text-truncate">Installed Reader Locations</span>
+                        </h2>
+                    </div>
+                </div>
+                <div class="user_content">
+                    <table class="uk-table" id="tblReport">
+                        <thead>
+                            <tr>
+                                <td>SL. No</td>
+                                <td>MAC Address</td>
+                                <td>IP Address</td>                                
+                                <td>Status</td>
+                                <td>Control</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="uk-table uk-table-nowrap table_check" ng-repeat="Iteam in DataLists track by $index">
+                                <td>
+                                    {{ $index + 1}}
+                                </td>
+                                <td>
+                                    <span class="uk-text-muted uk-text-small">{{ Iteam.ReaderNo }}</span>
+                                </td>
+                                <td>
+                                    <span class="uk-text-muted uk-text-small">{{ Iteam.ReaderIP }}</span>
+                                </td>                                
+                                <td>
+                                    <span class="uk-text-muted uk-text-danger" ng-if="Iteam.IsAction == false">Disabled</span>
+                                    <span class="uk-text-muted uk-text-success" ng-if="Iteam.IsAction == true">Active</span>
+                                </td>
+                                <td>
+                                    <a title="Stop" ng-click="setAction(Iteam.mReaderSettupId,false)" ng-if="Iteam.IsAction == true" class="md-btn md-btn-danger md-btn-small"><i class="material-icons">&#xE036;</i></a>
+                                    <a title="Start" ng-click="setAction(Iteam.mReaderSettupId,true)" ng-if="Iteam.IsAction == false" class="md-btn md-btn-success md-btn-small"><i class="material-icons">&#xE038;</i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td> <span><h1> {{DataLists.length?DataLists.length:0}}</h1></span> </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+@section foot
+{
+
+    <!-- page specific plugins -->
+    <!-- ionrangeslider -->
+    <script src="~/Content/bower_components/ion.rangeslider/js/ion.rangeSlider.min.js"></script>
+    <!-- htmleditor (codeMirror) -->
+    <script src="~/Content/assets/js/uikit_htmleditor_custom.min.js"></script>
+    <!-- inputmask-->
+    <script src="~/Content/bower_components/jquery.inputmask/dist/jquery.inputmask.bundle.js"></script>
+    <!--  forms advanced functions -->
+    <script src="~/Content/assets/js/pages/forms_advanced.min.js"></script>
+
+    <!-- page specific plugins -->
+    <!-- kendo UI -->
+    <script src="@Url.Content("~/Content/assets/js/kendoui_custom.min.js")"
+            type="text/javascript"></script>
+
+    <!--  kendoui functions -->
+    <script src="@Url.Content("~/Content/assets/js/pages/kendoui.min.js")"
+            type="text/javascript"></script>
+
+    <script>
+        function printDiv(divID) {
+            var divElements = document.getElementById(divID).innerHTML;
+            var oldPage = document.body.innerHTML;
+            document.body.innerHTML = "<html><head><title></title></head><body>" + divElements + "</body>";
+            window.print();
+            document.body.innerHTML = oldPage;
+        }
+    </script>
+}
+
+
+
+

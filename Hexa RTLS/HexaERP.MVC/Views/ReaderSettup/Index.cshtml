@@ -1,0 +1,243 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+
+@section head
+{
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.common-material.min.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.material.min.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/datatables/media/css/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/datatables/media/css/jquery.dataTables.min.css" rel="stylesheet" />
+}
+
+<div id="page_content" ng-controller="ReaderSettupCtrl">
+    <div id="page_content_inner">
+        <h3 class="heading_b uk-margin-bottom">Reader Set-up</h3>
+
+        <div class="md-card uk-margin-medium-bottom">
+            <div class="md-card-content">
+                <div class="uk-grid" data-uk-grid-margin>
+                    <div class="uk-width-medium-1-1">
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="uk-icon-search"></i>
+                            </span>
+                            <div class="md-input-wrapper md-input-filled">
+                                <label for="product_edit_quantity_control">Search</label>
+                                <input type="text" class="md-input" name="search" id="global_filter">
+                                <span class="md-input-bar "></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @*<h4 class="heading_a uk-margin-bottom">Reader Data</h4>*@
+        <div class="md-card uk-margin-medium-bottom">
+            <div class="md-card-content">
+                <div class="dt_colVis_buttons"></div>
+                <table id="tbl" class="uk-table" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Site</th>
+                            <th>Zone</th>
+                            <th>Sub Zone</th>
+                            <th>Antenna Location</th>
+                            <th>Set-up</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <form class="uk-form-stacked" id="myForm">
+            <div class="uk-modal" id="mailbox_new_message">
+                <div class="uk-modal-dialog uk-modal-dialog-large">
+                    <button class="uk-modal-close uk-close" type="button"></button>
+                    <div class="uk-modal-header">
+                        <span id="lbltext">Set-up Reader For This Room</span>
+                        <input type="button" class="uk-badge uk-badge-primary" ng-click="GetMacAdd()" ng-show="btngetmac" ng-init="btngetmac=true" value="Get Mac" />
+                    </div>
+                    <br />
+                    <div class="uk-grid" data-uk-grid-margin>
+                        <div class="uk-width-medium-1-4">
+                            <div class="parsley-row">
+                                <label>Reader IP<span class="req"> </span></label>
+                                <input type="text" id="ReaderIP" name="ReaderIP" ng-model="setupForm.ReaderIP" autofocus class="md-input label-fixed" />
+                            </div>
+                        </div>
+                        <div class="uk-width-medium-1-4">
+                            <div class="parsley-row">
+                                <label>Reader Mac<span class="req"></span></label>
+                                <input type="text" id="ReaderNo" name="ReaderNo" ng-model="setupForm.ReaderNo" class="md-input label-fixed" />
+                            </div>
+                        </div>
+                        <div class="uk-width-medium-1-4">
+                            <div class="parsley-row">
+                                <label>Antenna Port No<span class="req"> </span></label>
+                                <input type="number" id="AttPortId" min="1" name="AttPortId" ng-model="setupForm.AttPortId" class="md-input label-fixed" />
+                            </div>
+
+                        </div>
+                        <div class="uk-width-medium-1-4">
+                            <input type="button" ng-show="btnportput" ng-init="btnportput=true" ng-click="readerSettupData()" class="md-btn md-btn-primary" title="Save" value="Save" />
+
+                            <input type="button" onclick="getLocation()" class="md-btn md-btn-primary" title="Get Location" value="Get Location" />
+                            <input type="button" ng-show="btnportUp" ng-click="readerSettupDataUpdate()" class="md-btn md-btn-primary" title="Update" value="Update" />
+                        </div>
+
+                        <div style="color:red">{{Errormessage}}</div>
+                        <input type="hidden" id="mRoomMasterId" name="mRoomMasterId" />
+                        <input type="hidden" id="mReaderSettupId" name="mReaderSettupId" />
+                    </div>
+
+                    <div class="uk-grid" data-uk-grid-margin>
+                        <div class="uk-width-medium-1-1">
+                            <div class="parsley-row">
+                                <label>Address<span class="req"> </span></label>
+                                <input type="text" id="add" name="description" class="md-input label-fixed" />
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="uk-grid" data-uk-grid-margin>
+                        <div class="uk-width-medium-1-2">
+                            <div class="md-input-wrapper">
+                                @*<label>Latitude<span class="req"> </span></label>*@
+                                <input type="text" id="lati" name="lat" class="md-input label-fixed" />
+                            </div>
+                        </div>
+                        <div class="uk-width-medium-1-2">
+                            <div class="md-input-wrapper">
+                                @*<label>Lon<span class="req"> </span></label>*@
+                                <input type="text" id="long" name="lng" class="md-input label-fixed" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="uk-grid" data-uk-grid-margin>
+                        <div class="uk-width-medium-1-1 uk-row-first">
+                            <h6 class="heading_b uk-margin-bottom">Reader Set-up Data</h6>
+                            <div class="md-card">
+                                <div class="md-card-content">
+                                    <div class="uk-overflow-container">
+                                        <table class="uk-table" cellspacing="0" width="100%">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>Antenna Location</th>
+                                                    <th>Mac</th>
+                                                    <th>Port</th>
+                                                    <th>IP</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="Idata in ReaderForRoom track by $index">
+                                                    <td>{{$index+1}}</td>
+                                                    <td>{{Idata.RoomName}}</td>
+                                                    <td>{{Idata.ReaderNo}}</td>
+                                                    <td>{{Idata.AttPortId}}</td>
+                                                    <td>{{Idata.ReaderIP}}</td>
+                                                    <td>
+                                                        <a ng-click="EditPorts(Idata)" title="Edit" data-uk-modal="{center:true}">
+                                                            <i class="md-icon material-icons">&#xE254;</i>
+                                                        </a>
+                                                        <a ng-click="DeletePorts(Idata.mReaderSettupId)" title="Delete">
+                                                            <i id="Deletebtn" class="md-icon material-icons">&#xE872;</i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="uk-grid" data-uk-grid-margin>
+                        <div class="uk-width-medium-1-1 uk-row-first">
+
+                            <div class="md-card">
+                                <div class="md-card-content">
+                                    <div class="uk-overflow-container">
+                                        <div id="dvMap" style="width: auto; height: 150px">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </form>
+    </div>
+</div>
+
+@section foot
+{
+    @*<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA_MSEHX9IwOkrzUJc1eBLT4KWzYOGgN98&callback=angular.noop" type="text/javascript">
+        </script>*@
+
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA_MSEHX9IwOkrzUJc1eBLT4KWzYOGgN98&signed_in=true&callback=angular.noop">
+        </script>
+
+    @*<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>*@
+
+    <!-- page specific plugins -->
+    <script src="~/Content/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/bower_components/datatables/media/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/Content/assets/js/kendoui_custom.min.js"></script>
+    <!--  kendoui functions -->
+    <script src="~/Content/assets/js/pages/kendoui.min.js"></script>
+
+    <script src="~/Scripts/HexaAgular/ReaderSettup.js"></script>
+
+    <script>
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (p) {
+                    var LatLng = new google.maps.LatLng(p.coords.latitude, p.coords.longitude);
+                   // console.log(p.coords.latitude, p.coords.longitude);
+                    var GEOCODING = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + p.coords.latitude + '%2C' + p.coords.longitude + '&language=en';
+                    $('#lati').val(p.coords.latitude); $('#long').val(p.coords.longitude);
+                    $.getJSON(GEOCODING).done(function (location) {
+                        console.log(location);
+                        //$('#country').html(location.results[0].address_components[5].long_name);
+                        //$('#state').html(location.results[0].address_components[4].long_name);
+                        //$('#city').html(location.results[0].address_components[2].long_name);
+                        $('#add').val(location.results[0].formatted_address);
+                        //$('#latitude').html(position.coords.latitude);
+                        //$('#longitude').html(position.coords.longitude);
+                    })
+
+                    var mapOptions = {
+                        center: LatLng,
+                        zoom: 60,
+                        mapTypeId: google.maps.MapTypeId.ROADMAP
+                    };
+                    var map = new google.maps.Map(document.getElementById("dvMap"), mapOptions);
+                    var marker = new google.maps.Marker({
+                        position: LatLng,
+                        map: map,
+                        title: "<div style = 'height:60px;width:200px'><b>Hexa RTLS System:</b><br />Latitude: " + p.coords.latitude + "<br />Longitude: " + p.coords.longitude
+                    });
+                    google.maps.event.addListener(marker, "click", function (e) {
+                        var infoWindow = new google.maps.InfoWindow();
+                        infoWindow.setContent(marker.title);
+                        infoWindow.open(map, marker);
+                    });
+                });
+            } else {
+                alert('Geo Location feature is not supported in this browser.');
+            }
+        }
+    </script>
+}

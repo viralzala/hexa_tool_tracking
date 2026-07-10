@@ -1,0 +1,225 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Users.cshtml";
+}
+@section head
+{
+    <!--   -->
+    <link href="@Url.Content("~/Content/bower_components/codemirror/lib/codemirror.css")"
+          rel="stylesheet" type="text/css" media="all" />
+}
+<div id="page_content_inner">
+    <div class="uk-grid" data-uk-grid-match="{target:'.md-card'}" data-uk-grid-margin>
+        <div class="uk-width-medium-1-2">
+            <div class="md-card">
+                <form action="" enctype="multipart/form-data">
+                    <div class="md-card-content">
+                        <h3 class="heading_a uk-margin-bottom">Upload Leads file</h3>
+                        <div>
+                            <input type="file" name="file" id="file" />
+                            <input type="submit" value="Upload" id="submitbtn" class="md-btn md-btn-primary" />
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="uk-width-medium-1-2">
+            <div class="md-card">
+
+                <div class="md-card-content">
+                    <h3 class="heading_a uk-margin-bottom">Download CSV File Format</h3>
+                    <div>
+                        <a href="~/Files/LeadsUpload.csv"><i class="material-icons">&#xE14D;</i></a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="uk-grid" data-uk-grid-match="{target:'.md-card'}" data-uk-grid-margin>
+        <div class="uk-width-medium-1-1">
+            <div class="md-card">
+                <div class="md-card-content">
+                    <div class="md-card uk-margin-medium-bottom">
+                        <div class="md-card-content">
+                            <div class="dt_colVis_buttons"></div>
+                            <table id="tblData" class="uk-table" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>LastName</th>
+                                        <th>Gender</th>
+                                        <th>EmailId</th>
+                                        <th>Contact</th>
+                                        <th>CompanyName</th>
+                                        <th>Designation</th>
+                                        <th>Address</th>
+                                        <th>City</th>
+                                        <th>State</th>
+                                        <th>PinCode</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <div class="uk-width-medium-1-4">
+            <div class="md-card">
+                <div class="md-card-content">
+                    <div id="showData"></div>
+                    <input type="button" value="Save" id="btnSave" class="md-btn md-btn-primary" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section foot
+{
+    <!-- page specific plugins -->
+<!-- ionrangeslider -->
+<script src="~/Content/bower_components/ion.rangeslider/js/ion.rangeSlider.min.js"></script>
+<!-- htmleditor (codeMirror) -->
+<script src="~/Content/assets/js/uikit_htmleditor_custom.min.js"></script>
+<!-- inputmask-->
+<script src="~/Content/bower_components/jquery.inputmask/dist/jquery.inputmask.bundle.js"></script>
+
+<!--  forms advanced functions -->
+<script src="~/Content/assets/js/pages/forms_advanced.min.js"></script>
+
+<!-- page specific plugins -->
+<!-- datatables -->
+<script src="~/Content/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+<!-- datatables buttons-->
+<script src="~/Content/bower_components/datatables-buttons/js/dataTables.buttons.js"></script>
+<script src="~/Content/assets/js/custom/datatables/buttons.uikit.js"></script>
+<script src="~/Content/bower_components/jszip/dist/jszip.min.js"></script>
+<script src="~/Content/bower_components/pdfmake/build/pdfmake.min.js"></script>
+<script src="~/Content/bower_components/pdfmake/build/vfs_fonts.js"></script>
+<script src="~/Content/bower_components/datatables-buttons/js/buttons.colVis.js"></script>
+<script src="~/Content/bower_components/datatables-buttons/js/buttons.html5.js"></script>
+<script src="~/Content/bower_components/datatables-buttons/js/buttons.print.js"></script>
+
+<!-- datatables custom integration -->
+<script src="~/Content/assets/js/custom/datatables/datatables.uikit.min.js"></script>
+
+<!--  datatables functions -->
+<script src="~/Content/assets/js/pages/plugins_datatables.min.js"></script>
+
+<script src="~/Content/data/jquery.tabletojson.js"></script>
+
+
+<!--  notifications -->
+<script src="~/AppJs/CRM/Notification.js"></script>
+
+
+
+<script type="text/javascript">
+        $(function () {
+            $('#btnSave').click(function () {
+                var table = $('#tblData').tableToJSON(); // Convert the table into a javascript object
+                var JLeadData = JSON.stringify(table);
+                $.getJSON("/LeadBulkUpload/Save", { Json: JLeadData }, function (data) {
+
+                    if (data.length <= 0) {
+                        Msgwarning(data + " :Record Uploaded");
+                    }
+                    else {
+                        MsgSucess(data + " :Record Uploaded");
+                    }
+
+                })
+            });
+
+
+            $('#submitbtn').click(function () {
+                var data = new FormData();
+                var files = $("#file").get(0).files;
+                if (files.length > 0) { data.append("HelpSectionImages", files[0]); }
+                else {
+                    //common.showNotification('warning', 'Please select file to upload.', 'top', 'right');
+                    UIkit.modal.alert('<p>Please select file to upload.</p>');
+                    return false;
+                }
+                var extension = $("#file").val().split('.').pop().toUpperCase();
+                if (extension != "CSV") {
+                    // if (extension != "CSV" && extension != "JPG" && extension != "GIF" && extension != "JPEG") {
+                    //common.showNotification('warning', 'Imvalid CSV file format.', 'top', 'right');
+                    UIkit.modal.alert('<p>Imvalid CSV file format.</p>');
+                    return false;
+                }
+                $.ajax({
+                    url: '/LeadBulkUpload/UploadLeads', type: "POST", processData: false,
+                    data: data, dataType: 'json',
+                    contentType: false,
+                    success: function (response, textStatus, xhr) {
+
+                        //var list = "";
+                        //for (var i = 0, l = response.length; i < l; i++) {
+                        //    console.log(response[i].data.aoColumns);
+                        //    list += '<li>' + response[i] + '</li>';
+                        //}
+                        //var list = "Here are some results: <ul>" + list + "</ul>";
+                        // console.log(list);
+
+                        var json = JSON.parse(response);
+                        //console.log(json);
+                        //var arr = response;
+                        //var out;
+                        // for (i = 0; i < arr.length; i++) {
+                        //     out += arr[i][0] + "<br>";
+                        // }
+                        // console.log(out);
+
+                        //var Djson = JSON.stringify(response);
+                        //var tableHeaders;
+                        //$.each(Djson.columns, function (i, val) {
+                        //    tableHeaders += "<th>" + val + "</th>";
+                        //    console.log(tableHeaders);
+                        //});
+
+
+                        //$("#tableDiv").append('<table id="displayTable" class="display" cellspacing="0" width="100%"><thead><tr>' + tableHeaders + '</tr></thead></table>');
+
+                        $('#tblData').dataTable({
+                            "destroy": true,
+                            "bDestroy": true,
+                            "bProcessing": true,
+                            searching: true,
+                            "aaData": json,
+                            "aoColumns": [
+                                { "mData": "Name" },
+                                 { "mData": "LastName" },
+                                { "mData": "Gender" },
+                                { "mData": "EmailId" },
+                                 { "mData": "Contact" },
+                                  { "mData": "CompanyName" },
+                                   { "mData": "Designation" },
+                                    { "mData": "Address" },
+                                    { "mData": "City" },
+                                    { "mData": "State" },
+                                    { "mData": "PinCode" }
+                            ]
+                        });
+
+
+                    },
+                    error: function (response) { }
+                });
+                return false;
+            });
+        });
+</script>
+
+}
+
+
+
+

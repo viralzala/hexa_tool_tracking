@@ -1,0 +1,1082 @@
+﻿@{
+    ViewBag.Title = "Asset Maintenance";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+
+@section head{
+    <link rel="stylesheet" href="~/Content/bower_components/codemirror/lib/codemirror.css">
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.common-material.min.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.material.min.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/datatables/media/css/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/datatables/media/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <style>
+        /* Premium UI Custom Styles */
+        .premium-page-banner {
+            background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
+            color: white;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .premium-page-banner .banner-icon {
+            font-size: 48px;
+            opacity: 0.9;
+            color: white;
+        }
+        .premium-page-banner h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 400;
+            color: white;
+        }
+        .premium-page-banner h1.text-white {
+            color: white;
+        }
+        .premium-page-banner .subtitle {
+            opacity: 0.85;
+            margin-top: 4px;
+            font-size: 14px;
+        }
+        .breadcrumb-nav {
+            background: rgba(255,255,255,0.15);
+            padding: 8px 16px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-top: 12px;
+            font-size: 12px;
+        }
+        .breadcrumb-nav a {
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+        }
+        .breadcrumb-nav span {
+            color: white;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-left: 4px solid #1a237e;
+            transition: all 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .stat-card .stat-icon {
+            font-size: 32px;
+            color: #1a237e;
+            opacity: 0.7;
+            float: left;
+            margin-right: 12px;
+        }
+        .stat-card .stat-value {
+            font-size: 28px;
+            font-weight: 600;
+            color: #1a237e;
+            margin: 0;
+        }
+        .stat-card .stat-label {
+            color: #666;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+        .stat-card.success { border-left-color: #2e7d32; }
+        .stat-card.success .stat-icon, .stat-card.success .stat-value { color: #2e7d32; }
+        .stat-card.warning { border-left-color: #ed6c02; }
+        .stat-card.warning .stat-icon, .stat-card.warning .stat-value { color: #ed6c02; }
+        .stat-card.info { border-left-color: #0288d1; }
+        .stat-card.info .stat-icon, .stat-card.info .stat-value { color: #0288d1; }
+        .stat-card.danger { border-left-color: #c62828; }
+        .stat-card.danger .stat-icon, .stat-card.danger .stat-value { color: #c62828; }
+
+        /* Search Card */
+        .search-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        .search-card .search-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .search-card .search-title i {
+            color: #1a237e;
+        }
+
+        /* Data Table */
+        .premium-table-container {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .premium-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .premium-table thead {
+            background: #f5f7fa;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .premium-table thead th {
+            padding: 14px 12px;
+            font-weight: 600;
+            color: #333;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #e0e0e0;
+            text-align: left;
+        }
+        .premium-table tbody td {
+            padding: 12px;
+            font-size: 13px;
+            color: #555;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .premium-table tbody tr {
+            transition: background 0.2s;
+        }
+        .premium-table tbody tr:nth-child(even) {
+            background: #fafafa;
+        }
+        .premium-table tbody tr:hover {
+            background: #e8eaf6;
+        }
+
+        /* Badge */
+        .premium-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .premium-badge-primary { background: #e8eaf6; color: #1a237e; }
+        .premium-badge-success { background: #e8f5e9; color: #2e7d32; }
+        .premium-badge-warning { background: #fff3e0; color: #ed6c02; }
+        .premium-badge-danger { background: #ffebee; color: #c62828; }
+        .premium-badge-info { background: #e1f5fe; color: #0288d1; }
+
+        /* Form Section Card */
+        .form-section-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border: 1px solid #e0e0e0;
+        }
+        .form-section-card .section-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1a237e;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e8eaf6;
+            display: flex;
+            align-items: center;
+        }
+        .form-section-card .section-title i {
+            margin-right: 8px;
+        }
+
+        /* Premium Form Group */
+        .premium-form-group {
+            margin-bottom: 16px;
+        }
+        .premium-form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #333;
+            font-size: 13px;
+        }
+        .premium-form-group label .required {
+            color: #d32f2f;
+            margin-left: 2px;
+        }
+
+        /* User Edit Heading */
+        .user_heading {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8eaf6 100%);
+            padding: 20px;
+            border-radius: 8px 8px 0 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .user_heading_content h2 {
+            margin: 0;
+            color: #1a237e;
+            font-size: 22px;
+        }
+        .user_heading_content .sub-heading {
+            color: #666;
+            font-size: 14px;
+            font-weight: 400;
+        }
+        .user_content {
+            padding: 20px;
+        }
+
+        /* Tab styling */
+        .uk-tab {
+            border-bottom: 2px solid #e0e0e0;
+        }
+        .uk-tab > li > a {
+            color: #666;
+            font-weight: 500;
+            padding: 10px 20px;
+        }
+        .uk-tab > li.uk-active > a {
+            color: #1a237e;
+            border-bottom: 2px solid #1a237e;
+            background: transparent;
+        }
+        .uk-tab > li > a:hover {
+            color: #1a237e;
+        }
+
+        /* Card styling */
+        .md-card {
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            background: white;
+            margin-bottom: 20px;
+        }
+        .md-card-toolbar {
+            background: #f5f7fa;
+            padding: 12px 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .md-card-toolbar-heading-text {
+            font-weight: 600;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .md-card-toolbar-heading-text i {
+            color: #1a237e;
+        }
+        .md-card-content {
+            padding: 20px;
+        }
+
+        /* Alert */
+        .premium-alert {
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .premium-alert-info {
+            background: #e1f5fe;
+            color: #0277bd;
+            border-left: 4px solid #0288d1;
+        }
+        .premium-alert-warning {
+            background: #fff3e0;
+            color: #ef6c00;
+            border-left: 4px solid #ed6c02;
+        }
+
+        /* Input Override */
+        .md-input-wrapper.md-input-filled label,
+        .md-input-wrapper label {
+            font-weight: 500;
+            color: #555;
+            font-size: 13px;
+        }
+        .md-input-wrapper.md-input-filled input,
+        .md-input-wrapper input {
+            border-color: #cfd8dc;
+            border-radius: 6px;
+            padding: 10px 14px;
+        }
+        .md-input-wrapper.md-input-filled input:focus,
+        .md-input-wrapper input:focus {
+            border-color: #1a237e;
+        }
+
+        /* Required asterisk */
+        .req {
+            color: #d32f2f;
+            font-weight: bold;
+        }
+
+        /* Help block */
+        .uk-form-help-block {
+            font-weight: 500;
+            color: #444;
+            margin-bottom: 6px;
+            display: block;
+        }
+        .uk-input-group-addon {
+            background: #f5f7fa;
+            border: 1px solid #cfd8dc;
+            border-radius: 6px 0 0 6px;
+            color: #666;
+        }
+
+        /* File input */
+        .fileinput .thumbnail {
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+            overflow: hidden;
+        }
+        .user_avatar_controls {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 8px;
+        }
+        .user_avatar_controls .btn-file {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #1a237e;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .user_avatar_controls .btn-file:hover {
+            background: #283593;
+        }
+
+        /* Card head avatar */
+        .md-card-head {
+            background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
+        }
+        .md-card-head-text {
+            color: white;
+        }
+        .md-card-head-avatar {
+            border-radius: 50%;
+            border: 3px solid white;
+        }
+        .md-card-head-menu a {
+            color: white;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 13px;
+        }
+        .md-card-head-menu a:hover {
+            opacity: 0.8;
+        }
+
+        /* Modal */
+        .uk-modal-header {
+            background: #f5f7fa;
+            border-radius: 8px 8px 0 0;
+            padding: 16px 20px;
+        }
+
+        /* Responsive */
+        @@media (max-width: 968px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .premium-page-banner h1 {
+                font-size: 22px;
+            }
+            .premium-page-banner .banner-icon {
+                font-size: 36px;
+            }
+        }
+        @@media (max-width: 640px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .premium-page-banner {
+                padding: 16px;
+            }
+            .premium-page-banner h1 {
+                font-size: 18px;
+            }
+        }
+    </style>
+}
+
+<div id="page_content_inner" ng-controller="MoreAssetDetailCtrl">
+    <!-- Premium Page Banner -->
+    <div class="premium-page-banner">
+        <div class="uk-grid" data-uk-grid-margin>
+            <div class="uk-width-small-1-1 uk-width-medium-1-6">
+                <i class="material-icons banner-icon">&#xE86E;</i>
+            </div>
+            <div class="uk-width-small-1-1 uk-width-medium-5-6">
+                <h1 class="text-white">Asset Maintenance</h1>
+                <p class="subtitle">Search and manage maintenance records for your assets</p>
+                <div class="breadcrumb-nav">
+                    <a href="@Url.Action("", "EnterpriseAnalyticsDashboard")"><i class="material-icons">&#xE88A;</i> Home</a> /
+                    <a href="#">Assets</a> /
+                    <span>Maintenance</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <i class="material-icons stat-icon">&#xE86E;</i>
+            <div>
+                <div class="stat-value">{{statTotal || 0}}</div>
+                <div class="stat-label">Total Maintenance</div>
+            </div>
+        </div>
+        <div class="stat-card success">
+            <i class="material-icons stat-icon">&#xE86C;</i>
+            <div>
+                <div class="stat-value">{{statCompleted || 0}}</div>
+                <div class="stat-label">Completed</div>
+            </div>
+        </div>
+        <div class="stat-card warning">
+            <i class="material-icons stat-icon">&#xE001;</i>
+            <div>
+                <div class="stat-value">{{statInProgress || 0}}</div>
+                <div class="stat-label">In Progress</div>
+            </div>
+        </div>
+        <div class="stat-card danger">
+            <i class="material-icons stat-icon">&#xE5CD;</i>
+            <div>
+                <div class="stat-value">{{statOverdue || 0}}</div>
+                <div class="stat-label">Overdue</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Section -->
+    <div class="search-card">
+        <div class="search-title">
+            <i class="material-icons">&#xE8B6;</i>
+            Search Asset
+        </div>
+        @using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "_formAssetInfo", @name = "_formAssetInfo" }))
+        {
+            <div class="md-card-content" style="padding: 0;">
+                <div class="uk-grid" data-uk-grid-margin>
+                    <div class="uk-width-medium-1-1">
+                        <div class="uk-grid" data-uk-grid-margin>
+                            <div class="uk-width-medium-1-4">
+                                <div class="parsley-row">
+                                    <label><i class="uk-icon-search"></i> <b>RFID</b><span class="req"> </span></label>
+                                    <input type="text" required name="RFID" ng-model="RFID" class="md-input label-fixed" />
+                                </div>
+                            </div>
+                            <div class="uk-width-medium-1-4">
+                                <div class="parsley-row">
+                                    <label><i class="uk-icon-search"></i> <b>Bar Code</b><span class="req"> </span></label>
+                                    <input type="text" required name="BarCode" ng-model="BarCode" class="md-input label-fixed" />
+                                </div>
+                            </div>
+                            <div class="uk-width-medium-1-4">
+                                <div class="parsley-row">
+                                    <label><i class="uk-icon-search"></i> <b>UID</b></label>
+                                    <input type="text" name="UID" value="@TempData["_CarryParam"]" class="md-input label-fixed" />
+                                </div>
+                            </div>
+                            <div class="uk-width-large-1-4 uk-width-medium-1-1">
+                                <div class="uk-input-group uk-margin-large-top">
+                                    <button title="Search" type="button" ng-click="GetAssetInfo()" ng-hide="isAdd"
+                                            class="md-btn md-btn-primary premium-btn-sm">
+                                        <i class="material-icons">&#xE8B6;</i> {{loading ? loading : 'Search'}}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Asset Info Details Section -->
+    <div class="uk-grid uk-grid-medium" data-uk-grid-margin>
+        <div class="uk-width-xLarge-2-10 uk-width-large-3-10">
+            <div class="md-card">
+                <div class="md-card-toolbar">
+                    <div class="md-card-toolbar-actions">
+                        <i ng-click="uploadAssetImg()" class="md-icon material-icons">&#xE146;</i>
+                    </div>
+                    <h3 class="md-card-toolbar-heading-text">
+                        <i class="material-icons">&#xE873;</i> Asset Details
+                    </h3>
+                </div>
+                <div class="md-card-content">
+                    <div class="uk-margin-bottom uk-text-center uk-position-relative">
+                        <img src="{{AssetInfo.img}}" alt="" class="img_medium" />
+                    </div>
+                </div>
+            </div>
+            <div class="md-card">
+                <div class="md-card-toolbar">
+                    <h3 class="md-card-toolbar-heading-text">
+                        <i class="material-icons">&#xE226;</i> Asset Data
+                    </h3>
+                </div>
+                <div class="md-card-content">
+                    <div class="uk-form-row">
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="uk-icon-cubes"></i>
+                            </span>
+                            <label for="product_edit_quantity_control">Stock Quantity</label><br />
+                            <label><b>{{AssetInfo.bStock}}</b></label>
+                        </div>
+                    </div>
+                    <div class="uk-form-row">
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="uk-icon-inr"></i>
+                            </span>
+                            <label for="product_edit_price_control">Purchase Cost</label><br />
+                            <label><b>{{AssetInfo.PurchaseCost}}</b></label>
+                        </div>
+                    </div>
+                    <div class="uk-form-row">
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon"></span>
+                            <label for="product_edit_tax_control">Depreciation</label><br />
+                            <label ng-if="AssetInfo.Depreciation != null">
+                                <b>({{AssetInfo.Depreciation}}) </b> Months
+                            </label>
+                        </div>
+                    </div>
+                    <div class="uk-form-row">
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="uk-icon-barcode"></i>
+                            </span>
+                            <label for="product_edit_sku_control">Bar Code</label><br />
+                            <label><b>{{AssetInfo.BarCode}}</b></label>
+                        </div>
+                    </div>
+                    <div class="uk-form-row">
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="uk-icon-barcode"></i>
+                            </span>
+                            <label for="product_edit_sku_control">RFID</label><br />
+                            <label><b>{{AssetInfo.RFID}}</b></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="uk-width-large-8-10">
+            <div class="md-card">
+                <div class="user_heading" data-uk-sticky="{ top: 48, media: 960 }">
+                    @using (Html.BeginForm(null, null, new { @id = string.Empty }, FormMethod.Post, new { enctype = "multipart/form-data", name = "ImgUpl", @id = "ImgUpl" }))
+                    {
+                        <input type="text" name="tAssetTagId" ng-model="tAssetTagId" ng-hide="true" />
+                        <div class="user_heading_avatar fileinput fileinput-new" data-provides="fileinput">
+                            <div class="fileinput-new thumbnail">
+                                <img src="{{AssetInfo.img}}" alt="Asset avatar" />
+                            </div>
+                            <div class="fileinput-preview fileinput-exists thumbnail"></div>
+                            <div class="user_avatar_controls">
+                                <span class="btn-file">
+                                    <span><i class="material-icons">&#xE2C6;</i></span>
+                                    <span class="fileinput-exists"><i class="material-icons">&#xE86A;</i></span>
+                                    <input type="file" name="file" id="user_edit_avatar_control">
+                                </span>
+                                <a href="#" class="btn-file fileinput-exists" data-dismiss="fileinput">
+                                    <i class="material-icons">&#xE5CD;</i>
+                                </a>
+                            </div>
+                        </div>
+                    }
+                    <div class="user_heading_content">
+                        <h2 class="heading_b">
+                            <span class="uk-text-truncate" id="user_edit_uname">{{AssetInfo.IteamName}}</span>
+                            <span class="sub-heading" id="user_edit_position">{{AssetInfo.ModelNo}} </span>
+                        </h2>
+                    </div>
+                </div>
+                <div class="user_content">
+                    <ul id="user_edit_tabs" class="uk-tab" data-uk-tab="{connect:'#user_edit_tabs_content'}">
+                        <li ng-click="GetbyTabInfo()" class="uk-active"><a href="#"><i class="material-icons">&#xE873;</i> Basic</a></li>
+                        <li ng-click="GetbyTabInfo()"><a href="#"><i class="material-icons">&#xE86E;</i> Maintenance</a></li>
+                        <li ng-click="GetbyTabInfo()"><a href="#"><i class="material-icons">&#xE8AF;</i> Status</a></li>
+                        <li><a href="#"><i class="material-icons">&#xE889;</i> Asset History</a></li>
+                    </ul>
+                    <ul id="user_edit_tabs_content" class="uk-switcher uk-margin">
+                        <!-- Basic Tab -->
+                        <li>
+                            <div class="uk-margin-top">
+                                <h3 class="full_width_in_card heading_c uk-margin-bottom">
+                                    <i class="material-icons">&#xE873;</i> Asset Information
+                                </h3>
+                                <div class="uk-grid">
+                                    <div class="uk-width-1-1">
+                                        <div class="uk-grid uk-grid-width-1-1 uk-grid-width-large-1-1" data-uk-grid-margin>
+                                            <div class="uk-overflow-container">
+                                                <table class="premium-table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="uk-text-nowrap"><b>Asset Name</b></th>
+                                                            <th class="uk-text-nowrap"><b>Model</b></th>
+                                                            <th class="uk-text-nowrap"><b>Model No</b></th>
+                                                            <th class="uk-text-nowrap"><b>Serial No</b></th>
+                                                            <th class="uk-text-nowrap"><b>Inv No.</b></th>
+                                                            <th class="uk-text-nowrap"><b>Vendor</b></th>
+                                                            <th class="uk-text-nowrap"><b>Location</b></th>
+                                                            <th class="uk-text-nowrap"><b>Received by</b></th>
+                                                            <th class="uk-text-nowrap"><b>Status</b></th>
+                                                            <th class="uk-text-nowrap"><b>Created On</b></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr class="uk-table-middle">
+                                                            <td>{{AssetInfo.IteamName}}</td>
+                                                            <td>{{AssetInfo.Model}}</td>
+                                                            <td>{{AssetInfo.ModelNo}}</td>
+                                                            <td class="uk-text-small">{{AssetInfo.SerialNo}}</td>
+                                                            <td>{{AssetInfo.InvNo}}</td>
+                                                            <td class="uk-text-small">{{AssetInfo.VendorName}}</td>
+                                                            <td class="uk-text-small">{{AssetInfo.Zone}}</td>
+                                                            <td class="uk-text-small">{{AssetInfo.Receivedby}}</td>
+                                                            <td class="uk-text-small">
+                                                                <span class="uk-badge" ng-if="AssetInfo.StatusName != null">{{AssetInfo.StatusName}}</span>
+                                                            </td>
+                                                            <td class="uk-width-2-10 uk-text-small">{{AssetInfo.CreatedDate | jsonDate:'dd MMMM yy'}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="uk-grid" data-uk-grid-margin>
+                                    <div class="uk-width-1-2">
+                                        <div class="md-card">
+                                            <div class="md-card-head md-bg-light-blue-600">
+                                                <div class="md-card-head-menu">
+                                                    <a data-uk-modal="{target:'#AssignInOut'}"><span class="md-icon-light">Issue</span> <i class="md-icon material-icons md-icon-light">&#xE2C6;</i></a>
+                                                    <a ng-click="CheckIn(AssetInfo.tEmployeeTagId,AssetInfo.tAssetTagId)"> <i class="md-icon material-icons md-icon-light">&#xE2C4;</i> <span class="md-icon-light">Checkin</span> </a>
+                                                </div>
+                                                <div class="uk-text-center">
+                                                    <img class="md-card-head-avatar" src="/Content/assets/img/avatars/user@2x.png" alt="" />
+                                                </div>
+                                                <h3 class="md-card-head-text uk-text-center md-color-white">
+                                                    {{AssetInfo.EmployeeName}}
+                                                    <span>{{AssetInfo.EmployeeId}}</span>
+                                                </h3>
+                                            </div>
+                                            <div class="md-card-content">
+                                                <ul class="md-list md-list-addon">
+                                                    <li>
+                                                        <div class="md-list-addon-element">
+                                                            <i class="md-list-addon-icon material-icons">&#xE158;</i>
+                                                        </div>
+                                                        <div class="md-list-content">
+                                                            <span class="md-list-heading">{{AssetInfo.EmailId}}</span>
+                                                            <span class="uk-text-small uk-text-muted">Email</span>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="md-list-addon-element">
+                                                            <i class="md-list-addon-icon material-icons">&#xE0CD;</i>
+                                                        </div>
+                                                        <div class="md-list-content">
+                                                            <span class="md-list-heading">{{AssetInfo.ContactNo}}</span>
+                                                            <span class="uk-text-small uk-text-muted">Phone</span>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="uk-width-1-2">
+                                        <div class="uk-overflow-container">
+                                            <table class="premium-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="uk-text-nowrap"><b>Asset Issued Status</b></th>
+                                                        <th class="uk-text-nowrap"><b>Issued Date</b></th>
+                                                        <th class="uk-text-nowrap"><b>Returning Date</b></th>
+                                                        <th class="uk-text-nowrap"><b>Days</b></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr class="uk-table-middle">
+                                                        <td>
+                                                            <span ng-if="AssetInfo.tEmployeeTagId == null" class="uk-badge uk-badge-primary">Asset ready to use</span>
+                                                            <span ng-if="AssetInfo.tEmployeeTagId != null" class="uk-badge uk-badge-primary">This asset are in use</span>
+                                                        </td>
+                                                        <td class="uk-width-2-10 uk-text-right uk-text-muted uk-text-small">
+                                                            <span ng-if="AssetInfo.tEmployeeTagId != null">{{AssetInfo.IssueDate | jsonDate:'dd MMMM yy'}}</span>
+                                                        </td>
+                                                        <td class="uk-width-2-10 uk-text-right uk-text-muted uk-text-small">
+                                                            <span ng-if="AssetInfo.tEmployeeTagId != null">{{AssetInfo.ReturnDate | jsonDate:'dd MMMM yy'}}</span>
+                                                        </td>
+                                                        <td>
+                                                            <span class="uk-badge uk-badge-success">{{AssetInfo.EngDays}}</span>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <!-- Maintenance Tab -->
+                        <li>
+                            <p class="uk-text-muted uk-text-small">Click on inner tab to add/view maintenance summary</p>
+                            <div class="uk-grid" data-uk-grid-margin>
+                                <div class="uk-width-medium-1-1">
+                                    <div class="md-card uk-margin-medium-bottom">
+                                        <div class="md-card-content">
+                                            <div class="uk-grid">
+                                                <div class="uk-width-1-1">
+                                                    <ul class="uk-tab" data-uk-tab="{connect:'#tabs_1_content'}" id="tabs_1">
+                                                        <li class="uk-active"><a href="#"><i class="material-icons">&#xE86E;</i> Maintenance Summary</a></li>
+                                                        <li ng-click="GetbyTabInfo()"><a href="#"><i class="material-icons">&#xE145;</i> Add New Maintenance</a></li>
+                                                    </ul>
+                                                    <ul id="tabs_1_content" class="uk-switcher uk-margin">
+                                                        <li>
+                                                            <div class="uk-grid">
+                                                                <div class="uk-width-1-1">
+                                                                    <div class="uk-grid uk-grid-width-1-1 uk-grid-width-large-1-1" data-uk-grid-margin>
+                                                                        <div class="uk-overflow-container">
+                                                                            <table class="premium-table">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                        <th class="uk-text-nowrap"><b>Title</b></th>
+                                                                                        <th class="uk-text-nowrap"><b>Maintenance Type</b></th>
+                                                                                        <th class="uk-text-nowrap"><b>Maintenance Part</b></th>
+                                                                                        <th class="uk-text-nowrap"><i class="uk-icon-inr"></i> <b>Cost</b></th>
+                                                                                        <th class="uk-text-nowrap"><b>IsWarranty</b></th>
+                                                                                        <th class="uk-text-nowrap"><b>Additional Part</b></th>
+                                                                                        <th class="uk-text-nowrap"><b>Created By</b></th>
+                                                                                        <th class="uk-text-nowrap"><b>Start Date</b></th>
+                                                                                        <th class="uk-text-nowrap"><b>Completion Date</b></th>
+                                                                                        <th class="uk-text-nowrap"><b>Note</b></th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                    <tr class="uk-table-middle" ng-repeat="mnt in MaintInfo">
+                                                                                        <td>{{mnt.Title}}</td>
+                                                                                        <td class="uk-text-small">{{mnt.MaintenanceName}}</td>
+                                                                                        <td class="uk-text-small">{{mnt.MaintenanPart}}</td>
+                                                                                        <td><i class="uk-icon-inr"></i><b> {{mnt.Cost}}</b></td>
+                                                                                        <td>
+                                                                                            <span class="uk-badge" ng-if="mnt.IsWarranty != null">{{mnt.IsWarranty}}</span>
+                                                                                        </td>
+                                                                                        <td>{{mnt.AdditionalPart}}</td>
+                                                                                        <td>{{mnt.CreatedBy}}</td>
+                                                                                        <td class="uk-text-small">{{mnt.StartDate | jsonDate:'dd MMMM yy'}}</td>
+                                                                                        <td class="uk-text-small">{{mnt.EndDate | jsonDate:'dd MMMM yy'}}</td>
+                                                                                        <td class="uk-text-small">{{mnt.Note}}</td>
+                                                                                    </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            @using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "_formMaintInfo", @name = "_formMaintInfo" }))
+                                                            {
+                                                                <div class="md-card uk-margin-medium-bottom">
+                                                                    <div class="md-card-toolbar">
+                                                                        <h3 class="md-card-toolbar-heading-text">
+                                                                            <i class="material-icons">&#xE145;</i> New Maintenance Record
+                                                                        </h3>
+                                                                    </div>
+                                                                    <div class="md-card-content">
+                                                                        <div class="uk-grid" data-uk-grid-margin>
+                                                                            <div class="uk-width-large-1-1">
+                                                                                <div class="uk-grid" data-uk-grid-margin>
+                                                                                    <div class="uk-width-large-1-4">
+                                                                                        <input type="text" name="tMaintenanceId" ng-model="tMaintenanceId" ng-hide="true" />
+                                                                                        <input type="text" name="tAssetTagId" ng-model="tAssetTagId" ng-hide="true" />
+                                                                                        <div class="parsley-row">
+                                                                                            <span class="uk-input-group-addon"></span>
+                                                                                            <span class="uk-form-help-block"><b>Maintenance Type</b> <span class="req">*</span></span>
+                                                                                            <input class="md-btn md-btn-wave waves-effect waves-button premium-input" id="mMaintenanceTypeId" name="mMaintenanceTypeId" ng-model="mMaintenanceTypeId" placeholder="Maintenance Type" />
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="uk-width-large-1-4">
+                                                                                        <div class="parsley-row">
+                                                                                            <label for="product_edit_quantity_control"><b>Title</b> <span class="req">*</span></label>
+                                                                                            <input type="text" class="md-input label-fixed" ng-model="Title" name="Title" id="Title">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="uk-width-large-1-4">
+                                                                                        <div class="uk-input-group">
+                                                                                            <span class="uk-input-group-addon">
+                                                                                                <i class="uk-icon-inr"></i>
+                                                                                            </span>
+                                                                                            <label for="wizard_address"><b>Cost</b></label>
+                                                                                            <input type="number" name="Cost" id="Cost" ng-model="Cost" required class="md-input label-fixed" />
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="uk-width-large-1-4">
+                                                                                        <div class="parsley-row">
+                                                                                            <label for="wizard_address"><b>In Warranty?</b></label><br />
+                                                                                            <input type="checkbox" name="IsWarranty" data-md-icheck value="1" class="md-input label-fixed" />
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="uk-width-medium-1-1">
+                                                                                <div class="uk-grid" data-uk-grid-margin>
+                                                                                    <div class="uk-width-medium-1-4">
+                                                                                        <div class="uk-input-group">
+                                                                                            <span class="uk-input-group-addon">
+                                                                                                <i class="uk-icon-calendar"></i>
+                                                                                            </span>
+                                                                                            <label for="wizard_address"><b>Start Date</b></label>
+                                                                                            <input type="date" name="StartDate" class="md-input label-fixed" />
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="uk-width-medium-1-4">
+                                                                                        <div class="uk-input-group">
+                                                                                            <span class="uk-input-group-addon">
+                                                                                                <i class="uk-icon-calendar"></i>
+                                                                                            </span>
+                                                                                            <label for="wizard_address"><b>Completion Date</b></label>
+                                                                                            <input type="date" name="EndDate" class="md-input label-fixed" />
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="uk-width-medium-1-4">
+                                                                                        <div class="parsley-row">
+                                                                                            <label for="wizard_address"><b>Maintenance Part</b></label>
+                                                                                            <textarea name="MaintenanPart" cols="30" rows="4" class="md-input label-fixed" id="MaintenanPart" ng-model="MaintenanPart"></textarea>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="uk-width-medium-1-4">
+                                                                                        <div class="parsley-row">
+                                                                                            <label for="wizard_address"><b>Additional Part</b></label>
+                                                                                            <textarea name="AdditionalPart" id="AdditionalPart" cols="30" rows="4" class="md-input label-fixed" ng-model="AdditionalPart"></textarea>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="uk-grid" data-uk-grid-margin>
+                                                                                    <div class="uk-width-medium-1-4">
+                                                                                        <div class="parsley-row">
+                                                                                            <label for="wizard_address"><b>Maint by</b></label>
+                                                                                            <input type="text" name="Maintby" class="md-input label-fixed" />
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="uk-width-medium-1-4">
+                                                                                        <div class="parsley-row">
+                                                                                            <label for="wizard_address"><b>Note</b></label>
+                                                                                            <input type="text" name="Note" class="md-input label-fixed" />
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="uk-width-large-1-3 uk-width-medium-1-1">
+                                                                                        <div class="uk-input-group uk-margin-large-top">
+                                                                                            <button title="Add" type="button" ng-click="MaintCollData()" ng-hide="isAddMaint"
+                                                                                                    class="md-btn md-btn-primary premium-btn-sm">
+                                                                                                <i class="material-icons">&#xE161;</i> {{loading ? loading : 'Add Maintenance'}}
+                                                                                            </button>
+                                                                                            <button title="Update" type="button" ng-click="MaintCollData();" ng-init="isEditMaint=true" ng-hide="isEditMaint"
+                                                                                                    class="md-btn md-btn-primary premium-btn-sm">
+                                                                                                <i class="material-icons">&#xE161;</i> {{loading ? loading : 'Update'}}
+                                                                                            </button>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            }
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <!-- Status Tab -->
+                        <li>
+                            <p class="uk-text-muted uk-text-small">Note: status will not be listed here. It will update in Basic Tab</p>
+                            <div class="uk-grid" data-uk-grid-margin>
+                                <div class="uk-width-medium-1-1">
+                                    @using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "_formStatusInfo", @name = "_formStatusInfo" }))
+                                    {
+                                        <div class="md-card uk-margin-medium-bottom">
+                                            <div class="md-card-toolbar">
+                                                <h3 class="md-card-toolbar-heading-text">
+                                                    <i class="material-icons">&#xE8AF;</i> Update Status
+                                                </h3>
+                                            </div>
+                                            <input type="text" name="tAssetTagId" ng-model="tAssetTagId" ng-hide="true" />
+                                            <div class="md-card-content">
+                                                <div class="uk-grid" data-uk-grid-margin>
+                                                    <div class="uk-width-medium-1-1">
+                                                        <div class="uk-grid" data-uk-grid-margin>
+                                                            <div class="uk-width-medium-1-4">
+                                                                <div class="parsley-row">
+                                                                    <span class="uk-input-group-addon"></span>
+                                                                    <input class="md-btn md-btn-wave waves-effect waves-button premium-input" id="mStatusMasterId" name="mStatusMasterId" ng-model="mStatusMasterId" placeholder="Select Status" />
+                                                                    <span class="uk-form-help-block"><b>Status Type</b> <span class="req">*</span></span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="uk-width-large-1-3 uk-width-medium-1-1">
+                                                                <div class="uk-input-group uk-margin-large-top">
+                                                                    <button title="Update Status" type="button" ng-click="StatusCollData()" ng-hide="isAddStatus"
+                                                                            class="md-btn md-btn-primary premium-btn-sm">
+                                                                        <i class="material-icons">&#xE161;</i> {{loading ? loading : 'Update Status'}}
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </li>
+                        <!-- Asset History Tab -->
+                        <li>
+                            <p class="uk-text-muted uk-text-small">History of asset transactions.</p>
+                            <div class="uk-grid">
+                                <div class="uk-width-1-1">
+                                    <div class="uk-grid uk-grid-width-1-1 uk-grid-width-large-1-1" data-uk-grid-margin>
+                                        <div class="uk-overflow-container">
+                                            <table class="premium-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="uk-text-nowrap"><b>Employee</b></th>
+                                                        <th class="uk-text-nowrap"><b>Issue Date</b></th>
+                                                        <th class="uk-text-nowrap"><b>Return Date</b></th>
+                                                        <th class="uk-text-nowrap"><b>Created By</b></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr class="uk-table-middle" ng-repeat="ah in AssetHist">
+                                                        <td class="uk-text-small">{{ah.EmployeeName}}</td>
+                                                        <td class="uk-text-small">{{ah.IssueDate | jsonDate:'dd MMMM yy'}}</td>
+                                                        <td class="uk-text-small">{{ah.ReturnDate | jsonDate:'dd MMMM yy'}}</td>
+                                                        <td class="uk-text-small">{{ah.CreatedBy}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Assign Asset Modal -->
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "_formIssue", @name = "_formIssue" }))
+    {
+        <div class="uk-modal" id="AssignInOut">
+            <div class="uk-modal-dialog uk-modal-dialog">
+                <button class="uk-modal-close uk-close" type="button"></button>
+                <div class="uk-modal-header">
+                    <span class="uk-badge uk-badge-primary">Assign Asset</span>
+                </div>
+                <div class="uk-grid" data-uk-grid-margin>
+                    <input type="text" name="tAssetTagId" ng-model="tAssetTagId" ng-hide="true" />
+                    <div class="uk-width-medium-1-2">
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="uk-icon-user"></i>
+                            </span>
+                            <div class="md-input-wrapper md-input-filled">
+                                <input class="md-btn md-btn-wave waves-effect waves-button premium-input" id="tEmployeeTagId" name="tEmployeeTagId" ng-model="tEmployeeTagId" placeholder="Select User" />
+                                <span class="uk-form-help-block"><b>Select User</b> <span class="req">*</span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-width-medium-1-2">
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="uk-icon-calendar"></i>
+                            </span>
+                            <div class="md-input-wrapper md-input-filled">
+                                <label for="product_edit_quantity_control"><b>Issue Date</b> <span class="req">*</span></label>
+                                <input type="date" class="md-input label-fixed" name="IssueDate" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="uk-grid" data-uk-grid-margin>
+                    <div class="uk-width-medium-1-2">
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="uk-icon-calendar"></i>
+                            </span>
+                            <div class="md-input-wrapper md-input-filled">
+                                <label for="product_edit_quantity_control"><b>Return Date</b></label>
+                                <input type="date" class="md-input label-fixed" name="ReturnDate" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-width-large-1-2">
+                        <div class="uk-input-group uk-margin-large-top">
+                            <button title="Issue" type="button" ng-hide="isAddIssue" ng-click="IssueForm(); GetbyTabInfo()"
+                                    class="md-btn md-btn-primary uk-modal-close premium-btn-sm">
+                                <i class="material-icons">&#xE2C4;</i> {{loading ? loading : 'Issue Asset'}}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section foot{
+    <!-- datatables custom integration -->
+    <script src="@Url.Content("~/Content/assets/js/kendoui_custom.min.js")" type="text/javascript"></script>
+    <!-- kendoui functions -->
+    <script src="@Url.Content("~/Content/assets/js/pages/kendoui.min.js")" type="text/javascript"></script>
+    <!-- page specific plugins -->
+    <!-- file input -->
+    <script src="~/Content/assets/js/custom/uikit_fileinput.min.js"></script>
+    <!-- user edit functions -->
+    <script src="~/Content/assets/js/pages/page_user_edit.min.js"></script>
+    <!-- MoreAssetDetail -->
+    <script src="~/Scripts/HexaAgular/MoreAssetDetail.js"></script>
+}

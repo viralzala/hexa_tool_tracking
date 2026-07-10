@@ -1,0 +1,122 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+
+@section head
+{
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.common-material.min.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.material.min.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/datatables/media/css/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/datatables/media/css/jquery.dataTables.min.css" rel="stylesheet" />
+}
+
+<div id="page_content">
+    <div id="page_content_inner">
+        <h3 class="heading_b uk-margin-bottom" ng-bind="'CreateDisposiotion'|translate"></h3>
+        <div class="md-card">
+            <div class="md-card-content large-padding">
+                <form action="" class="uk-form-stacked" enctype="multipart/form-data" method="post">
+                    <div class="uk-grid" data-uk-grid-margin>
+                        <div class="parsley-row" hidden="hidden">
+                            <input type="hidden" name="TC_LeadDispositionId" id="TC_LeadDispositionId" class="md-input" />
+                        </div>
+                        <div class="uk-width-medium-1-2">
+                            <div class="parsley-row">
+                                <label ng-bind="'LeadType'|translate">:</label>
+                                <input id="TC_LeadTypeId" name="TC_LeadTypeId" required placeholder="Select Inquiry..." />
+                                <input type="hidden" id="TC_LeadTypeIds" class="md-input" />
+                            </div>
+                        </div>
+                        <div class="uk-width-medium-1-2">
+                            <div class="parsley-row">
+                                <label ng-bind="'InquiryType'|translate">:</label>
+                                <input id="TC_InquiryTypeId" name="TC_InquiryTypeId" required placeholder="Select Inquiry..." />
+                                <input type="hidden" id="TC_InquiryTypeIds" class="md-input" />
+                            </div>
+                        </div>
+                        <div class="uk-width-medium-1-2">
+                            <div class="parsley-row">
+                                <label for="MenuUrl" ng-bind="'DispositionName'|translate"><span class="req"> </span></label>
+                                <input type="text" value="" required id="Name" name="Name" class="md-input label-fixed" />
+                            </div>
+                        </div>
+                        <div class="uk-width-1-1">
+                            <button type="button" class="md-btn md-btn-primary" id="btnsave" ng-bind="'Submit'|translate"></button>
+                            <button type="button" class="md-btn md-btn-primary" id="btnupdate" ng-bind="'Update'|translate"></button>
+                            <button type="reset" class="md-btn md-btn-primary" id="btnCancel" ng-bind="'Cancel'|translate"></button>                         
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="md-card uk-margin-medium-bottom">
+            <div class="md-card-content">
+                <div class="uk-grid" data-uk-grid-margin>
+                    <div class="uk-width-medium-1-1">
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="uk-icon-search"></i>
+                            </span>
+                            <div class="md-input-wrapper md-input-filled">
+                                <label for="product_edit_quantity_control" ng-bind="'Search'|translate"></label>
+                                <input type="text" class="md-input" name="search" id="global_filter">
+                                <span class="md-input-bar "></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="md-card uk-margin-medium-bottom">
+            <div class="md-card-content">
+                <div class="dt_colVis_buttons"></div>
+                <table id="tbl" class="uk-table" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th ng-bind="'Id'|translate"></th>
+                            <th  ng-bind="'LeadDisposition'|translate"></th>
+                            <th ng-bind="'InquiryType'|translate"></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        WebFontConfig = {
+            google: {
+                families: [
+                    'Source+Code+Pro:400,700:latin',
+                    'Roboto:400,300,500,700,400italic:latin'
+                ]
+            }
+        };
+        (function () {
+            var wf = document.createElement('script');
+            wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+            '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+            wf.type = 'text/javascript';
+            wf.async = 'true';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(wf, s);
+        })();
+    </script>
+</div>
+
+@section foot
+{
+    <!-- page specific plugins -->
+    <script src="~/Content/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/bower_components/datatables/media/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/AppJs/UserManagement/LeadDispositionMaster.js"></script>
+
+    <script src="~/Content/assets/js/kendoui_custom.min.js"></script>
+    <!--  kendoui functions -->
+    <script src="~/Content/assets/js/pages/kendoui.min.js"></script>
+}
+

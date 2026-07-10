@@ -1,0 +1,343 @@
+﻿@{
+    /**/
+
+    ViewBag.Title = "Index";
+
+    if (Session["SortCode"] != null)
+    {
+        Layout = "~/Views/Shared/_Admin.cshtml";
+    }
+    else
+    {
+        Response.Redirect("/AppUser");
+    }
+}
+
+@section head
+{
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.common-material.min.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.material.min.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/datatables/media/css/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/datatables/media/css/jquery.dataTables.min.css" rel="stylesheet" />
+}
+
+<div ng-controller="TagBLEtoBinCtrl">
+    <div id="page_content">
+        <div id="page_content_inner">
+            <h3 class="heading_b uk-margin-bottom">Bin Pack</h3>
+            @using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "_formColl", @name = "_formColl" }))
+            {
+                <div class="uk-grid" data-uk-grid-margin>
+                    <div class="uk-width-large-6-10 uk-width-large-6-10 uk-row-first">
+                        <div class="md-card uk-margin-medium-bottom">
+                            <div class="md-card-content">
+                                <div class="uk-grid" data-uk-grid-margin>
+                                    <div class="uk-input-group">
+                                        <label for="wizard_address">
+                                            <b>
+                                                Employee ID/Name
+                                            </b>
+                                        </label>
+                                        <input type="text"
+                                               name="CreatedBy"
+                                               ng-model="CreatedBy"
+                                               placeholder="Scan Employee ID/Name"
+                                               id="CreatedBy"
+                                               focus-on="CreatedBy"
+                                               class="md-input label-fixed" />
+                                    </div>
+                                    <div class="uk-input-group">
+                                        <label for="wizard_address">
+                                            <b>
+                                                *Ble
+                                            </b>
+                                        </label>
+                                        <input type="text"
+                                               name="Ble"
+                                               ng-model="Ble"
+                                               id="Ble"
+                                               placeholder="Scan Ble"
+                                               class="md-input label-fixed" />
+                                    </div>
+                                    @if (Convert.ToString(Session["SortCode"]) == "AD")
+                                    {<div class="uk-input-group">
+                                            <hr />
+                                            <span class="uk-input-group-addon">
+                                                <input name="IsMaster"
+                                                       id="IsMaster"
+                                                       ng-model="IsMaster"
+                                                       value="true"
+                                                       type="checkbox"
+                                                       placeholder="Direct to assembly?"
+                                                       data-md-icheck />
+                                            </span>
+                                            <label>Direct to assembly</label>
+                                        </div>}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-width-large-4-10 uk-width-large-4-10">
+                        <div class="md-card uk-margin-medium-bottom">
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display:block">
+                    @*@Html.AntiForgeryToken()*@
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="uk-grid" data-uk-grid-margin>
+                        <div class="uk-width-large-7-10 uk-width-large-7-10 uk-row-first">
+                            <div class="md-card uk-margin-medium-bottom">
+                                <div class="md-card-content">
+                                    <div class="md-card-content">
+                                        <div class="uk-grid" data-uk-grid-margin>
+                                            @*<input type="hidden" name="Id" id="Id" />
+                                                <input type="hidden" name="PalletId" id="PalletId" />
+                                                <input type="hidden" name="StatusId" id="StatusId" />
+                                                <input type="hidden" name="ContainerId" id="ContainerId" />
+                                                <input type="hidden" name="CustomerId" id="CustomerId" />
+                                                <input type="hidden" name="ShiftId" id="ShiftId" />*@
+                                            <div class="uk-input-group">
+                                                <div class="parsley-row">
+                                                    <label>
+                                                        <b>
+                                                            Part Number
+                                                        </b><span class="req"> </span>
+                                                    </label>
+                                                    <input type="text" placeholder="Scan Part Number" required name="PartNumber" id="PartNumber" class="md-input label-fixed" />
+                                                </div>
+                                            </div>
+
+                                            <div class="uk-input-group">
+                                                <div class="parsley-row">
+                                                    <label>
+                                                        <b>
+                                                            Quantity
+                                                        </b><span class="req"> </span>
+                                                    </label>
+                                                    <input type="text" placeholder="Scan Quantity" required name="Quantity" id="Quantity" class="md-input label-fixed" />
+                                                </div>
+                                            </div>
+
+
+
+                                            <div class="uk-input-group">
+                                                <div class="parsley-row">
+                                                    <label>
+                                                        <b>
+                                                            Pro  DateTime
+                                                        </b><span class="req"> </span>
+                                                    </label>
+                                                    <input type="date" placeholder="Select Pro DateTime" required name="DateAndTime" id="DateAndTime" class="md-input label-fixed" />
+                                                </div>
+                                            </div>
+
+                                            <div class="uk-input-group">
+                                                <div class="parsley-row">
+                                                    <label>
+                                                        <b>
+                                                            Lot Name
+                                                        </b><span class="req"> </span>
+                                                    </label>
+                                                    <input type="text" placeholder="Scan Lot" required name="Lot" id="Lot" class="md-input label-fixed" />
+                                                </div>
+                                            </div>
+
+                                            <div class="uk-input-group">
+                                                <button title="Submit"
+                                                        type="button"
+                                                        style="text-transform: capitalize"
+                                                        ng-click="SubmitSMTBinPack()"
+                                                        class="md-btn md-btn-primary">
+                                                    Push to database
+                                                </button>
+                                            </div>
+
+                                            @*<div class="uk-input-group">
+                                                    <div class="parsley-row">
+                                                        <label>
+                                                            <b>
+                                                                Serial Number
+                                                            </b><span class="req"> </span>
+                                                        </label>
+                                                        <input type="text" placeholder="Scan Serial Number" required name="SerialNumber" id="SerialNumber" class="md-input label-fixed" />
+                                                    </div>
+                                                </div>*@
+
+                                            @*<div class="uk-input-group">
+                                                    <div class="parsley-row">
+                                                        <label>
+                                                            <b>
+                                                                Customer Code
+                                                            </b><span class="req"> </span>
+                                                        </label>
+                                                        <input type="text" placeholder="Scan Customer Code" required name="CustomerCode" id="CustomerCode" class="md-input label-fixed" />
+                                                    </div>
+                                                </div>*@
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="uk-width-large-3-10 uk-width-large-4-10">
+                            <div class="md-card uk-margin-medium-bottom">
+                                <div class="md-card-content">
+                                    <ul class="md-list" id="Niftify">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-grid" data-uk-grid-margin style="display:none;">
+                        <div class="uk-width-xLarge-3-10 uk-width-large-3-10">
+                            <div class="uk-grid" data-uk-grid-margin>
+                                <div class="md-card-content">
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="uk-width-large-7-10 uk-width-large-7-10 uk-row-first">
+                            <div class="md-card uk-margin-medium-bottom">
+                                <div class="md-card-content">
+                                    <div class="uk-grid" data-uk-grid-margin>
+                                        @*<div class="uk-input-group">
+                                                <div class="parsley-row">
+                                                    <label>
+                                                        <b>
+                                                            PartId
+                                                        </b><span class="req"> </span>
+                                                    </label>
+                                                    <input type="number" placeholder="Scan PartId" required name="PartId" id="PartId" class="md-input label-fixed" />
+                                                </div>
+                                            </div>*@
+                                        @*<div class="uk-input-group">
+                                                <div class="parsley-row">
+                                                    <label>
+                                                        <b>
+                                                            QAD Line
+                                                        </b><span class="req"> </span>
+                                                    </label>
+                                                    <input type="text" placeholder="Scan QAD Line" required name="QADLine" id="QADLine" class="md-input label-fixed" />
+                                                </div>
+                                            </div>*@
+                                        @*<div class="uk-input-group">
+                                                <div class="parsley-row">
+                                                    <label>
+                                                        <b>
+                                                            Station
+                                                        </b><span class="req"> </span>
+                                                    </label>
+                                                    <input type="text" placeholder="Scan Station" required name="Station" id="Station" class="md-input label-fixed" />
+                                                </div>
+                                            </div>*@
+
+                                        @*@if (Convert.ToString(Session["SortCode"]) == "AD")
+                                            {<div class="uk-input-group">
+                                                    <span class="uk-input-group-addon">
+                                                        <input name="IsMaster"
+                                                               id="IsMaster"
+                                                               value="true"
+                                                               type="checkbox"
+                                                               placeholder="Direct to assembly?"
+                                                               data-md-icheck /> <hr />
+                                                    </span>
+                                                    <label>Direct to assembly</label>
+                                                </div>}*@
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div class="uk-grid" data-uk-grid-margin="" data-uk-grid-match="{target:'.md-card-content'}" style="display:none">
+                <div class="uk-width-xLarge-8-10 uk-width-large-7-10">
+                    <div class="md-card">
+                        <div class="md-card-content" style="min-height: 280px;">
+                            <div class="uk-overflow-container">
+                                <table class="uk-table" id="FileItems">
+                                    <thead>
+                                        <tr>
+                                            <th class="uk-text-nowrap">SerialNumber</th>
+                                            <th class="uk-text-nowrap">Quantity</th>
+                                            <th class="uk-text-nowrap uk-text-right">Date&Time</th>
+                                            <th class="uk-text-nowrap">CustomerCode</th>
+                                            <th class="uk-text-nowrap">PartNumber</th>
+                                            <th class="uk-text-nowrap">QADLine</th>
+                                            <th class="uk-text-nowrap">Station</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="uk-table-middle" ng-repeat="i in FileItems">
+                                            <td class="uk-text-nowrap">
+                                                <a> {{i.SerialNumber}}</a>
+                                            </td>
+                                            <td class="uk-text-nowrap">
+                                                <span class="uk-badge">{{i.Quantity}}</span>
+                                            </td>
+                                            <td class="uk-text-right uk-text-muted uk-text-small">
+                                                {{i.DateAndTime | jsonDate:'dd MMMM yy'}}
+                                            </td>
+                                            <td>
+                                                <span>{{i.CustomerCode}}</span>
+                                            </td>
+                                            <td>
+                                                <span>{{i.PartNumber}}</span>
+                                            </td>
+                                            <td>
+                                                <span>{{i.QADLine}}</span>
+                                            </td>
+                                            <td>
+                                                <span>{{i.Station}}</span>
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="uk-width-xLarge-2-10 uk-width-large-3-10 uk-row-first">
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <br />
+                            <div class="uk-grid" data-uk-grid-margin>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="md-card uk-margin-medium-bottom" style="display:none">
+                <div class="md-card-content">
+                    <div class="uk-grid uk-grid-width-medium-1-6 uk-grid-width-large-1-6" data-uk-grid-margin>
+                        <div class="uk-input-group">
+                            <button title="Submit" type="button" ng-click="PushFileTODB()"
+                                    class="md-btn md-btn-primary">
+                                Push to database
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr />
+        </div>
+    </div>
+</div>
+
+@section foot
+{
+    <script src="~/Content/assets/js/pages/ecommerce_product_edit.min.js"></script>
+    <!-- page specific plugins -->
+    <script src="~/Content/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/bower_components/datatables/media/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/Content/assets/js/kendoui_custom.min.js"></script>
+    <!--  kendoui functions -->
+    <script src="~/Content/assets/js/pages/kendoui.min.js"></script>
+
+    <script src="~/Scripts/HexaAgular/SMT/TagBLEtoBin.js"></script>
+}

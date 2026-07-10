@@ -1,0 +1,381 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+
+@section head
+{
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.common-material.min.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.material.min.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/datatables/media/css/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/datatables/media/css/jquery.dataTables.min.css" rel="stylesheet" />
+}
+
+<div id="page_content_inner" ng-cloak>
+    <h3 class="heading_b uk-margin-bottom" ng-bind="'Tools_Tag'|translate"></h3>
+    <div class="md-card uk-margin-large-bottom">
+        <div class="md-card-content">
+            <form class="uk-form-stacked" id="wizard_advanced_form">
+                <div id="wizard_advanced">
+
+                    <!-- first section -->
+                    <h3>Tools Information</h3>
+                    <section>
+                        <h2 class="heading_a">
+                            Tools Information
+                        </h2>
+                        <div class="uk-grid uk-grid-width-medium-1-2 uk-grid-width-large-1-4" data-uk-grid-margin>
+                            <div class="uk-input-group">
+                                <span class="uk-input-group-addon">
+                                    <i class="uk-icon-cubes"></i>
+                                </span>
+                                <div class="md-input-wrapper md-input-filled">
+                                    <label for="product_edit_quantity_control">Tool Name</label>
+                                    <input type="text" name="ToolName" id="ToolName" required class="md-input" />
+                                    <span class="md-input-bar "></span>
+                                </div>
+                            </div>
+                            <div class="uk-input-group">
+                                <label for="wizard_fullname">Tool Code</label>
+                                <input type="text" name="Code" id="Code" required class="md-input" />
+                            </div>
+
+                            <div class="uk-input-group">
+                                <label for="wizard_fullname">Manufacturer</label>
+                                <input type="text" name="Manufacturer" id="Manufacturer" required class="md-input" />
+                            </div>
+
+                            <div class="uk-input-group">
+                                <label for="wizard_fullname">Model</label>
+                                <input type="text" name="Model" id="Model" required class="md-input" />
+                            </div>
+
+                        </div>
+                        <div class="uk-grid uk-grid-width-medium-1-2 uk-grid-width-large-1-4" data-uk-grid-margin>
+                            <div class="uk-input-group">
+                                <label for="wizard_fullname">Model No</label>
+                                <input type="text" name="ModelNo" id="ModelNo" required class="md-input" />
+                            </div>
+                            <div class="uk-input-group">
+                                <label for="wizard_fullname">Serial</label>
+                                <input type="text" name="Serial" id="Serial" required class="md-input" />
+                            </div>
+                            <div class="uk-input-group">
+                                <label for="wizard_address">Description</label>
+                                <input type="text" name="Description" id="Description" required class="md-input" />
+                            </div>
+                            <div class="uk-input-group">
+                                <label for="wizard_address">Condition</label>
+                                <input type="text" name="Condition" id="Condition" required class="md-input" />
+                            </div>
+                        </div>
+                        <div class="uk-grid uk-grid-width-medium-1-2 uk-grid-width-large-1-4" data-uk-grid-margin>
+                            <div class="uk-input-group">
+                                <label for="wizard_fullname">Tool Status</label>
+                                <input type="text" name="IteamStatus" id="IteamStatus" required class="md-input" />
+                            </div>
+                            <div class="uk-input-group">
+                                <label>Asset Category </label>
+                                <input id="mGroupMasterId" name="mGroupMasterId" required placeholder="Select Category..." />
+                                <input type="hidden" id="mGroupMasterIds" class="md-input" />
+                            </div>
+                            <div class="uk-input-group">
+                                <label for="wizard_phone">Tool Type</label>
+                                <input id="mIteamTypeMasterId" name="mIteamTypeMasterId" required placeholder="Select Type..." />
+                                <input type="hidden" id="mIteamTypeMasterIds" class="md-input" />
+                            </div>
+                        </div>
+                        <div class="uk-grid uk-grid-width-medium-1-2 uk-grid-width-large-1-4" data-uk-grid-margin>
+                            <div class="uk-input-group">
+                                <label>Supplier</label>
+                                <input id="toSupplierId" name="toSupplierId" required placeholder="Select Supplier..." />
+                                <input type="hidden" id="toSupplierIds" class="md-input" />
+                            </div>
+                        </div>
+                    </section>
+                    <h3>Stcok Information</h3>
+                    <section>
+                        <h2 class="heading_a">
+                            Stcok Information
+                        </h2>
+                        <div class="uk-grid uk-grid-width-medium-1-2 uk-grid-width-large-1-4" data-uk-grid-margin>
+                            <div class="uk-input-group">
+                                <label for="wizard_fullname">Unit</label>
+                                :
+                                <input id="mUnitMasterId" name="mUnitMasterId" required placeholder="Select Unit..." />
+                                <input type="hidden" id="mUnitMasterIds" class="md-input" />
+                            </div>
+                            <div class="uk-input-group">
+                                <label for="wizard_fullname">Tool Size</label>
+                                <input type="text" name="Size" id="Size" required class="md-input" />
+                            </div>
+                            <div class="uk-input-group">
+                                <span class="uk-input-group-addon">
+                                    <i class="uk-icon-cubes"></i>
+                                </span>
+                                <div class="md-input-wrapper md-input-filled">
+                                    <label for="product_edit_quantity_control">Stock Quantity</label>
+                                    <input type="number" class="md-input" name="Stock" id="Stock">
+                                    <span class="md-input-bar "></span>
+                                </div>
+                            </div>
+                            <div class="uk-input-group">
+                                <span class="uk-input-group-addon">
+                                    <i class="uk-icon-inr"></i>
+                                </span>
+                                <div class="md-input-wrapper md-input-filled">
+                                    <label for="product_edit_quantity_control">Each Price</label>
+                                    <input type="number" class="md-input" name="Price" id="Price">
+                                    <span class="md-input-bar "></span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </section>
+                    <!-- second section -->
+                    <h3>Loaction Information</h3>
+                    <section>
+                        <h2 class="heading_a">
+                            Loaction Information
+                        </h2>
+                        <div class="uk-grid uk-grid-width-medium-1-2 uk-grid-width-large-1-4" data-uk-grid-margin>
+                            <div class="uk-width-medium-2-6 parsley-row">
+                                <div class="uk-input-group">
+                                    <span class="uk-input-group-addon">
+                                        <i class="uk-icon-building"></i>
+                                    </span>
+                                    <label for="wizard_vehicle_registration_city">Floor/Compartment/Loaction-</label>
+                                    <input onchange="GetRooms()" id="mFloorMasterId" name="mFloorMasterId" required placeholder="Select Reader..." />
+                                </div>
+                            </div>
+                            <div class="uk-width-medium-2-6 parsley-row">
+                                <div class="uk-input-group">
+                                    <span class="uk-input-group-addon">
+                                        <i class="uk-icon-home"></i>
+                                    </span>
+                                    <label for="wizard_vehicle_registration_city">Room/Deck/Area-</label>
+                                    <input id="mRoomMasterId" name="mRoomMasterId" required placeholder="Select Reader..." />
+                                </div>
+                            </div>
+                            <div class="uk-width-medium-2-6 parsley-row">
+                                <div class="uk-input-group">
+                                    <span class="uk-input-group-addon">
+                                        <i class="uk-icon-th"></i>
+                                    </span>
+                                    <label for="wizard_vehicle_registration_city">Drawer</label>
+                                    <input type="text" name="drawer" id="drawer" required class="md-input" />
+                                </div>
+                            </div>
+                            <div class="uk-width-medium-2-6 parsley-row">
+                                <div class="uk-input-group">
+                                    <span class="uk-input-group-addon">
+                                        <i class="uk-icon-server"></i>
+                                    </span>
+                                    <label for="wizard_vehicle_registration_city">Drawer Rack</label>
+                                    <input type="text" name="drawerrack" id="drawerrack" required class="md-input" />
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- third section -->
+                    <h3>RFID Tagging</h3>
+                    <section>
+                        <h2 class="heading_a">
+                            RFID Tagging
+                            <span class="sub-heading"></span>
+                        </h2>
+                        <span class="uk-alert uk-alert-info">If you would like to registration Employee for Perticuler Floor and Room please send his there and get rfid</span>
+                        <div class="uk-grid" data-uk-grid-margin>
+                            <div class="uk-width-medium-1-6 parsley-row">
+                                <label for="wizard_vehicle_registration_city">Start Reader</label>
+                                <input id="Reader" name="Reader" required placeholder="Select Reader..." />
+                            </div>
+                            <div class="uk-width-medium-2-6 parsley-row">
+                                <div class="uk-input-group">
+                                    <span class="uk-input-group-addon">
+                                        <i class="uk-icon-barcode"></i>
+                                    </span>
+                                    <label for="product_edit_sku_control">RFID/BARCODE</label>
+                                    <input type="text" name="RFID" id="RFID" required class="md-input" />
+                                </div>
+                            </div>
+                            <div class="uk-width-medium-1-6 parsley-row">
+                                <label for="wizard_vehicle_registration_address">Attena Port</label>
+                                <input type="text" name="PORTID" id="PORTID" required class="md-input" />
+                            </div>
+                            <div class="uk-width-medium-1-6 parsley-row">
+                                <label for="wizard_vehicle_registration_city">Start Reader</label>
+                                <a id="startb" onclick="test()" class="md-btn md-btn-facebook md-btn-mini md-btn-icon"><i id="btntst" class="material-icons"></i> </a>
+                            </div>
+                            <div class="uk-width-medium-1-6 parsley-row">
+                                <label for="wizard_vehicle_registration_state">Stop</label>
+                                <a onclick="StopReader()" class="md-btn md-btn-facebook md-btn-mini md-btn-icon"><i class="material-icons">&#xE036;</i></a>
+                            </div>
+                            <br />
+                            <div class="uk-width-medium-1-6 parsley-row">
+                                <label class="uk-alert uk-alert-info">Reader Status</label>
+                                <span id="lblerr" class="uk-text-danger uk-margin-remove"></span>
+                            </div>
+                            <div class="uk-width-medium-1-6 parsley-row">
+                                <label for="wizard_vehicle_registration_zip">Clear Data</label>
+                                <a onclick="ClearRdata()" class="md-btn md-btn-facebook md-btn-mini md-btn-icon"><i class="material-icons">&#xE14C;</i></a>
+                            </div>
+                            <div class="uk-width-medium-1-6 parsley-row">
+                                <label for="wizard_vehicle_registration_zip">GET RFID</label>
+                                <a id="getRfid" onclick="GetId()" class="md-btn md-btn-facebook md-btn-mini md-btn-icon"><i class="material-icons">&#xE8C7;</i></a>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="md-card uk-margin-medium-bottom">
+        <div class="md-card-content">
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-medium-1-1">
+                    <div class="uk-input-group">
+                        <span class="uk-input-group-addon">
+                            <i class="uk-icon-search"></i>
+                        </span>
+                        <div class="md-input-wrapper md-input-filled">
+                            <label for="product_edit_quantity_control" ng-bind="'Search'|translate"></label>
+                            <input type="text" class="md-input" name="search" id="global_filter">
+                            <span class="md-input-bar "></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h4 class="heading_a uk-margin-bottom">Tools Data</h4>
+    <div class="md-card uk-margin-medium-bottom">
+        <div class="md-card-content">
+            <table id="dt_tableExport" class="uk-table" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th ng-bind="'Id'|translate"></th>
+
+                        <th ng-bind="'Tool'|translate"></th>
+                        <th ng-bind="'ToolCode'|translate"></th>
+                        <th ng-bind="'Manufacturer'|translate"></th>
+                        <th ng-bind="'Model'|translate"></th>
+                        <th ng-bind="'ModelNo'|translate"></th>
+                        <th ng-bind="'Serial'|translate"></th>
+                        <th ng-bind="'Condition'|translate"></th>
+                        @*<th ng-bind="'IteamStatus'|translate"></th>
+                        <th ng-bind="'General.Description'|translate"></th>*@
+                        <th ng-bind="'RFID'|translate"></th>
+                        <th ng-bind="'UnitName'|translate"></th>
+                        <th ng-bind="'InStock'|translate"></th>
+                        <th ng-bind="'Stock'|translate"></th>
+                        <th ng-bind="'UserCountry.Location'|translate"></th>
+
+                        <th></th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+@section foot
+{
+    <div>
+        <input type="hidden" id="custid" />
+        <form class="uk-form-stacked" id="page_settings">
+            <div class="uk-modal" id="mailbox_new_message">
+                <div class="uk-modal-dialog uk-modal-dialog">
+                    <button class="uk-modal-close uk-close" type="button"></button>
+                    <div class="uk-modal-header">
+                        <span id="lbltext" class="uk-badge uk-badge-primary">Add Stock</span>
+                    </div>
+                    <div class="uk-grid" data-uk-grid-margin>
+                        <div class="parsley-row" hidden="hidden">
+                            <input type="hidden" name="tAssetTagId" id="toTooltagIds" class="md-input" />
+                            <input type="hidden" name="tAssetTagId" id="UIDs" class="md-input" />
+                            <input type="hidden" name="tAssetTagId" id="RFIDs" class="md-input" />
+                        </div>
+                        <div class="uk-width-medium-1-2">
+                            <div class="uk-input-group">
+                                <span class="uk-input-group-addon">
+                                    <i class="uk-icon-cubes"></i>
+                                </span>
+                                <div class="md-input-wrapper md-input-filled">
+                                    <label for="product_edit_quantity_control">Add Stock Quantity</label>
+                                    <input type="number" class="md-input" name="Stockup" min="1" id="Stockup">
+                                    <span class="md-input-bar "></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="uk-modal-footer">
+                        <div class="md-fab-wrapper">
+                            <div class="md-fab md-fab-toolbar md-fab-small md-fab-accent">
+                                <i class="material-icons"></i>
+                                <div class="md-fab-toolbar-actions">                                    
+                                    <button type="button" id="btnsave" style="display: block" data-uk-tooltip="{cls:'uk-tooltip-small',pos:'bottom'}" title="Save"><i class="material-icons md-color-white"></i></button>
+                                    <button type="reset" id="user_edit_delete" data-uk-tooltip="{cls:'uk-tooltip-small',pos:'bottom'}" title="Delete"><i class="material-icons md-color-white"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+    <!-- page specific plugins -->
+    <!-- datatables -->
+    <script src="~/Content/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+
+    <!-- datatables custom integration -->
+    <script src="~/Content/assets/js/custom/datatables/datatables.uikit.min.js"></script>
+
+    <!--  datatables functions -->
+    <script src="~/Content/assets/js/pages/plugins_datatables.min.js"></script>
+
+
+    <!-- page specific plugins -->
+   
+    @*<script src="~/Content/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/bower_components/datatables/media/js/dataTables.bootstrap.min.js"></script>*@
+
+    <script src="~/AppJs/Tools/ToolsTag.js"></script>
+
+    <script src="~/Content/assets/js/kendoui_custom.min.js"></script>
+    <!--  kendoui functions -->
+    <script src="~/Content/assets/js/pages/kendoui.min.js"></script>
+
+    <script src="~/Content/bower_components/parsleyjs/dist/parsley.min.js"></script>
+    <!-- jquery steps -->
+    <script src="~/Content/assets/js/custom/wizard_steps.min.js"></script>
+
+    <!--  forms wizard functions -->
+    <script src="~/AppJs/Tools/ToolsForm.js"></script>
+
+    <!--  notifications -->
+    <script src="~/AppJs/CRM/Notification.js"></script>
+
+
+    <!-- datatables buttons-->
+    <script src="~/Content/bower_components/datatables-buttons/js/dataTables.buttons.js"></script>
+    <script src="~/Content/assets/js/custom/datatables/buttons.uikit.js"></script>
+    <script src="~/Content/bower_components/jszip/dist/jszip.min.js"></script>
+    <script src="~/Content/bower_components/pdfmake/build/pdfmake.min.js"></script>
+    <script src="~/Content/bower_components/pdfmake/build/vfs_fonts.js"></script>
+    <script src="~/Content/bower_components/datatables-buttons/js/buttons.colVis.js"></script>
+    <script src="~/Content/bower_components/datatables-buttons/js/buttons.html5.js"></script>
+    <script src="~/Content/bower_components/datatables-buttons/js/buttons.print.js"></script>   
+    @*<script src="~/Content/assets/js/pages/forms_wizard.min.js"></script>*@
+}
+
+
+
+

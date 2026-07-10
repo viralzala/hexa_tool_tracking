@@ -1,0 +1,164 @@
+﻿@{
+    /**/
+
+    ViewBag.Title = "Index";
+
+    if (Session["SortCode"] != null)
+    {
+        Layout = "~/Views/Shared/_Admin.cshtml";
+    }
+    else
+    {
+        Response.Redirect("/AppUser");
+    }
+}
+@section head
+{
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.common-material.min.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.material.min.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/datatables/media/css/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/datatables/media/css/jquery.dataTables.min.css" rel="stylesheet" />
+}
+
+<div ng-controller="ReturnApproveSMTBinCtrl">
+    <div id="page_content">
+        <div id="page_content_inner">
+
+            <h3 class="heading_b uk-margin-bottom">Return Approve SMT Bin</h3>
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-large-2-10 hidden-print">
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <div class="uk-form-row">
+                                <div class="uk-grid" data-uk-grid-margin="">
+                                    <div class="uk-width-1-2">
+                                        <div class="parsley-row">
+                                            <span class="uk-form-help-block">
+                                                <h1>{{SmtProducts.length}}</h1>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="uk-width-large-8-10 uk-row-first">
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <div class="uk-form-row">
+                                <div class="uk-grid" data-uk-grid-margin="">
+                                    <div class="uk-width-medium-1-1 uk-row-first">
+                                        <div class="uk-overflow-container">
+                                            <table id="example1" class="uk-table uk-table-nowrap table_check">
+                                                <thead>
+                                                    <tr>
+                                                        <th><b>Ble Tag</b></th>
+                                                        <th>Lot</th>
+                                                        <th>Staus</th>
+                                                        <th> <b> Part Number</b></th>
+                                                        <th><b>Qty</b></th>
+                                                        <th><b>Pro Date</b></th>
+                                                        <th><b>Serial/Lot No</b></th>
+                                                        <th><b>Employee</b></th>
+                                                        <th><b>Remark</b></th>
+                                                        <th>
+
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat="i in SmtProducts">
+
+                                                        <td>{{i.Ble}}</td>
+                                                        <td>{{i.Lot}}</td>
+                                                        <td>
+                                                            <span class="uk-badge uk-badge-primary">{{i.Status}}</span>
+                                                        </td>
+                                                        <td> {{i.PartNumber}}</td>
+                                                        <td>{{i.Quantity}}</td>
+                                                        <td>{{i.DateAndTime | jsonDate:'dd MMMM yy'}}</td>
+                                                        <td>
+                                                            {{i.SerialNumber}}
+                                                        </td>
+                                                        <td>
+                                                            <span class="uk-badge uk-badge-warning">
+                                                                {{i.ModifiedBy}}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            {{i.Remark}}
+                                                        </td>
+                                                        <td>
+                                                            <input id="chkTakeAway_{{i.mSMTProductId}}"
+                                                                   type="checkbox"
+                                                                   data-md-icheck
+                                                                   class="chkTakeAway-ichecked-id"
+                                                                   value={{i.mSMTProductId}}>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <td colspan="7"></td>
+                                                        <td>
+                                                            <div class="parsley-row">
+                                                                <span class="uk-form-help-block">
+
+                                                                    <b>
+                                                                        Remark
+                                                                    </b>
+                                                                </span>
+                                                                <textarea placeholder="Enter Remark" class="md-input label-fixed" focus-on="Remark" name="Remark" id="Remark" ng-model="Remark"></textarea>
+
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="uk-input-group">
+                                                                <button title="Submit" type="button" ng-click="SubmitApprovalRequest()"
+                                                                        class="md-btn md-btn-primary">
+                                                                    {{loading ? loading : 'Submit Approval'}}
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @*<div class="md-card">
+                            <div class="md-card-content">
+                                dd
+                            </div>
+                        </div>*@
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section foot
+{
+
+    <!-- page specific plugins -->
+    <script src="~/Content/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/bower_components/datatables/media/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/Content/assets/js/kendoui_custom.min.js"></script>
+    <!--  kendoui functions -->
+    <script src="~/Content/assets/js/pages/kendoui.min.js"></script>
+    <script src="~/Scripts/HexaAgular/SMT/ReturnApproveSMTBin.js"></script>
+    @*<script type="text/javascript">
+            $(function () {
+                document.getElementById('ReaderNo').focus();
+            });
+
+        </script>*@
+
+}

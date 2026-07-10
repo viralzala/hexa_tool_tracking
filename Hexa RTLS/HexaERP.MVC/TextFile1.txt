@@ -1,0 +1,45 @@
+﻿//var _TakewayList = context.mSMTProducts
+                    //       .AsEnumerable()
+                    //       .Select(sel => new
+                    //       {
+                    //           sel.mSMTProductId,
+                    //           sel.Id,
+                    //           sel.SerialNumber,
+                    //           sel.PalletId,
+                    //           sel.Quantity,
+                    //           sel.DateAndTime,
+                    //           sel.StatusId,
+                    //           sel.Status,
+                    //           sel.CustomerCode,
+                    //           sel.ContainerId,
+                    //           sel.CustomerId,
+                    //           sel.Lot,
+                    //           sel.PartId,
+                    //           sel.PartNumber,
+                    //           sel.QADLine,
+                    //           sel.ShiftId,
+                    //           sel.Station,
+                    //           sel.Ble,
+                    //           sel.mZoneId,
+                    //           sel.ShelfName,
+                    //           sel.Remark,
+                    //           sel.Comment,
+                    //           sel.IsNormalReturn,
+                    //           sel.IsQualityReturn,
+                    //           sel.IsPutaway,
+                    //           sel.IsTakeaway,
+                    //           sel.IsApprove,
+                    //           sel.LastSeenTime,
+                    //           sel.IsAction,
+                    //           sel.CreatedDate,
+                    //           sel.CreatedBy,
+                    //           sel.ModifiedDate,
+                    //           sel.ModifiedBy
+                    //       }).Where(x => x.IsAction == true && x.IsPutaway == true)
+                    //       .OrderBy(p => p.DateAndTime)
+                    //       .GroupBy(row => new { Quantity = (long?)row.Quantity, PartNumber = row.PartNumber },
+                    //       (g, r) => new
+                    //       {
+                    //           List = r.Select(l => l),
+                    //           SUM_Quantity = r.Sum(s => (decimal?)s.Quantity)
+                    //       }).Where(p => p.SUM_Quantity > Quantity).ToList();

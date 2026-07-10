@@ -1,0 +1,370 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+
+@section head
+{
+    <!--   -->
+    <link href="@Url.Content("~/Content/bower_components/codemirror/lib/codemirror.css")"
+          rel="stylesheet" type="text/css" media="all" />
+}
+
+<div id="page_content_inner">
+    <div class="uk-grid" data-uk-grid-margin data-uk-grid-match id="user_profile">
+        <div class="uk-width-large-1-1">
+            <div class="md-card">
+                <div class="user_heading">
+                    <div class="user_heading_menu hidden-print">
+                        <div class="uk-display-inline-block" data-uk-dropdown="{pos:'left-top'}">
+                            <i class="md-icon material-icons md-icon-light">&#xE5D4;</i>
+                            <div class="uk-dropdown uk-dropdown-small">
+                                <ul class="uk-nav">
+                                    <li><a id="btnstop">{{'Stop'|translate}}<i class="material-icons">&#xE0C7;</i></a></li>
+                                    <li><a id="btnstart">{{'Start'|translate}}<i class="material-icons">&#xE0C8;</i></a></li>
+                                    <li><a id="btnrefresh">{{'Refresh'|translate}}<i class="material-icons">&#xE5D5;</i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="uk-display-inline-block"><i class="md-icon md-icon-light material-icons" id="page_print">&#xE8ad;</i></div>
+                    </div>
+                </div>
+                <div class="user_content">
+                    <ul id="user_profile_tabs" class="uk-tab" data-uk-tab="{connect:'#user_profile_tabs_content', animation:'slide-horizontal'}" data-uk-sticky="{ top: 48, media: 960 }">
+                        <li class="uk-active"><a href="#"><span id="lblfli"></span></a></li>
+                        <li><a href="#"><span id="lblflii"></span></a></li>
+                        <li><a href="#"><span id="lblfliii"></span></a></li>
+                        <li><a href="#"><span id="lblfliv"></span></a></li>
+                    </ul>
+                    <ul id="user_profile_tabs_content" class="uk-switcher uk-margin">
+                        <li>
+                            <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
+                                <div class="uk-width-large-1-2">
+                                    <h4 class="heading_c uk-margin-small-bottom" id="Roomfiri"></h4>
+                                    <div class="timeline">
+                                        <div class="timeline_item">
+                                            <div class="timeline_icon timeline_icon_primary"><i class="material-icons">&#xE88A;</i></div>
+                                            <div class="timeline_date">
+                                                <h4 id="Countfiri"></h4>
+                                            </div>
+                                            <div class="timeline_content timeline_content_addon" style="height: 150px;">
+                                                <div class="">
+                                                    <div class="room" id="mapfiri">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="uk-width-large-1-2">
+                                    <h4 class="heading_c uk-margin-small-bottom" id="Roomfirii"></h4>
+                                    <div class="timeline">
+                                        <div class="timeline_item">
+                                            <div class="timeline_icon timeline_icon_primary"><i class="material-icons">&#xE88A;</i></div>
+                                            <div class="timeline_date">
+                                                <h4 id="Countfirii"></h4>
+                                            </div>
+                                            <div class="timeline_content timeline_content_addon" style="height: 150px;">
+                                                <div class="">
+                                                    <div class="room" id="mapfirii">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
+                                <div class="uk-width-large-1-2">
+                                    <h4 class="heading_c uk-margin-small-bottom" id="Roomfiriii"></h4>
+                                    <div class="timeline">
+                                        <div class="timeline_item">
+                                            <div class="timeline_icon timeline_icon_primary"><i class="material-icons">&#xE88A;</i></div>
+                                            <div class="timeline_date">
+                                                <h4 id="Countfiriii"></h4>
+                                            </div>
+                                            <div class="timeline_content timeline_content_addon" style="height: 150px;">
+                                                <div class="">
+                                                    <div class="room" id="mapfiriii">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="uk-width-large-1-2">
+                                    <h4 class="heading_c uk-margin-small-bottom" id="Roomfiriv"></h4>
+                                    <div class="timeline">
+                                        <div class="timeline_item">
+                                            <div class="timeline_icon timeline_icon_primary"><i class="material-icons">&#xE88A;</i></div>
+                                            <div class="timeline_date">
+                                                <h4 id="Countfiriv"></h4>
+                                            </div>
+                                            <div class="timeline_content timeline_content_addon" style="height: 150px;">
+                                                <div class="">
+                                                    <div class="room" id="mapfiriv">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div id="user_profile_gallery" class="uk-margin">
+                                <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
+                                    <div class="uk-width-large-1-2">
+                                        <h4 class="heading_c uk-margin-small-bottom" id="Roomfiiri"></h4>
+                                        <div class="timeline">
+                                            <div class="timeline_item">
+                                                <div class="timeline_icon timeline_icon_primary"><i class="material-icons">&#xE88A;</i></div>
+                                                <div class="timeline_date">
+                                                    <h4 id="Countfiiri"></h4>
+                                                </div>
+                                                <div class="timeline_content timeline_content_addon" style="height: 150px;">
+                                                    <div class="">
+                                                        <div class="room" id="mapfiiri">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="uk-width-large-1-2">
+                                        <h4 class="heading_c uk-margin-small-bottom" id="Roomfiirii"></h4>
+                                        <div class="timeline">
+                                            <div class="timeline_item">
+                                                <div class="timeline_icon timeline_icon_primary"><i class="material-icons">&#xE88A;</i></div>
+                                                <div class="timeline_date">
+                                                    <h4 id="Countfiirii"></h4>
+                                                </div>
+                                                <div class="timeline_content timeline_content_addon" style="height: 150px;">
+                                                    <div class="">
+                                                        <div class="room" id="mapfiirii">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="uk-width-large-1-2">
+                                        <h4 class="heading_c uk-margin-small-bottom" id="Roomfiiriii"></h4>
+                                        <div class="timeline">
+                                            <div class="timeline_item">
+                                                <div class="timeline_icon timeline_icon_primary"><i class="material-icons">&#xE88A;</i></div>
+                                                <div class="timeline_date">
+                                                    <h4 id="Countfiiriii"></h4>
+                                                </div>
+                                                <div class="timeline_content timeline_content_addon" style="height: 150px;">
+                                                    <div class="">
+                                                        <div class="room" id="mapfiiriii">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="uk-width-large-1-2">
+                                        <h4 class="heading_c uk-margin-small-bottom" id="Roomfiiriv"></h4>
+                                        <div class="timeline">
+                                            <div class="timeline_item">
+                                                <div class="timeline_icon timeline_icon_primary"><i class="material-icons">&#xE88A;</i></div>
+                                                <div class="timeline_date">
+                                                    <h4 id="Countfiiriv"></h4>
+                                                </div>
+                                                <div class="timeline_content timeline_content_addon" style="height: 150px;">
+                                                    <div class="">
+                                                        <div class="room" id="mapfiiriv">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <ul class="md-list">
+                                <li>
+                                    <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
+                                        <div class="uk-width-large-1-2">
+                                            <h4 class="heading_c uk-margin-small-bottom" id="Roomfiiiri"></h4>
+                                            <div class="timeline">
+                                                <div class="timeline_item">
+                                                    <div class="timeline_icon timeline_icon_primary"><i class="material-icons">&#xE88A;</i></div>
+                                                    <div class="timeline_date">
+                                                        <h4 id="Countfiiiri"></h4>
+                                                    </div>
+                                                    <div class="timeline_content timeline_content_addon" style="height: 150px;">
+                                                        <div class="">
+                                                            <div class="room" id="mapfiiiri">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="uk-width-large-1-2">
+                                            <h4 class="heading_c uk-margin-small-bottom" id="Roomfiiirii"></h4>
+                                            <div class="timeline">
+                                                <div class="timeline_item">
+                                                    <div class="timeline_icon timeline_icon_primary"><i class="material-icons">&#xE88A;</i></div>
+                                                    <div class="timeline_date">
+                                                        <h4 id="Countfiiirii"></h4>
+                                                    </div>
+                                                    <div class="timeline_content timeline_content_addon" style="height: 150px;">
+                                                        <div class="">
+                                                            <div class="room" id="mapfiiirii">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
+                                        <div class="uk-width-large-1-2">
+                                            <h4 class="heading_c uk-margin-small-bottom" id="Roomfiiiriii"></h4>
+                                            <div class="timeline">
+                                                <div class="timeline_item">
+                                                    <div class="timeline_icon timeline_icon_primary"><i class="material-icons">&#xE88A;</i></div>
+                                                    <div class="timeline_date">
+                                                        <h4 id="Countfiiiriii"></h4>
+                                                    </div>
+                                                    <div class="timeline_content timeline_content_addon" style="height: 150px;">
+                                                        <div class="">
+                                                            <div class="room" id="mapfiiiriii">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="uk-width-large-1-2">
+                                            <h4 class="heading_c uk-margin-small-bottom" id="Roomfiiiriv"></h4>
+                                            <div class="timeline">
+                                                <div class="timeline_item">
+                                                    <div class="timeline_icon timeline_icon_primary"><i class="material-icons">&#xE88A;</i></div>
+                                                    <div class="timeline_date">
+                                                        <h4 id="Countfiiiriv"></h4>
+                                                    </div>
+                                                    <div class="timeline_content timeline_content_addon" style="height: 150px;">
+                                                        <div class="">
+                                                            <div class="room" id="mapfiiiriv">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
+                                <div class="uk-width-large-1-2">
+                                    <h4 class="heading_c uk-margin-small-bottom" id="Roomfivri"></h4>
+                                    <div class="timeline">
+                                        <div class="timeline_item">
+                                            <div class="timeline_icon timeline_icon_primary"><i class="material-icons">&#xE88A;</i></div>
+                                            <div class="timeline_date">
+                                                <h4 id="Countfivri"></h4>
+                                            </div>
+                                            <div class="timeline_content timeline_content_addon" style="height: 150px;">
+                                                <div class="">
+                                                    <div class="room" id="mapfivri">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="uk-width-large-1-2">
+                                    <h4 class="heading_c uk-margin-small-bottom" id="Roomfivrii"></h4>
+                                    <div class="timeline">
+                                        <div class="timeline_item">
+                                            <div class="timeline_icon timeline_icon_primary"><i class="material-icons">&#xE88A;</i></div>
+                                            <div class="timeline_date">
+                                                <h4 id="Countfivrii"></h4>
+                                            </div>
+                                            <div class="timeline_content timeline_content_addon" style="height: 150px;">
+                                                <div class="">
+                                                    <div class="room" id="mapfivrii">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="uk-width-large-1-2">
+                                    <h4 class="heading_c uk-margin-small-bottom" id="Roomfivriii"></h4>
+                                    <div class="timeline">
+                                        <div class="timeline_item">
+                                            <div class="timeline_icon timeline_icon_primary"><i class="material-icons">&#xE88A;</i></div>
+                                            <div class="timeline_date">
+                                                <h4 id="Countfivriii"></h4>
+                                            </div>
+                                            <div class="timeline_content timeline_content_addon" style="height: 150px;">
+                                                <div class="">
+                                                    <div class="room" id="mapfivriii">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="uk-width-large-1-2">
+                                    <h4 class="heading_c uk-margin-small-bottom" id="Roomfivriv"></h4>
+                                    <div class="timeline">
+                                        <div class="timeline_item">
+                                            <div class="timeline_icon timeline_icon_primary"><i class="material-icons">&#xE88A;</i></div>
+                                            <div class="timeline_date">
+                                                <h4 id="Countfivriv"></h4>
+                                            </div>
+                                            <div class="timeline_content timeline_content_addon" style="height: 150px;">
+                                                <div class="">
+                                                    <div class="room" id="mapfivriv">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section foot
+{
+    <style>
+        .ticket {
+            position: relative !important;
+            float: left;
+            padding: 7px 3px;
+            margin: 0 5px 5px 0;
+        }
+    </style>
+    <script>
+
+    </script>
+    <!-- page specific plugins -->
+    <!-- maplace (google maps) -->
+    
+
+    <!-- page specific -->
+    <script src="~/AppJs/RFID/RFIDTrack.js"></script>
+}
+
+
+
+
+

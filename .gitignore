@@ -1,0 +1,12 @@
+.vs/
+bin/
+obj/
+packages/
+
+*.rar
+*.zip
+*.7z
+
+*.bak
+*.mdf
+*.ldf

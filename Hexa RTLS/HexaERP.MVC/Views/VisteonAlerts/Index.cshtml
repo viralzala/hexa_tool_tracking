@@ -1,0 +1,137 @@
+﻿@{
+    /**/
+
+    ViewBag.Title = "Index";
+
+    if (Session["SortCode"] != null)
+    {
+        if (Convert.ToString(Session["SortCode"]) == "SA")
+        {
+            Layout = "~/Views/Shared/_Site.cshtml";
+        }
+        else if (Convert.ToString(Session["SortCode"]) == "AD")
+        {
+            Layout = "~/Views/Shared/_Admin.cshtml";
+        }
+        else if (new string[] { "OT", "SA" }.Contains(Convert.ToString(Session["SortCode"])))
+        {
+            Layout = "~/Views/Shared/_Users.cshtml";
+        }
+        else if (Convert.ToString(Session["SortCode"]) == "NAP")
+        {
+            Layout = "~/Views/Shared/_NormalApproval.cshtml";
+        }
+        else if (Convert.ToString(Session["SortCode"]) == "QAP")
+        {
+            Layout = "~/Views/Shared/_QualityApproval.cshtml";
+        }
+    }
+    else
+    {
+        Response.Redirect("/AppUser");
+    }
+}
+
+@section head
+{
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.common-material.min.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.material.min.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/datatables/media/css/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/datatables/media/css/jquery.dataTables.min.css" rel="stylesheet" />
+}
+
+<div ng-controller="VisteonAlertsCtrl">
+    <div id="page_content">
+        <div id="page_content_inner">
+            <div class="uk-width-medium-8-10 uk-container-center">
+                <div class="md-card md-card-single">
+                    <div class="md-card-toolbar">
+
+                        <h3 class="md-card-toolbar-heading-text large">
+                            Visteon Alerts Dashboard
+                        </h3>
+                    </div>
+                    <div class="md-card-content" id="todo_list">
+                        <div class="uk-margin-large-bottom">
+                            <h2 class="heading_list">ADMIN</h2>
+                            <div class="uk-overflow-container">
+                                <table class="uk-table">
+                                    <thead>
+                                        <tr>
+                                            <th class="uk-text-nowrap">#ID</th>
+                                            <th class="uk-text-nowrap">Error</th>
+
+                                            <th class="uk-text-nowrap uk-text-right">Date/Time</th>
+                                            <th class="uk-text-nowrap"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="uk-table-middle" ng-repeat="i in Alerts">
+                                            <td class="uk-width-3-10 uk-text-nowrap"><a>{{i.AppUserName}}</a></td>
+                                            <td class="uk-width-2-10 uk-text-nowrap"><span class="uk-badge uk-badge-danger">{{i.RFID}}</span></td>
+
+                                            <td class="uk-width-2-10 uk-text-right uk-text-muted uk-text-small">{{i.tDate | jsonDate:'dd MMMM yy hh:mm a'}}</td>
+                                            <td class="uk-width-3-10">
+                                                @if (Convert.ToString(Session["SortCode"]) == "AD")
+                                                {
+                                                    <a ng-click="Remove(i)" class="md-list-action"><i class="md-icon material-icons">&#xE872;</i></a>
+                                                }
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            @*<ul class="md-list md-list-addon uk-margin-small-bottom uk-nestable" data-uk-nestable="{ maxDepth:2,handleClass:'md-list-content'}">
+
+                                    <li class="uk-nestable-item" ng-repeat="i in Alerts">
+                                        <div class="md-list-content">
+                                            <a ng-click="Remove(i)" class="md-list-action"><i class="md-icon material-icons">&#xE872;</i></a>
+                                            <span class="md-list-heading">{{i.AppUserName}}</span>
+                                            <span class="uk-text-small uk-text-muted">{{i.RFID}}</span>
+                                            <span class="uk-text-muted uk-text-small">{{i.tDate | jsonDate:'dd MMMM yy hh:mm a'}}</span>
+                                        </div>
+                                    </li>
+                                </ul>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section foot
+{
+
+    <!-- common functions -->
+    <script src="~/Content/assets/js/common.min.js"></script>
+    <!-- uikit functions -->
+    <script src="~/Content/assets/js/uikit_custom.min.js"></script>
+    <!-- altair common functions/helpers -->
+    <script src="~/Content/assets/js/altair_admin_common.min.js"></script>
+
+    <!-- page specific plugins -->
+    <!--  todo functions -->
+    <script src="~/Content/assets/js/pages/page_todo.min.js"></script>
+
+    <script>
+        $(function () {
+            // enable hires images
+            altair_helpers.retina_images();
+            // fastClick (touch devices)
+            if (Modernizr.touch) {
+                FastClick.attach(document.body);
+            }
+        });
+    </script>
+
+    <script src="~/Scripts/HexaAgular/SMT/VisteonAlerts.js"></script>
+
+    @*<script type="text/javascript">
+            $(function () {
+                document.getElementById('ReaderNo').focus();
+            });
+
+        </script>*@
+
+}

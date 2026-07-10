@@ -1,0 +1,1171 @@
+@{
+    ViewBag.Title = "Enterprise Analytics Dashboard";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+@section head{
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.45.1/dist/apexcharts.min.js"></script>
+    <style>
+        * { box-sizing: border-box; }
+        body { background: #f5f7fa; }
+
+        /* ===== Premium Banner ===== */
+        .ea-banner {
+            background: linear-gradient(135deg, #0d47a1 0%, #1a237e 40%, #283593 100%);
+            color: #fff;
+            border-radius: 20px;
+            padding: 32px 36px;
+            margin-bottom: 28px;
+            box-shadow: 0 12px 32px rgba(26, 35, 126, 0.25);
+            position: relative;
+            overflow: hidden;
+        }
+        .ea-banner::before {
+            content: '';
+            position: absolute;
+            top: -60%;
+            right: -10%;
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .ea-banner::after {
+            content: '';
+            position: absolute;
+            bottom: -40%;
+            left: -5%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .ea-banner .ea-user {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+            z-index: 2;
+            flex-wrap: wrap;
+        }
+        .ea-banner .ea-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.18);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            border: 3px solid rgba(255,255,255,0.35);
+            flex-shrink: 0;
+            animation: pulse 2s infinite;
+        }
+@@keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(255,255,255,0); }
+        }
+        .ea-banner .ea-greeting h1 {
+            margin: 0;
+            color: #FFFFFF;
+            font-size: 30px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            line-height: 1.3;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.25);
+        }
+        .ea-banner .ea-greeting h1 .user-name {
+            color: #FFD54F;
+            font-weight: 800;
+        }
+        .ea-banner .ea-greeting p {
+            margin: 4px 0 0;
+            opacity: 0.85;
+            font-size: 14px;
+        }
+        .ea-banner .ea-meta {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 2;
+        }
+        .ea-banner .ea-meta .ea-date {
+            font-size: 14px;
+            opacity: 0.95;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.12);
+            padding: 8px 16px;
+            border-radius: 24px;
+        }
+        .ea-banner .ea-org-badge {
+            background: rgba(255,255,255,0.15);
+            padding: 8px 18px;
+            border-radius: 24px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            z-index: 2;
+        }
+        .ea-banner .ea-notification {
+            position: relative;
+            z-index: 2;
+        }
+        .ea-banner .ea-notification .ea-bell {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            cursor: pointer;
+            position: relative;
+        }
+        .ea-banner .ea-notification .ea-badge {
+            position: absolute;
+            top: 4px;
+            right: 6px;
+            background: #ff5252;
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        .ea-breadcrumb {
+            margin-top: 16px;
+            font-size: 13px;
+            opacity: 0.75;
+            position: relative;
+            z-index: 2;
+        }
+        .ea-breadcrumb a {
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+        }
+        .ea-breadcrumb a:hover {
+            text-decoration: underline;
+        }
+        .ea-breadcrumb span {
+            color: #fff;
+        }
+
+        /* ===== Glassmorphism Cards ===== */
+        .ea-card {
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.7);
+            border-radius: 16px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.06), 0 2px 6px rgba(0,0,0,0.04);
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .ea-card:hover {
+            box-shadow: 0 12px 32px rgba(26,35,126,0.12);
+            transform: translateY(-4px);
+        }
+
+        /* ===== KPI Grid ===== */
+        .ea-kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 28px;
+        }
+        @@media (max-width: 1200px) { .ea-kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+        @@media (max-width: 600px) { .ea-kpi-grid { grid-template-columns: 1fr; } }
+
+        .ea-kpi-card {
+            padding: 24px 20px;
+            position: relative;
+            overflow: hidden;
+            cursor: default;
+        }
+        .ea-kpi-card .ea-kpi-icon-wrap {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 14px;
+            font-size: 26px;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .ea-kpi-card .ea-kpi-value {
+            font-size: 34px;
+            font-weight: 800;
+            margin: 0;
+            line-height: 1.1;
+            font-family: 'Source Code Pro', monospace;
+        }
+        .ea-kpi-card .ea-kpi-label {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            margin: 6px 0 0;
+            opacity: 0.75;
+        }
+        .ea-kpi-card .ea-kpi-trend {
+            font-size: 11px;
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .ea-kpi-card .ea-kpi-trend.positive { color: #43a047; }
+        .ea-kpi-card .ea-kpi-trend.negative { color: #e53935; }
+        .ea-kpi-card .ea-kpi-bg-icon {
+            position: absolute;
+            right: -12px;
+            bottom: -12px;
+            font-size: 80px;
+            opacity: 0.06;
+            pointer-events: none;
+        }
+        .ea-kpi-card .ea-kpi-glow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 16px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        .ea-kpi-card:hover .ea-kpi-glow {
+            opacity: 0.15;
+        }
+
+        /* KPI Color Variants */
+        .ea-kpi-primary .ea-kpi-icon-wrap { background: linear-gradient(135deg, #1a237e, #3949ab); }
+        .ea-kpi-primary .ea-kpi-value { color: #1a237e; }
+        .ea-kpi-primary .ea-kpi-glow { background: linear-gradient(135deg, #1a237e, #3949ab); }
+
+        .ea-kpi-success .ea-kpi-icon-wrap { background: linear-gradient(135deg, #2e7d32, #43a047); }
+        .ea-kpi-success .ea-kpi-value { color: #2e7d32; }
+        .ea-kpi-success .ea-kpi-glow { background: linear-gradient(135deg, #2e7d32, #43a047); }
+
+        .ea-kpi-warning .ea-kpi-icon-wrap { background: linear-gradient(135deg, #e65100, #ef6c00); }
+        .ea-kpi-warning .ea-kpi-value { color: #e65100; }
+        .ea-kpi-warning .ea-kpi-glow { background: linear-gradient(135deg, #e65100, #ef6c00); }
+
+        .ea-kpi-danger .ea-kpi-icon-wrap { background: linear-gradient(135deg, #c62828, #e53935); }
+        .ea-kpi-danger .ea-kpi-value { color: #c62828; }
+        .ea-kpi-danger .ea-kpi-glow { background: linear-gradient(135deg, #c62828, #e53935); }
+
+        .ea-kpi-info .ea-kpi-icon-wrap { background: linear-gradient(135deg, #01579b, #0288d1); }
+        .ea-kpi-info .ea-kpi-value { color: #01579b; }
+        .ea-kpi-info .ea-kpi-glow { background: linear-gradient(135deg, #01579b, #0288d1); }
+
+        .ea-kpi-purple .ea-kpi-icon-wrap { background: linear-gradient(135deg, #4a148c, #7b1fa2); }
+        .ea-kpi-purple .ea-kpi-value { color: #4a148c; }
+        .ea-kpi-purple .ea-kpi-glow { background: linear-gradient(135deg, #4a148c, #7b1fa2); }
+
+        .ea-kpi-teal .ea-kpi-icon-wrap { background: linear-gradient(135deg, #00695c, #00897b); }
+        .ea-kpi-teal .ea-kpi-value { color: #00695c; }
+        .ea-kpi-teal .ea-kpi-glow { background: linear-gradient(135deg, #00695c, #00897b); }
+
+        .ea-kpi-amber .ea-kpi-icon-wrap { background: linear-gradient(135deg, #f57f17, #fbc02d); }
+        .ea-kpi-amber .ea-kpi-value { color: #f57f17; }
+        .ea-kpi-amber .ea-kpi-glow { background: linear-gradient(135deg, #f57f17, #fbc02d); }
+
+        /* ===== Section Title ===== */
+        .ea-section-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: #1a237e;
+            margin: 0 0 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e8eaf6;
+        }
+        .ea-section-title i {
+            font-size: 22px;
+        }
+
+        /* ===== Dashboard Layout ===== */
+        .ea-row {
+            display: grid;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+        .ea-row-2 { grid-template-columns: 1fr 1fr; }
+        .ea-row-3 { grid-template-columns: 1fr 1fr 1fr; }
+        .ea-row-4 { grid-template-columns: repeat(4, 1fr); }
+        .ea-row-main { grid-template-columns: 2.5fr 1fr; }
+        @@media (max-width: 900px) {
+            .ea-row-2, .ea-row-3, .ea-row-4, .ea-row-main { grid-template-columns: 1fr; }
+        }
+
+        /* ===== Card Header ===== */
+        .ea-card-hdr {
+            padding: 18px 22px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(to right, #f5f7fa, #fafafa);
+        }
+        .ea-card-hdr h3 {
+            margin: 0;
+            font-size: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .ea-card-hdr h3 i { color: #1a237e; font-size: 20px; }
+
+        /* ===== Activity List ===== */
+        .ea-act-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .ea-act-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 14px 0;
+            border-bottom: 1px solid #f5f5f5;
+            transition: background 0.2s;
+        }
+        .ea-act-list li:hover { background: #f8f9ff; }
+        .ea-act-list li:last-child { border-bottom: none; }
+        .ea-act-list .ea-act-dot {
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: white;
+            flex-shrink: 0;
+        }
+        .ea-act-list .ea-act-dot.blue { background: linear-gradient(135deg, #1a237e, #5c6bc0); }
+        .ea-act-list .ea-act-dot.green { background: linear-gradient(135deg, #2e7d32, #66bb6a); }
+        .ea-act-list .ea-act-dot.orange { background: linear-gradient(135deg, #e65100, #ffa726); }
+        .ea-act-list .ea-act-dot.red { background: linear-gradient(135deg, #c62828, #ef5350); }
+        .ea-act-list .ea-act-dot.teal { background: linear-gradient(135deg, #00695c, #00897b); }
+        .ea-act-list .ea-act-dot.purple { background: linear-gradient(135deg, #4a148c, #7b1fa2); }
+        .ea-act-list .ea-act-content { flex: 1; }
+        .ea-act-list .ea-act-content .ea-act-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+        }
+        .ea-act-list .ea-act-content .ea-act-meta {
+            font-size: 12px;
+            color: #999;
+            margin-top: 3px;
+        }
+
+        /* ===== Alert List ===== */
+        .ea-alert-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .ea-alert-list li {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        .ea-alert-list li:last-child { border-bottom: none; }
+        .ea-alert-list .ea-alert-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            box-shadow: 0 0 0 2px rgba(255,255,255,1), 0 0 0 4px rgba(0,0,0,0.1);
+        }
+        .ea-alert-list .ea-alert-dot.red { background: #e53935; }
+        .ea-alert-list .ea-alert-dot.amber { background: #ffa000; }
+        .ea-alert-list .ea-alert-dot.green { background: #43a047; }
+        .ea-alert-list .ea-alert-dot.blue { background: #1e88e5; }
+        .ea-alert-list .ea-alert-content { flex: 1; }
+        .ea-alert-list .ea-alert-content .ea-alert-title {
+            font-size: 13px;
+            font-weight: 500;
+            color: #333;
+        }
+        .ea-alert-list .ea-alert-content .ea-alert-meta {
+            font-size: 11px;
+            color: #999;
+        }
+        .ea-alert-list .ea-alert-badge {
+            font-size: 10px;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .ea-alert-list .ea-alert-badge.due { background: #fff3e0; color: #e65100; }
+        .ea-alert-list .ea-alert-badge.overdue { background: #ffebee; color: #c62828; }
+
+        /* ===== Quick Actions ===== */
+        .ea-qactions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+        }
+        @@media (max-width: 768px) { .ea-qactions { grid-template-columns: repeat(2, 1fr); } }
+        .ea-qaction {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 18px 12px;
+            background: linear-gradient(135deg, #f5f7fa, #e8eaf6);
+            border-radius: 14px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            color: #333;
+        }
+        .ea-qaction:hover {
+            background: linear-gradient(135deg, #e8eaf6, #d1d5e8);
+            border-color: #3f51b5;
+            transform: translateY(-5px);
+            box-shadow: 0 12px 28px rgba(26,35,126,0.15);
+        }
+        .ea-qaction i {
+            font-size: 28px;
+            color: #1a237e;
+        }
+        .ea-qaction span {
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        /* ===== Premium Table ===== */
+        .ea-table-wrap {
+            overflow-x: auto;
+            max-height: 350px;
+        }
+        .ea-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        .ea-table thead {
+            background: #f5f7fa;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+        .ea-table thead th {
+            padding: 14px 12px;
+            font-weight: 600;
+            color: #333;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            border-bottom: 2px solid #e0e0e0;
+            text-align: left;
+            white-space: nowrap;
+        }
+        .ea-table tbody td {
+            padding: 12px;
+            color: #555;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .ea-table tbody tr {
+            transition: background 0.15s;
+        }
+        .ea-table tbody tr:nth-child(even) { background: #fafafa; }
+        .ea-table tbody tr:hover { background: #e8eaf6; }
+        .ea-table .ea-status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .ea-table .ea-status-badge.success { background: #e8f5e9; color: #2e7d32; }
+        .ea-table .ea-status-badge.warning { background: #fff3e0; color: #e65100; }
+        .ea-table .ea-status-badge.info { background: #e1f5fe; color: #01579b; }
+        .ea-table .ea-status-badge.danger { background: #ffebee; color: #c62828; }
+
+        /* ===== Chart Container ===== */
+        .ea-chart-box {
+            padding: 12px;
+            min-height: 260px;
+        }
+
+        /* ===== Progress ===== */
+        .ea-progress-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .ea-progress-item label {
+            font-size: 12px;
+            font-weight: 500;
+            min-width: 110px;
+            color: #555;
+        }
+        .ea-progress-bar {
+            flex: 1;
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+        }
+        .ea-progress-fill {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .ea-progress-item span {
+            font-size: 12px;
+            font-weight: 600;
+            min-width: 40px;
+            text-align: right;
+        }
+
+        /* ===== Empty State ===== */
+        .ea-empty {
+            text-align: center;
+            padding: 32px 20px;
+            color: #aaa;
+        }
+        .ea-empty i {
+            font-size: 48px;
+            margin-bottom: 10px;
+            color: #ddd;
+        }
+        .ea-empty p {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        /* ===== Loading ===== */
+        .ea-loader {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+            flex-direction: column;
+            gap: 16px;
+            color: #888;
+        }
+        .ea-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #e0e0e0;
+            border-top: 4px solid #1a237e;
+            border-radius: 50%;
+            animation: ea-spin 1s linear infinite;
+        }
+        @@keyframes ea-spin { to { transform: rotate(360deg); } }
+
+        /* ===== Fade In ===== */
+        .ea-fade-in {
+            animation: ea-fadeIn 0.5s ease-out;
+        }
+        @@keyframes ea-fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== Right Sidebar ===== */
+        .ea-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* ===== Responsive ===== */
+        @@media (max-width: 768px) {
+            .ea-banner { padding: 24px 20px; }
+            .ea-banner .ea-user { flex-direction: column; align-items: flex-start; }
+            .ea-banner .ea-meta { margin-left: 0; width: 100%; justify-content: flex-start; }
+            .ea-banner .ea-greeting h1 { font-size: 22px; }
+            .ea-kpi-card .ea-kpi-value { font-size: 28px; }
+        }
+
+        /* ===== Export Buttons ===== */
+        .ea-export-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            background: #e8eaf6;
+            border-radius: 8px;
+            font-size: 12px;
+            color: #1a237e;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid #c5cae9;
+        }
+        .ea-export-btn:hover {
+            background: #d1d5e8;
+        }
+    </style>
+}
+<div id="page_content_inner" ng-controller="EnterpriseAnalyticsDashboardCtrl" ng-cloak>
+    <!-- Loading State -->
+    <div class="ea-loader" ng-if="!loaded">
+        <div class="ea-spinner"></div>
+        <span>Loading Enterprise Analytics Dashboard...</span>
+    </div>
+
+    <div ng-if="loaded" class="ea-fade-in">
+        <!-- ===== Premium Header ===== -->
+        <div class="ea-banner">
+            <div class="ea-user">
+                <div class="ea-avatar">
+                    <i class="material-icons">&#xE7FD;</i>
+                </div>
+                <div class="ea-greeting">
+                    <h1>Good {{currentDate.getHours() < 12 ? 'Morning' : currentDate.getHours() < 17 ? 'Afternoon' : 'Evening'}}, <span class="user-name">{{userName}}</span></h1>
+                    <p>Welcome to Hexa Enterprise Asset Management Platform</p>
+                </div>
+                <div class="ea-meta">
+                    <div class="ea-date">
+                        <i class="material-icons" style="font-size:18px;">&#xE192;</i>
+                        {{currentDate | date:'EEEE, MMMM d, yyyy'}}
+                    </div>
+                    <div class="ea-org-badge">
+                        <i class="material-icons" style="font-size:16px;">&#xE88A;</i>
+                        {{organization || 'Hexa ERP'}}
+                    </div>
+                </div>
+                <div class="ea-notification">
+                    <div class="ea-bell">
+                        <i class="material-icons">&#xE7F4;</i>
+                        <span class="ea-badge">{{upcomingCalibrations.length + upcomingInspections.length + upcomingMaintenance.length}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="ea-breadcrumb">
+                <a href="#">Home</a> / <span>Enterprise Analytics Dashboard</span>
+            </div>
+        </div>
+
+        <!-- ===== KPI Cards (8 Premium) ===== -->
+        <div class="ea-kpi-grid">
+            <div class="ea-card ea-kpi-card ea-kpi-primary">
+                <div class="ea-kpi-icon-wrap"><i class="material-icons">&#xE86E;</i></div>
+                <p class="ea-kpi-value kpi-counter">{{totalAssets}}</p>
+                <p class="ea-kpi-label">Total Assets</p>
+                <p class="ea-kpi-trend positive"><i class="material-icons" style="font-size:14px;">&#xE889;</i> All registered assets</p>
+                <div class="ea-kpi-bg-icon"><i class="material-icons">&#xE86E;</i></div>
+                <div class="ea-kpi-glow"></div>
+            </div>
+            <div class="ea-card ea-kpi-card ea-kpi-success">
+                <div class="ea-kpi-icon-wrap"><i class="material-icons">&#xE86C;</i></div>
+                <p class="ea-kpi-value kpi-counter">{{activeAssets}}</p>
+                <p class="ea-kpi-label">Active Assets</p>
+                <p class="ea-kpi-trend positive"><i class="material-icons" style="font-size:14px;">&#xE86C;</i> Operational assets</p>
+                <div class="ea-kpi-bg-icon"><i class="material-icons">&#xE86C;</i></div>
+                <div class="ea-kpi-glow"></div>
+            </div>
+            <div class="ea-card ea-kpi-card ea-kpi-warning">
+                <div class="ea-kpi-icon-wrap"><i class="material-icons">&#xE2C4;</i></div>
+                <p class="ea-kpi-value kpi-counter">{{assetsIssued}}</p>
+                <p class="ea-kpi-label">Assets Issued</p>
+                <p class="ea-kpi-trend"><i class="material-icons" style="font-size:14px;">&#xE2C4;</i> Checked out to employees</p>
+                <div class="ea-kpi-bg-icon"><i class="material-icons">&#xE2C4;</i></div>
+                <div class="ea-kpi-glow"></div>
+            </div>
+            <div class="ea-card ea-kpi-card ea-kpi-info">
+                <div class="ea-kpi-icon-wrap"><i class="material-icons">&#xE2C6;</i></div>
+                <p class="ea-kpi-value kpi-counter">{{assetsAvailable}}</p>
+                <p class="ea-kpi-label">Assets Available</p>
+                <p class="ea-kpi-trend positive"><i class="material-icons" style="font-size:14px;">&#xE2C6;</i> Ready for use</p>
+                <div class="ea-kpi-bg-icon"><i class="material-icons">&#xE2C6;</i></div>
+                <div class="ea-kpi-glow"></div>
+            </div>
+            <div class="ea-card ea-kpi-card ea-kpi-purple">
+                <div class="ea-kpi-icon-wrap"><i class="material-icons">&#xE8B0;</i></div>
+                <p class="ea-kpi-value kpi-counter">{{calibrationDue}}</p>
+                <p class="ea-kpi-label">Calibration Due</p>
+                <p class="ea-kpi-trend" ng-class="{'positive': calibrationOverdue == 0, 'negative': calibrationOverdue > 0}">
+                    <i class="material-icons" style="font-size:14px;">&#xE8B0;</i> {{calibrationOverdue}} overdue
+                </p>
+                <div class="ea-kpi-bg-icon"><i class="material-icons">&#xE8B0;</i></div>
+                <div class="ea-kpi-glow"></div>
+            </div>
+            <div class="ea-card ea-kpi-card ea-kpi-amber">
+                <div class="ea-kpi-icon-wrap"><i class="material-icons">&#xE86C;</i></div>
+                <p class="ea-kpi-value kpi-counter">{{inspectionDue}}</p>
+                <p class="ea-kpi-label">Inspection Due</p>
+                <p class="ea-kpi-trend" ng-class="{'positive': inspectionOverdue == 0, 'negative': inspectionOverdue > 0}">
+                    <i class="material-icons" style="font-size:14px;">&#xE86C;</i> {{inspectionOverdue}} overdue
+                </p>
+                <div class="ea-kpi-bg-icon"><i class="material-icons">&#xE86C;</i></div>
+                <div class="ea-kpi-glow"></div>
+            </div>
+            <div class="ea-card ea-kpi-card ea-kpi-danger">
+                <div class="ea-kpi-icon-wrap"><i class="material-icons">&#xE86E;</i></div>
+                <p class="ea-kpi-value kpi-counter">{{maintenanceDue}}</p>
+                <p class="ea-kpi-label">Maintenance Due</p>
+                <p class="ea-kpi-trend" ng-class="{'positive': maintenanceOverdue == 0, 'negative': maintenanceOverdue > 0}">
+                    <i class="material-icons" style="font-size:14px;">&#xE86E;</i> {{maintenanceOverdue}} overdue
+                </p>
+                <div class="ea-kpi-bg-icon"><i class="material-icons">&#xE86E;</i></div>
+                <div class="ea-kpi-glow"></div>
+            </div>
+            <div class="ea-card ea-kpi-card ea-kpi-teal">
+                <div class="ea-kpi-icon-wrap"><i class="material-icons">&#xE5CD;</i></div>
+                <p class="ea-kpi-value kpi-counter">{{expiredAssets}}</p>
+                <p class="ea-kpi-label">Expired Assets</p>
+                <p class="ea-kpi-trend" ng-class="{'positive': expiredAssets == 0, 'negative': expiredAssets > 0}">
+                    <i class="material-icons" style="font-size:14px;">&#xE5CD;</i> Warranty expired
+                </p>
+                <div class="ea-kpi-bg-icon"><i class="material-icons">&#xE5CD;</i></div>
+                <div class="ea-kpi-glow"></div>
+            </div>
+        </div>
+
+        <!-- ===== Quick Actions ===== -->
+        <div class="ea-card" style="margin-bottom:24px;">
+            <div class="ea-card-hdr">
+                <h3><i class="material-icons">&#xE80B;</i> Quick Actions</h3>
+            </div>
+            <div style="padding:20px;">
+                <div class="ea-qactions">
+                    <a href="/AssetTag" class="ea-qaction"><i class="material-icons">&#xE145;</i><span>Add Asset</span></a>
+                    <a href="/AssetIssue" class="ea-qaction"><i class="material-icons">&#xE2C4;</i><span>Issue Asset</span></a>
+                    <a href="/MoreAssetDetail" class="ea-qaction"><i class="material-icons">&#xE2C6;</i><span>Return Asset</span></a>
+                    <a href="/AssetCalibration" class="ea-qaction"><i class="material-icons">&#xE8B0;</i><span>Calibration</span></a>
+                    <a href="/AssetInspection" class="ea-qaction"><i class="material-icons">&#xE86C;</i><span>Inspection</span></a>
+                    <a href="/MoreAssetDetail" class="ea-qaction"><i class="material-icons">&#xE86E;</i><span>Maintenance</span></a>
+                    <a href="/AssetsReport" class="ea-qaction"><i class="material-icons">&#xE8B0;</i><span>Reports</span></a>
+                    <a href="/NewDashboard" class="ea-qaction"><i class="material-icons">&#xE8AF;</i><span>Dashboard</span></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== Main Content Grid ===== -->
+        <div class="ea-row ea-row-main">
+            <!-- Left Column -->
+            <div>
+                <!-- Trend Charts Row -->
+                <div class="ea-row ea-row-3" style="margin-bottom:24px;">
+                    <div class="ea-card">
+                        <div class="ea-card-hdr"><h3><i class="material-icons">&#xE889;</i> Monthly Trend</h3></div>
+                        <div class="ea-chart-box"><div id="ea-chart-monthly"></div></div>
+                    </div>
+                    <div class="ea-card">
+                        <div class="ea-card-hdr"><h3><i class="material-icons">&#xE8B1;</i> Weekly Trend</h3></div>
+                        <div class="ea-chart-box"><div id="ea-chart-weekly"></div></div>
+                    </div>
+                    <div class="ea-card">
+                        <div class="ea-card-hdr"><h3><i class="material-icons">&#xE192;</i> Yearly Trend</h3></div>
+                        <div class="ea-chart-box"><div id="ea-chart-yearly"></div></div>
+                    </div>
+                </div>
+
+                <!-- Chart Row 1: Line & Bar -->
+                <div class="ea-row ea-row-2" style="margin-bottom:24px;">
+                    <div class="ea-card">
+                        <div class="ea-card-hdr"><h3><i class="material-icons">&#xE889;</i> Line Chart - Asset Trend</h3></div>
+                        <div class="ea-chart-box"><div id="ea-chart-line"></div></div>
+                    </div>
+                    <div class="ea-card">
+                        <div class="ea-card-hdr"><h3><i class="material-icons">&#xE8B0;</i> Bar Chart - Calibrations</h3></div>
+                        <div class="ea-chart-box"><div id="ea-chart-bar"></div></div>
+                    </div>
+                </div>
+
+                <!-- Chart Row 2: Horizontal Bar & Area -->
+                <div class="ea-row ea-row-2" style="margin-bottom:24px;">
+                    <div class="ea-card">
+                        <div class="ea-card-hdr"><h3><i class="material-icons">&#xE86C;</i> Horizontal Bar - Inspections</h3></div>
+                        <div class="ea-chart-box"><div id="ea-chart-hbar"></div></div>
+                    </div>
+                    <div class="ea-card">
+                        <div class="ea-card-hdr"><h3><i class="material-icons">&#xE86E;</i> Area Chart - Maintenance</h3></div>
+                        <div class="ea-chart-box"><div id="ea-chart-area"></div></div>
+                    </div>
+                </div>
+
+                <!-- Chart Row 3: Spline & Mixed -->
+                <div class="ea-row ea-row-2" style="margin-bottom:24px;">
+                    <div class="ea-card">
+                        <div class="ea-card-hdr"><h3><i class="material-icons">&#xE889;</i> Spline Chart</h3></div>
+                        <div class="ea-chart-box"><div id="ea-chart-spline"></div></div>
+                    </div>
+                    <div class="ea-card">
+                        <div class="ea-card-hdr"><h3><i class="material-icons">&#xE8AF;</i> Mixed Chart</h3></div>
+                        <div class="ea-chart-box"><div id="ea-chart-mixed"></div></div>
+                    </div>
+                </div>
+
+                <!-- Distribution Charts Row -->
+                <div class="ea-row ea-row-3" style="margin-bottom:24px;">
+                    <div class="ea-card">
+                        <div class="ea-card-hdr"><h3><i class="material-icons">&#xE8AF;</i> Pie Chart</h3></div>
+                        <div class="ea-chart-box"><div id="ea-chart-pie"></div></div>
+                    </div>
+                    <div class="ea-card">
+                        <div class="ea-card-hdr"><h3><i class="material-icons">&#xE8AF;</i> Donut Chart</h3></div>
+                        <div class="ea-chart-box"><div id="ea-chart-donut"></div></div>
+                    </div>
+                    <div class="ea-card">
+                        <div class="ea-card-hdr"><h3><i class="material-icons">&#xE8B6;</i> Polar Area</h3></div>
+                        <div class="ea-chart-box"><div id="ea-chart-polar"></div></div>
+                    </div>
+                </div>
+
+                <!-- Advanced Charts Row -->
+                <div class="ea-row ea-row-3" style="margin-bottom:24px;">
+                    <div class="ea-card">
+                        <div class="ea-card-hdr"><h3><i class="material-icons">&#xE8AF;</i> Radar Chart</h3></div>
+                        <div class="ea-chart-box"><div id="ea-chart-radar"></div></div>
+                    </div>
+                    <div class="ea-card">
+                        <div class="ea-card-hdr"><h3><i class="material-icons">&#xE8AF;</i> Radial Bar</h3></div>
+                        <div class="ea-chart-box"><div id="ea-chart-radial"></div></div>
+                    </div>
+                    <div class="ea-card">
+                        <div class="ea-card-hdr"><h3><i class="material-icons">&#xE8B0;</i> Gauge Chart</h3></div>
+                        <div class="ea-chart-box"><div id="ea-chart-gauge"></div></div>
+                    </div>
+                </div>
+
+                <!-- More Charts Row -->
+                <div class="ea-row ea-row-2" style="margin-bottom:24px;">
+                    <div class="ea-card">
+                        <div class="ea-card-hdr"><h3><i class="material-icons">&#xE8B6;</i> Scatter Chart</h3></div>
+                        <div class="ea-chart-box"><div id="ea-chart-scatter"></div></div>
+                    </div>
+                    <div class="ea-card">
+                        <div class="ea-card-hdr"><h3><i class="material-icons">&#xE8B6;</i> Bubble Chart</h3></div>
+                        <div class="ea-chart-box"><div id="ea-chart-bubble"></div></div>
+                    </div>
+                </div>
+
+                <div class="ea-row ea-row-2" style="margin-bottom:24px;">
+                    <div class="ea-card">
+                        <div class="ea-card-hdr"><h3><i class="material-icons">&#xE8AF;</i> Heatmap</h3></div>
+                        <div class="ea-chart-box"><div id="ea-chart-heatmap"></div></div>
+                    </div>
+                    <div class="ea-card">
+                        <div class="ea-card-hdr"><h3><i class="material-icons">&#xE8B6;</i> Treemap</h3></div>
+                        <div class="ea-chart-box"><div id="ea-chart-treemap"></div></div>
+                    </div>
+                </div>
+
+                <div class="ea-row ea-row-2" style="margin-bottom:24px;">
+                    <div class="ea-card">
+                        <div class="ea-card-hdr"><h3><i class="material-icons">&#xE8AF;</i> Funnel Chart</h3></div>
+                        <div class="ea-chart-box"><div id="ea-chart-funnel"></div></div>
+                    </div>
+                    <div class="ea-card">
+                        <div class="ea-card-hdr"><h3><i class="material-icons">&#xE8B0;</i> Stacked Bar</h3></div>
+                        <div class="ea-chart-box"><div id="ea-chart-stacked"></div></div>
+                    </div>
+                </div>
+
+                <div class="ea-row ea-row-2" style="margin-bottom:24px;">
+                    <div class="ea-card">
+                        <div class="ea-card-hdr"><h3><i class="material-icons">&#xE192;</i> Timeline Chart</h3></div>
+                        <div class="ea-chart-box"><div id="ea-chart-timeline"></div></div>
+                    </div>
+                    <div class="ea-card">
+                        <div class="ea-card-hdr"><h3><i class="material-icons">&#xE192;</i> Calendar Heatmap</h3></div>
+                        <div class="ea-chart-box"><div id="ea-chart-calendar"></div></div>
+                    </div>
+                </div>
+
+                <div class="ea-row ea-row-2" style="margin-bottom:24px;">
+                    <div class="ea-card">
+                        <div class="ea-card-hdr"><h3><i class="material-icons">&#xE8B0;</i> Progress Chart</h3></div>
+                        <div class="ea-chart-box" id="ea-chart-progress"></div>
+                    </div>
+                    <div class="ea-card">
+                        <div class="ea-card-hdr"><h3><i class="material-icons">&#xE55B;</i> Map Chart</h3></div>
+                        <div class="ea-chart-box" id="ea-chart-map" style="display:flex;align-items:center;justify-content:center;color:#999;font-size:14px;">
+                            <i class="material-icons" style="font-size:48px;margin-bottom:8px;">&#xE55B;</i>
+                            <div>Geographic Distribution Map</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Transactions Table -->
+                <div class="ea-card" style="margin-bottom:24px;">
+                    <div class="ea-card-hdr">
+                        <h3><i class="material-icons">&#xE8B0;</i> Recent Transactions</h3>
+                        <div style="display:flex;gap:8px;">
+                            <span class="ea-export-btn" ng-click="exportData('transactions')"><i class="material-icons" style="font-size:16px;">&#xE24E;</i> Excel</span>
+                            <span class="ea-export-btn" ng-click="exportData('assets')"><i class="material-icons" style="font-size:16px;">&#xE24D;</i> PDF</span>
+                        </div>
+                    </div>
+                    <div class="ea-table-wrap">
+                        <table class="ea-table" ng-if="transactions.length > 0">
+                            <thead>
+                                <tr>
+                                    <th>#</th><th>Issue Date</th><th>Return Date</th><th>Created By</th><th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="t in transactions track by $index">
+                                    <td>{{$index + 1}}</td>
+                                    <td>{{formatDate(t.IssueDateDisplay)}}</td>
+                                    <td>{{formatDate(t.ReturnDateDisplay)}}</td>
+                                    <td>{{t.CreatedBy}}</td>
+                                    <td><span class="ea-status-badge info">Completed</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="ea-empty" ng-if="transactions.length === 0" style="padding:40px;">
+                            <i class="material-icons">&#xE8B0;</i><p>No transactions found</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Latest Assets Table -->
+                <div class="ea-card" style="margin-bottom:24px;">
+                    <div class="ea-card-hdr">
+                        <h3><i class="material-icons">&#xE86E;</i> Latest Assets</h3>
+                        <span class="ea-export-btn" ng-click="exportData('assets')"><i class="material-icons" style="font-size:16px;">&#xE24E;</i> Export</span>
+                    </div>
+                    <div class="ea-table-wrap">
+                        <table class="ea-table" ng-if="latestAssets.length > 0">
+                            <thead>
+                                <tr>
+                                    <th>Name</th><th>Model</th><th>Serial</th><th>Department</th><th>Created By</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="a in latestAssets track by $index">
+                                    <td>{{a.IteamName}}</td>
+                                    <td>{{a.ModelNo}}</td>
+                                    <td>{{a.SerialNo}}</td>
+                                    <td>{{a.OwnerDepartment}}</td>
+                                    <td>{{a.CreatedBy}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="ea-empty" ng-if="latestAssets.length === 0" style="padding:40px;">
+                            <i class="material-icons">&#xE86E;</i><p>No assets found</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Sidebar -->
+            <div class="ea-sidebar">
+                <!-- Due Today -->
+                <div class="ea-card">
+                    <div class="ea-card-hdr"><h3><i class="material-icons">&#xE8AF;</i> Due Today</h3></div>
+                    <div style="padding:16px;">
+                        <div ng-if="dueTodayItems.length > 0" style="max-height:200px;overflow-y:auto">
+                            <ul class="ea-alert-list">
+                                <li ng-repeat="item in dueTodayItems">
+                                    <span class="ea-alert-dot" ng-class="{'blue': item.Type === 'Calibration', 'green': item.Type === 'Inspection', 'red': item.Type === 'Maintenance'}"></span>
+                                    <div class="ea-alert-content">
+                                        <div class="ea-alert-title">{{item.Type}}: {{item.Name}}</div>
+                                        <div class="ea-alert-meta">{{item.Date}}</div>
+                                    </div>
+                                    <span class="ea-alert-badge due">Today</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="ea-empty" ng-if="dueTodayItems.length === 0">
+                            <i class="material-icons">&#xE8AF;</i><p>No items due today</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upcoming Alerts -->
+                <div class="ea-card">
+                    <div class="ea-card-hdr"><h3><i class="material-icons">&#xE7F4;</i> Upcoming Alerts</h3></div>
+                    <div style="padding:16px;">
+                        <div ng-if="upcomingCalibrations.length > 0 || upcomingInspections.length > 0 || upcomingMaintenance.length > 0">
+                            <p style="font-size:12px;font-weight:600;color:#1a237e;margin:0 0 8px;">Calibration Due</p>
+                            <ul class="ea-alert-list" ng-if="upcomingCalibrations.length > 0">
+                                <li ng-repeat="c in upcomingCalibrations | limitTo:5">
+                                    <span class="ea-alert-dot orange"></span>
+                                    <div class="ea-alert-content">
+                                        <div class="ea-alert-title">{{c.AssetName || c.CertificateNo}}</div>
+                                        <div class="ea-alert-meta">Due: {{formatDate(c.DueDateDisplay)}}</div>
+                                    </div>
+                                    <span class="ea-alert-badge due">Due</span>
+                                </li>
+                            </ul>
+                            
+                            <p style="font-size:12px;font-weight:600;color:#01579b;margin:12px 0 8px;">Inspection Due</p>
+                            <ul class="ea-alert-list" ng-if="upcomingInspections.length > 0">
+                                <li ng-repeat="i in upcomingInspections | limitTo:5">
+                                    <span class="ea-alert-dot green"></span>
+                                    <div class="ea-alert-content">
+                                        <div class="ea-alert-title">{{i.InspectionNo}}</div>
+                                        <div class="ea-alert-meta">{{formatDate(i.InspectionDateDisplay)}}</div>
+                                    </div>
+                                    <span class="ea-alert-badge due">Due</span>
+                                </li>
+                            </ul>
+                            
+                            <p style="font-size:12px;font-weight:600;color:#c62828;margin:12px 0 8px;">Maintenance Due</p>
+                            <ul class="ea-alert-list" ng-if="upcomingMaintenance.length > 0">
+                                <li ng-repeat="m in upcomingMaintenance | limitTo:5">
+                                    <span class="ea-alert-dot red"></span>
+                                    <div class="ea-alert-content">
+                                        <div class="ea-alert-title">{{m.WorkOrderNo}}</div>
+                                        <div class="ea-alert-meta">Due: {{formatDate(m.DueDateDisplay)}}</div>
+                                    </div>
+                                    <span class="ea-alert-badge due">Due</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="ea-empty" ng-if="upcomingCalibrations.length === 0 && upcomingInspections.length === 0 && upcomingMaintenance.length === 0">
+                            <i class="material-icons">&#xE7F4;</i><p>No upcoming alerts</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Latest Activities -->
+                <div class="ea-card">
+                    <div class="ea-card-hdr"><h3><i class="material-icons">&#xE889;</i> Latest Activities</h3></div>
+                    <div style="padding:16px;">
+                        <ul class="ea-act-list" ng-if="latestAssets.length > 0">
+                            <li ng-repeat="a in latestAssets | limitTo:5">
+                                <div class="ea-act-dot blue"><i class="material-icons">&#xE86E;</i></div>
+                                <div class="ea-act-content">
+                                    <div class="ea-act-title">{{a.IteamName}} - {{a.ModelNo}}</div>
+                                    <div class="ea-act-meta">Added by {{a.CreatedBy}} - {{formatDate(a.CreatedDateDisplay)}}</div>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="ea-empty" ng-if="latestAssets.length === 0">
+                            <i class="material-icons">&#xE889;</i><p>No activities</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Latest Calibrations -->
+                <div class="ea-card">
+                    <div class="ea-card-hdr"><h3><i class="material-icons">&#xE8B0;</i> Latest Calibrations</h3></div>
+                    <div style="padding:16px;">
+                        <ul class="ea-act-list" ng-if="latestCalibrations.length > 0">
+                            <li ng-repeat="c in latestCalibrations | limitTo:5">
+                                <div class="ea-act-dot orange"><i class="material-icons">&#xE8B0;</i></div>
+                                <div class="ea-act-content">
+                                    <div class="ea-act-title">{{c.CertificateNo || 'Calibration'}}</div>
+                                    <div class="ea-act-meta">{{c.CreatedBy}} - {{formatDate(c.CalibrationDateDisplay)}}</div>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="ea-empty" ng-if="latestCalibrations.length === 0">
+                            <i class="material-icons">&#xE8B0;</i><p>No calibrations</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Latest Inspections -->
+                <div class="ea-card">
+                    <div class="ea-card-hdr"><h3><i class="material-icons">&#xE86C;</i> Latest Inspections</h3></div>
+                    <div style="padding:16px;">
+                        <ul class="ea-act-list" ng-if="latestInspections.length > 0">
+                            <li ng-repeat="i in latestInspections | limitTo:5">
+                                <div class="ea-act-dot green"><i class="material-icons">&#xE86C;</i></div>
+                                <div class="ea-act-content">
+                                    <div class="ea-act-title">{{i.InspectionNo}} <span ng-if="i.Status" style="font-size:10px;color:#e65100">{{i.Status}}</span></div>
+                                    <div class="ea-act-meta">{{i.CreatedBy}} - {{formatDate(i.InspectionDateDisplay)}}</div>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="ea-empty" ng-if="latestInspections.length === 0">
+                            <i class="material-icons">&#xE86C;</i><p>No inspections</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Latest Maintenance -->
+                <div class="ea-card">
+                    <div class="ea-card-hdr"><h3><i class="material-icons">&#xE86E;</i> Latest Maintenance</h3></div>
+                    <div style="padding:16px;">
+                        <ul class="ea-act-list" ng-if="latestMaintenance.length > 0">
+                            <li ng-repeat="m in latestMaintenance | limitTo:5">
+                                <div class="ea-act-dot red"><i class="material-icons">&#xE86E;</i></div>
+                                <div class="ea-act-content">
+                                    <div class="ea-act-title">{{m.Title}}</div>
+                                    <div class="ea-act-meta">{{m.CreatedBy}} - Cost: &#8377;{{m.Cost}}</div>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="ea-empty" ng-if="latestMaintenance.length === 0">
+                            <i class="material-icons">&#xE86E;</i><p>No maintenance records</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Overdue Items -->
+                <div class="ea-card">
+                    <div class="ea-card-hdr"><h3><i class="material-icons">&#xE7F4;</i> Overdue Items</h3></div>
+                    <div style="padding:16px;">
+                        <div ng-if="overdueCalibrations.length > 0 || overdueInspections.length > 0">
+                            <p style="font-size:12px;font-weight:600;color:#e53935;margin:0 0 8px;">Overdue Calibrations</p>
+                            <ul class="ea-alert-list" ng-if="overdueCalibrations.length > 0">
+                                <li ng-repeat="c in overdueCalibrations | limitTo:5">
+                                    <span class="ea-alert-dot red"></span>
+                                    <div class="ea-alert-content">
+                                        <div class="ea-alert-title">{{c.CertificateNo}}</div>
+                                        <div class="ea-alert-meta">{{c.DaysOverdue}} days overdue</div>
+                                    </div>
+                                    <span class="ea-alert-badge overdue">Overdue</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="ea-empty" ng-if="overdueCalibrations.length === 0 && overdueInspections.length === 0">
+                            <i class="material-icons">&#xE7F4;</i><p>No overdue items</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Login Users -->
+                <div class="ea-card">
+                    <div class="ea-card-hdr"><h3><i class="material-icons">&#xE7FD;</i> Recent Login Users</h3></div>
+                    <div style="padding:16px;">
+                        <ul class="ea-act-list" ng-if="recentLogins.length > 0">
+                            <li ng-repeat="u in recentLogins | limitTo:5">
+                                <div class="ea-act-dot teal"><i class="material-icons">&#xE7FD;</i></div>
+                                <div class="ea-act-content">
+                                    <div class="ea-act-title">{{u.AppUserName}}</div>
+                                    <div class="ea-act-meta">{{u.EmailId}} - {{u.LastLogin}}</div>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="ea-empty" ng-if="recentLogins.length === 0">
+                            <i class="material-icons">&#xE7FD;</i><p>No recent logins</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section foot{
+    <script src="~/Scripts/HexaAgular/EnterpriseAnalyticsDashboard.js"></script>
+}

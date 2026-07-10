@@ -1,0 +1,117 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Site.cshtml";
+}
+
+
+
+@section head
+{
+    <!-- htmleditor (codeMirror) -->
+    <link href="@Url.Content("~/Content/bower_components/codemirror/lib/codemirror.css")"
+          rel="stylesheet" type="text/css" media="all" />
+
+    <!-- kendo UI -->
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.common-material.min.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.material.min.css" rel="stylesheet" />
+
+    <link href="@Url.Content("~/Content/bower_components/datatables/media/css/jquery.dataTables.min.css")"
+          rel="stylesheet" type="text/css" media="all" />
+
+    <link href="@Url.Content("~/Content/bower_components/datatables/media/css/dataTables.bootstrap.css")"
+          rel="stylesheet" type="text/css" media="all" />
+}
+
+<div id="page_content_inner" ng-controller="AdminHomeCtrl">
+    <div class="md-card">
+        <div class="md-card-content">
+            <div class="uk-grid uk-grid-divider" data-uk-grid-margin>
+                <div class="uk-width-medium-1-4">
+                    <ul class="md-list md-list-addon">
+                        <li ng-if="HexaService.Flag == true">
+                            <div class="md-list-addon-element">
+                                <i class="material-icons md-48">&#xE326;</i>
+                            </div>
+                            <div class="md-list-content">
+                                <span class="md-list-heading">Status</span>
+                                <code>{{HexaService.Message}}</code>
+                            </div>
+                        </li>
+                        <li ng-if="HexaService.Flag == false">
+                            <div class="md-list-addon-element">
+                                <i class="material-icons md-48">&#xE327;</i>
+                            </div>
+                            <div class="md-list-content">
+                                <span class="md-list-heading">Status</span>
+                                <code>{{HexaService.Message}}</code>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="uk-width-medium-1-4">
+                    <div>
+                        <div class="md-top-bar-icons" ng-if="HexaService.Flag == false">
+                            <label></label>
+                            Start <i ng-click="StartService()" class=" md-icon material-icons">&#xE326;</i>
+
+                        </div>
+                        <div class="md-top-bar-icons" ng-if="HexaService.Flag == true">
+                            <label></label>
+                            Stop <i ng-click="StopService()" class="md-icon material-icons">&#xE327;</i>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section foot
+{
+    <!-- page specific plugins -->
+    @*<script src="@Url.Content("~/Content/bower_components/dragula.js/dist/dragula.min.js")"
+        type="text/javascript"></script>*@
+
+    <!--  sortable functions -->
+    @*<script src="@Url.Content("~/Content/assets/js/pages/components_sortable.min.js")"
+        type="text/javascript"></script>*@
+
+    <!-- functions -->
+    <script src="@Url.Content("~/Content/assets/js/kendoui_custom.min.js")"
+            type="text/javascript"></script>
+
+    <script src="@Url.Content("~/Content/assets/js/pages/kendoui.min.js")"
+            type="text/javascript"></script>
+    <!-- page specific plugins -->
+    <!-- ionrangeslider -->
+    <script src="@Url.Content("~/Content/bower_components/ion.rangeslider/js/ion.rangeSlider.min.js")"
+            type="text/javascript"></script>
+    <!--  forms advanced functions -->
+    <script src="~/Content/assets/js/pages/forms_advanced.min.js"></script>
+
+    <!--  mailbox functions -->
+    @*<script src="@Url.Content("~/Content/assets/js/pages/page_mailbox.min.js")"
+        type="text/javascript"></script>*@
+
+    <!-- page specific plugins -->
+    <!--  contact list functions -->
+    <script src="@Url.Content("~/Content/assets/js/pages/page_contact_list.min.js")"
+            type="text/javascript"></script>
+
+    <!-- product edit functions -->
+    <script src="@Url.Content("~/Content/assets/js/pages/ecommerce_product_edit.min.js")"
+            type="text/javascript"></script>
+
+    <!--  tour functions -->
+    <script src="~/Content/bower_components/enjoyhint/enjoyhint.js"></script>
+    <script src="~/Content/assets/js/pages/plugins_tour.min.js"></script>
+    @*<script src="~/AppJs/HexaDash.js"></script>*@
+
+
+    <script src="@Url.Content("~/Scripts/HexaAgular/SuperAdmin.js")"
+            type="text/javascript"></script>
+}
+
+

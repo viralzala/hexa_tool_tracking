@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="46c5ebb6b28d4b9f8805e3edf9d35375" Name="Diagram1">
+        <EntityTypeShape EntityType="EricssonDBModel.AppMenu" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.AppRole" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.AppUser" Width="1.5" PointX="4.75" PointY="0.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.ConfigureModel" Width="1.5" PointX="6.75" PointY="0.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.DepartMent" Width="1.5" PointX="0.75" PointY="6.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.HexaModule" Width="1.5" PointX="6.75" PointY="3.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.Icon" Width="1.5" PointX="6.75" PointY="6.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.mActivity" Width="1.5" PointX="8.75" PointY="0.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.mAgency" Width="1.5" PointX="2.75" PointY="8.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.mDesignation" Width="1.5" PointX="8.75" PointY="4.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.mFloorMaster" Width="1.5" PointX="8.75" PointY="8.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.mGroupMaster" Width="1.5" PointX="4.75" PointY="9.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.mIndooMap" Width="1.5" PointX="10.75" PointY="0.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.mIteamMaster" Width="1.5" PointX="10.75" PointY="5.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.mIteamTypeMaster" Width="1.5" PointX="10.75" PointY="9.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.mLocationMaster" Width="1.5" PointX="12.75" PointY="0.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.mLocatorMaster" Width="1.5" PointX="0.75" PointY="12.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.mMailConfig" Width="1.5" PointX="12.75" PointY="4.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.mMaintenanceType" Width="1.5" PointX="6.75" PointY="12.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.mReader" Width="1.5" PointX="12.75" PointY="10.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.mReaderSettup" Width="1.5" PointX="2.75" PointY="13.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.mRoomMaster" Width="1.5" PointX="8.75" PointY="13.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.mSetDistance" Width="1.5" PointX="14.75" PointY="0.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.mShift" Width="1.5" PointX="14.75" PointY="3.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.mSiteMaster" Width="1.5" PointX="14.75" PointY="7.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.mSkillCategory" Width="1.5" PointX="14.75" PointY="11.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.mStatusMaster" Width="1.5" PointX="10.75" PointY="15.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.mSupplier" Width="1.5" PointX="12.75" PointY="15.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.mUnitMaster" Width="1.5" PointX="14.75" PointY="15.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.mVendor" Width="1.5" PointX="16.75" PointY="0.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.mWarehouseMaster" Width="1.5" PointX="4.75" PointY="16.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.mWorkCategory" Width="1.5" PointX="16.75" PointY="6.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.mZone" Width="1.5" PointX="16.75" PointY="10.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.OrgInfo" Width="1.5" PointX="16.75" PointY="14.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.RoleAcess" Width="1.5" PointX="16.75" PointY="17.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.RoleMenu" Width="1.5" PointX="18.75" PointY="0.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.Rolemodule" Width="1.5" PointX="18.75" PointY="5.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.tAssetCheckOut" Width="1.5" PointX="6.75" PointY="18.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.tAssetMonitor" Width="1.5" PointX="18.75" PointY="8.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.tAssetStockIn" Width="1.5" PointX="18.75" PointY="11.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.tAssetStockIssue" Width="1.5" PointX="18.75" PointY="16.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.tAssetStockTranfer" Width="1.5" PointX="0.75" PointY="19.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.tAssetTag" Width="1.5" PointX="8.75" PointY="19.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.TC_Action" Width="1.5" PointX="20.75" PointY="0.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.TC_Customer" Width="1.5" PointX="2.75" PointY="20.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.TC_EmailConfiguration" Width="1.5" PointX="20.75" PointY="4.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.TC_InquiryGroupSource" Width="1.5" PointX="20.75" PointY="9.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.TC_InquirySource" Width="1.5" PointX="20.75" PointY="13.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.TC_InquiryStatus" Width="1.5" PointX="20.75" PointY="17.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.TC_InquiryType" Width="1.5" PointX="10.75" PointY="21.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.TC_Lead" Width="1.5" PointX="12.75" PointY="21.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.TC_LeadDisposition" Width="1.5" PointX="18.75" PointY="21.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.TC_LeadFollowUp" Width="1.5" PointX="20.75" PointY="21.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.TC_LeadStage" Width="1.5" PointX="22.75" PointY="0.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.TC_LeadSubDisposition" Width="1.5" PointX="22.75" PointY="4.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.TC_LeadType" Width="1.5" PointX="4.75" PointY="22.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.tEmployeeTag" Width="1.5" PointX="22.75" PointY="8.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.tExtendWarranty" Width="1.5" PointX="14.75" PointY="22.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.tMaintenance" Width="1.5" PointX="22.75" PointY="15.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.toCategoryMaster" Width="1.5" PointX="22.75" PointY="21.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.toMonitor" Width="1.5" PointX="24.75" PointY="0.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.toRFIDType" Width="1.5" PointX="24.75" PointY="4.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.toSupplier" Width="1.5" PointX="24.75" PointY="8.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.toSupplierCategory" Width="1.5" PointX="24.75" PointY="14.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.toSupplierType" Width="1.5" PointX="24.75" PointY="18.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.toToolMaintenance" Width="1.5" PointX="24.75" PointY="22.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.toToolStockIn" Width="1.5" PointX="0.75" PointY="25.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.toTooltag" Width="1.5" PointX="16.75" PointY="25.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.toTrackInfo" Width="1.5" PointX="26.75" PointY="0.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.tPortChangeLog" Width="1.5" PointX="2.75" PointY="26.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.tReaderLog" Width="1.5" PointX="4.75" PointY="26.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.tRFIDType" Width="1.5" PointX="26.75" PointY="5.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.tSpeedTrack" Width="1.5" PointX="26.75" PointY="9.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.tToolTrackDemo" Width="1.5" PointX="26.75" PointY="12.75" />
+        <EntityTypeShape EntityType="EricssonDBModel.tTrackInfo" Width="1.5" PointX="26.75" PointY="15.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

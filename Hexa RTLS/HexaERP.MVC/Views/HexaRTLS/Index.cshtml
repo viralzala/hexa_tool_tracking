@@ -1,0 +1,314 @@
+﻿
+@{
+    /**/
+
+    ViewBag.Title = "Index";
+
+    if (Session["SortCode"] != null)
+    {
+        Layout = "~/Views/Shared/_Admin.cshtml";
+    }
+    else
+    {
+        
+    }
+}
+
+@section head
+{
+    <!-- htmleditor (codeMirror) -->
+    <link href="@Url.Content("~/Content/bower_components/codemirror/lib/codemirror.css")"
+          rel="stylesheet" type="text/css" media="all" />
+
+    <!-- kendo UI -->
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.common-material.min.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.material.min.css" rel="stylesheet" />
+
+    <link href="@Url.Content("~/Content/bower_components/datatables/media/css/jquery.dataTables.min.css")"
+          rel="stylesheet" type="text/css" media="all" />
+
+    <link href="@Url.Content("~/Content/bower_components/datatables/media/css/dataTables.bootstrap.css")"
+          rel="stylesheet" type="text/css" media="all" />
+    <style>
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(20, 1fr);
+            grid-gap: 10px;
+        }
+
+        .grid-item {
+            background-color: #ccc;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+}
+
+<div ng-controller="HexaRTLSCtrl">
+
+    <div id="page_content">
+        <div id="page_content_inner">
+
+
+            <div class="scrum_task critical">
+                <p class="scrum_task_description"><b> Note:</b> click on asset/employee name to get details about it</p>
+            </div>
+            <div class="md-card uk-margin-medium-bottom">
+                <div class="md-card-content">
+                    <div class="uk-grid" data-uk-grid-margin>
+                        <div class="uk-width-medium-1-1">
+
+
+                            <div class="uk-vertical-align">
+                                <div class="uk-vertical-align-middle">
+                                    <ul id="contact_list_filter" class="uk-subnav uk-subnav-pill uk-margin-remove">
+                                        <li class="uk-active" data-uk-filter=""><a class="" href="#">All</a></li>
+                                        <div ng-repeat="Iteam in Location">
+                                        <li data-uk-filter="{{Iteam.mZoneId}}">
+                                            <a ng-click="ShowProduct(Iteam)" href="#">{{Iteam.Zone}}</a>
+                                        </li>
+                                </div>
+                                <li class="uk-active" title="Safety report click here download excel">
+                                    <a href="@Url.Action("SafetyExportExcelAsync", "EmployeeTrackSummary")">
+                                        Safety report <i class="material-icons">&#xE003;</i> <i class="uk-icon-spinner uk-icon-small uk-icon-spin"></i>
+                                    </a>
+                                </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="heading_b uk-text-center grid_no_results" style="display:none">No Locations found</h3>
+        <div class="uk-grid-width-small-1-1 uk-grid-width-medium-1-6 uk-grid-width-xLarge-1-1 uk-grid-width-xLarge-1-1 hierarchical_show" id="contact_list">
+            <div class="md-card md-card-hover">
+                <div class="md-card-content grid">
+                    <div class="{{task.IsAction == false ? 'grid-item uk-badge md-bg-green-600' : 'grid-item uk-badge md-bg-red-600' }}" data-uk-filter="{{task.mZoneId}},{{task.mZoneId}},mudassarinamdar@gmail.com" ng-repeat="task in Shelf">
+                        <span title="{{task.PartNumber}}"> {{task.ShelfName}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modal_overflow" class="uk-modal">
+    <div class="uk-modal-dialog uk-modal-dialog-large">
+        <button type="button" class="uk-modal-close uk-close"></button>
+        <div class="uk-grid" data-uk-grid-margin data-uk-grid-match id="user_profile">
+            <div class="uk-width-large-1-3">
+                <div class="md-card">
+                    <div class="user_heading">
+                        <div class="user_heading_content">
+                            <h2 class="heading_b uk-margin-bottom">
+                                <span class="uk-text-truncate">{{EmpDetails.Name}}</span>
+                                <span class="sub-heading">{{EmpDetails.EmployeeId}}</span>
+                                <span class="sub-heading">{{EmpDetails.Epc}}</span>
+
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="md-card">
+                    <div class="md-card-content">
+                        <div class="uk-margin-bottom uk-text-center uk-position-relative">
+                            <img src="~/Content/assets/img/avatars/user@2x.png" alt="Employee Photo" class="img_small" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-width-large-1-3">
+                <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
+                    <div class="uk-width-large-1-1">
+                        <h4 class="heading_c uk-margin-small-bottom">Employee Info</h4>
+                        <div class="timeline">
+                            <div class="timeline_item">
+                                <div class="timeline_icon timeline_icon_warning"><i class="material-icons">&#xE7FE;</i></div>
+                                <div class="timeline_content">
+                                    Employee Information
+                                    <div class="md-card">
+                                        <div class="user_heading">
+                                            <div class="user_heading_content">
+                                                <h6 class="heading_b uk-margin-bottom">
+                                                    <span class="sub-heading">Agency :{{EmpDetails.Agency}}</span>
+                                                    <span class="sub-heading">Designation :{{EmpDetails.Designation}}</span>
+                                                    <span class="sub-heading">SkillCategory :{{EmpDetails.SkillCategory}}</span>
+                                                    <span class="sub-heading">WorkCategory :{{EmpDetails.WorkCategory}}</span>
+                                                    <span class="sub-heading">Activity: {{EmpDetails.Activity}}</span>
+                                                </h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-width-large-1-3">
+                <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
+                    <div class="uk-width-large-1-1">
+                        <h4 class="heading_c uk-margin-small-bottom">Track Info</h4>
+                        <div class="timeline">
+                            <div class="timeline_item">
+                                <div class="timeline_icon timeline_icon_danger"><i class="material-icons">&#xE88A;</i></div>
+                                <div class="timeline_content">
+                                    Track Location
+                                    <div class="md-card">
+                                        <div class="user_heading">
+                                            <div class="user_heading_content">
+                                                <h2 class="heading_b uk-margin-bottom">
+                                                    <span class="uk-text-truncate">{{_trackWork}}</span>
+                                                    <span class="sub-heading">{{EmpDetails.tDate | jsonDate: "yyyy-MM-dd HH:mm:ss a"}}</span>
+                                                </h2>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modal_overflow_Asset" class="uk-modal">
+    <div class="uk-modal-dialog uk-modal-dialog-large">
+        <button type="button" class="uk-modal-close uk-close"></button>
+        <div class="uk-grid" data-uk-grid-margin data-uk-grid-match id="user_profile">
+            <div class="uk-width-large-1-3">
+                <div class="md-card">
+                    <div class="user_heading">
+                        <div class="user_heading_content">
+                            <h2 class="heading_b uk-margin-bottom">
+                                <span class="uk-text-truncate">{{AssetDetail.IteamName}}</span>
+                                <span class="sub-heading">{{AssetDetail.ModelNo}}</span>
+                                <span class="sub-heading">{{AssetDetail.Epc}}</span>
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="md-card">
+                    <div class="md-card-content">
+                        <div class="uk-margin-bottom uk-text-center uk-position-relative">
+                            <img ng-if="AssetDetail.img != null" src="{{AssetDetail.img}}" alt="Asset Image" class="img_medium" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-width-large-1-3">
+                <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
+                    <div class="uk-width-large-1-1">
+                        <h4 class="heading_c uk-margin-small-bottom">Asset Info</h4>
+                        <div class="timeline">
+                            <div class="timeline_item">
+                                <div class="timeline_icon timeline_icon_warning"><i class="material-icons">&#xE7FE;</i></div>
+                                <div class="timeline_content">
+                                    Asset  Issued Information
+                                    <div class="md-card">
+                                        <div class="user_heading">
+                                            <div class="user_heading_content">
+                                                <h6 class="heading_b uk-margin-bottom">
+                                                    <span class="uk-text-truncate">{{AssetDetail.EmployeeName}}</span>
+                                                    <span class="sub-heading">{{AssetDetail.EmployeeId}}</span>
+                                                    <span class="sub-heading">{{AssetDetail.ContactNo}}</span>
+                                                </h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-width-large-1-3">
+                <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
+                    <div class="uk-width-large-1-1">
+                        <h4 class="heading_c uk-margin-small-bottom">Track Info</h4>
+                        <div class="timeline">
+                            <div class="timeline_item">
+                                <div class="timeline_icon timeline_icon_danger"><i class="material-icons">&#xE88A;</i></div>
+                                <div class="timeline_content">
+                                    Track Location
+                                    <div class="md-card">
+                                        <div class="user_heading">
+                                            <div class="user_heading_content">
+                                                <h2 class="heading_b uk-margin-bottom">
+                                                    <span class="uk-text-truncate">{{AsRrack}}</span>
+                                                    <span class="sub-heading">{{AssetDetail.tDate | jsonDate: "yyyy-MM-dd HH:mm:ss a"}}</span>
+                                                </h2>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+@section foot
+{
+
+    @*<script src="@Url.Content("~/Content/bower_components/dragula.js/dist/dragula.min.js")"
+        type="text/javascript"></script>*@
+
+    <!--  sortable functions -->
+    @*<script src="@Url.Content("~/Content/assets/js/pages/components_sortable.min.js")"
+        type="text/javascript"></script>*@
+
+    <!-- functions -->
+    <script src="@Url.Content("~/Content/assets/js/kendoui_custom.min.js")"
+            type="text/javascript"></script>
+
+    <script src="@Url.Content("~/Content/assets/js/pages/kendoui.min.js")"
+            type="text/javascript"></script>
+
+
+    <!--  mailbox functions -->
+    @*<script src="@Url.Content("~/Content/assets/js/pages/page_mailbox.min.js")"
+        type="text/javascript"></script>*@
+
+    <!-- page specific plugins -->
+    <!--  contact list functions -->
+    <script src="@Url.Content("~/Content/assets/js/pages/page_contact_list.min.js")"
+            type="text/javascript"></script>
+
+    <!-- product edit functions -->
+    <script src="@Url.Content("~/Content/assets/js/pages/ecommerce_product_edit.min.js")"
+            type="text/javascript"></script>
+
+
+    <!--  kendoui functions -->
+    <script src="~/Scripts/HexaAgular/HexaRTLS.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            //var numRows = parseInt(prompt("Enter rows"));
+            //var numCols = parseInt(prompt("Enter cols"));
+            //var grideContainer = $("#grideCOntainer");
+            //for (var i = 0; i < numRows; i++) {
+            //    var row =$("<div>").addClass()
+            //}
+
+            var grid = $('.grid1');
+
+            for (var i = 0; i <= 200; i++) {
+                var gridItem = $('<div>').addClass('grid-item').text('Grid Item' + i);
+                //grid.append(gridItem);
+            }
+        });
+    </script>
+
+}

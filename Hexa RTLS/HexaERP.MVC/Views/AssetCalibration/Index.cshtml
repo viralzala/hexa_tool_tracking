@@ -1,0 +1,685 @@
+@{
+    ViewBag.Title = "Asset Calibration";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+
+@section head{
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.common-material.min.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.material.min.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/datatables/media/css/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/datatables/media/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <style>
+        /* Premium UI Custom Styles */
+        .premium-page-banner {
+            background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
+            color: white;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .premium-page-banner .banner-icon {
+            font-size: 48px;
+            opacity: 0.9;
+            color: white;
+        }
+        .premium-page-banner h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 400;
+            color: white;
+        }
+        .premium-page-banner h1.text-white {
+            color: white;
+        }
+        .premium-page-banner .subtitle {
+            opacity: 0.85;
+            margin-top: 4px;
+            font-size: 14px;
+        }
+        .breadcrumb-nav {
+            background: rgba(255,255,255,0.15);
+            padding: 8px 16px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-top: 12px;
+            font-size: 12px;
+        }
+        .breadcrumb-nav a {
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+        }
+        .breadcrumb-nav span {
+            color: white;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-left: 4px solid #1a237e;
+            transition: all 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .stat-card .stat-icon {
+            font-size: 32px;
+            color: #1a237e;
+            opacity: 0.7;
+            float: left;
+            margin-right: 12px;
+        }
+        .stat-card .stat-value {
+            font-size: 28px;
+            font-weight: 600;
+            color: #1a237e;
+            margin: 0;
+        }
+        .stat-card .stat-label {
+            color: #666;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+        .stat-card.success { border-left-color: #2e7d32; }
+        .stat-card.success .stat-icon, .stat-card.success .stat-value { color: #2e7d32; }
+        .stat-card.warning { border-left-color: #ed6c02; }
+        .stat-card.warning .stat-icon, .stat-card.warning .stat-value { color: #ed6c02; }
+        .stat-card.info { border-left-color: #0288d1; }
+        .stat-card.info .stat-icon, .stat-card.info .stat-value { color: #0288d1; }
+        .stat-card.danger { border-left-color: #c62828; }
+        .stat-card.danger .stat-icon, .stat-card.danger .stat-value { color: #c62828; }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255,255,255,0.8);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .loading-spinner {
+            text-align: center;
+            color: #1a237e;
+        }
+        .loading-spinner i {
+            font-size: 48px;
+            animation: spin 1s linear infinite;
+        }
+        @@keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Search Card */
+        .search-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        .search-card .search-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .search-card .search-title i {
+            color: #1a237e;
+        }
+
+        /* Form Section Card */
+        .form-section-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border: 1px solid #e0e0e0;
+        }
+        .form-section-card .section-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1a237e;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e8eaf6;
+            display: flex;
+            align-items: center;
+        }
+        .form-section-card .section-title i {
+            margin-right: 8px;
+        }
+
+        /* Data Table */
+        .premium-table-container {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .premium-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .premium-table thead {
+            background: #f5f7fa;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .premium-table thead th {
+            padding: 14px 12px;
+            font-weight: 600;
+            color: #333;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #e0e0e0;
+            text-align: left;
+        }
+        .premium-table tbody td {
+            padding: 12px;
+            font-size: 13px;
+            color: #555;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .premium-table tbody tr {
+            transition: background 0.2s;
+        }
+        .premium-table tbody tr:nth-child(even) {
+            background: #fafafa;
+        }
+        .premium-table tbody tr:hover {
+            background: #e8eaf6;
+        }
+
+        /* Badge */
+        .premium-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .premium-badge-primary { background: #e8eaf6; color: #1a237e; }
+        .premium-badge-success { background: #e8f5e9; color: #2e7d32; }
+        .premium-badge-warning { background: #fff3e0; color: #ed6c02; }
+        .premium-badge-danger { background: #ffebee; color: #c62828; }
+        .premium-badge-info { background: #e1f5fe; color: #0288d1; }
+
+        /* Premium Form Group */
+        .premium-form-group {
+            margin-bottom: 16px;
+        }
+        .premium-form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #333;
+            font-size: 13px;
+        }
+        .premium-form-group label .required {
+            color: #d32f2f;
+            margin-left: 2px;
+        }
+
+        /* User Edit Heading */
+        .user_heading {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8eaf6 100%);
+            padding: 20px;
+            border-radius: 8px 8px 0 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .user_heading_content h2 {
+            margin: 0;
+            color: #1a237e;
+            font-size: 22px;
+        }
+        .user_heading_content .sub-heading {
+            color: #666;
+            font-size: 14px;
+            font-weight: 400;
+        }
+        .user_content {
+            padding: 20px;
+        }
+
+        /* Tab styling */
+        .uk-tab {
+            border-bottom: 2px solid #e0e0e0;
+        }
+        .uk-tab > li > a {
+            color: #666;
+            font-weight: 500;
+            padding: 10px 20px;
+        }
+        .uk-tab > li.uk-active > a {
+            color: #1a237e;
+            border-bottom: 2px solid #1a237e;
+            background: transparent;
+        }
+        .uk-tab > li > a:hover {
+            color: #1a237e;
+        }
+
+        /* Card styling */
+        .md-card {
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            background: white;
+            margin-bottom: 20px;
+        }
+        .md-card-toolbar {
+            background: #f5f7fa;
+            padding: 12px 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .md-card-toolbar-heading-text {
+            font-weight: 600;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .md-card-toolbar-heading-text i {
+            color: #1a237e;
+        }
+        .md-card-content {
+            padding: 20px;
+        }
+
+        /* Alert */
+        .premium-alert {
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .premium-alert-info {
+            background: #e1f5fe;
+            color: #0277bd;
+            border-left: 4px solid #0288d1;
+        }
+
+        /* Input Override */
+        .md-input-wrapper.md-input-filled label,
+        .md-input-wrapper label {
+            font-weight: 500;
+            color: #555;
+            font-size: 13px;
+        }
+        .md-input-wrapper.md-input-filled input,
+        .md-input-wrapper input {
+            border-color: #cfd8dc;
+            border-radius: 6px;
+            padding: 10px 14px;
+        }
+        .md-input-wrapper.md-input-filled input:focus,
+        .md-input-wrapper input:focus {
+            border-color: #1a237e;
+        }
+
+        /* Required asterisk */
+        .req {
+            color: #d32f2f;
+            font-weight: bold;
+        }
+
+        /* Help block */
+        .uk-form-help-block {
+            font-weight: 500;
+            color: #444;
+            margin-bottom: 6px;
+            display: block;
+        }
+        .uk-input-group-addon {
+            background: #f5f7fa;
+            border: 1px solid #cfd8dc;
+            border-radius: 6px 0 0 6px;
+            color: #666;
+        }
+
+        /* Responsive */
+        @@media (max-width: 968px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .premium-page-banner h1 {
+                font-size: 22px;
+            }
+            .premium-page-banner .banner-icon {
+                font-size: 36px;
+            }
+        }
+        @@media (max-width: 640px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .premium-page-banner {
+                padding: 16px;
+            }
+            .premium-page-banner h1 {
+                font-size: 18px;
+            }
+        }
+    </style>
+}
+
+    <div id="page_content_inner" ng-controller="AssetCalibrationCtrl" ng-cloak>
+        <div class="loading-overlay" ng-if="loading">
+            <div class="loading-spinner">
+                <i class="material-icons">&#xE86C;</i>
+                <span>Loading...</span>
+            </div>
+        </div>
+    <!-- Premium Page Banner -->
+    <div class="premium-page-banner">
+        <div class="uk-grid" data-uk-grid-margin>
+            <div class="uk-width-small-1-1 uk-width-medium-1-6">
+                <i class="material-icons banner-icon">&#xE86C;</i>
+            </div>
+            <div class="uk-width-small-1-1 uk-width-medium-5-6">
+                <h1 class="text-white">Asset Calibration</h1>
+                <p class="subtitle">Search and manage calibration records for your assets</p>
+                <div class="breadcrumb-nav">
+                    <a href="@Url.Action("", "EnterpriseAnalyticsDashboard")"><i class="material-icons">&#xE88A;</i> Home</a> /
+                    <a href="#">Assets</a> /
+                    <span>Calibration</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <i class="material-icons stat-icon">&#xE86C;</i>
+            <div>
+                <div class="stat-value">{{statTotal || 0}}</div>
+                <div class="stat-label">Total Calibrations</div>
+            </div>
+        </div>
+        <div class="stat-card success">
+            <i class="material-icons stat-icon">&#xE86C;</i>
+            <div>
+                <div class="stat-value">{{statCompleted || 0}}</div>
+                <div class="stat-label">Completed</div>
+            </div>
+        </div>
+        <div class="stat-card warning">
+            <i class="material-icons stat-icon">&#xE001;</i>
+            <div>
+                <div class="stat-value">{{statPending || 0}}</div>
+                <div class="stat-label">Pending</div>
+            </div>
+        </div>
+        <div class="stat-card danger">
+            <i class="material-icons stat-icon">&#xE5CD;</i>
+            <div>
+                <div class="stat-value">{{statExpired || 0}}</div>
+                <div class="stat-label">Expired</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Section -->
+    <div class="search-card">
+        <div class="search-title">
+            <i class="material-icons">&#xE8B6;</i>
+            Search Asset
+        </div>
+        @using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "_formAssetInfo", @name = "_formAssetInfo" }))
+        {
+            <div class="md-card-content" style="padding: 0;">
+                <div class="uk-grid" data-uk-grid-margin>
+                    <div class="uk-width-medium-1-1">
+                        <div class="uk-grid" data-uk-grid-margin>
+                            <div class="uk-width-medium-1-4">
+                                <div class="parsley-row">
+                                    <label><i class="uk-icon-search"></i> <b>RFID</b><span class="req"> </span></label>
+                                    <input type="text" required name="RFID" ng-model="RFID" class="md-input label-fixed" />
+                                </div>
+                            </div>
+                            <div class="uk-width-medium-1-4">
+                                <div class="parsley-row">
+                                    <label><i class="uk-icon-search"></i> <b>Bar Code</b><span class="req"> </span></label>
+                                    <input type="text" required name="BarCode" ng-model="BarCode" class="md-input label-fixed" />
+                                </div>
+                            </div>
+                            <div class="uk-width-medium-1-4">
+                                <div class="parsley-row">
+                                    <label><i class="uk-icon-search"></i> <b>UID</b></label>
+                                    <input type="text" name="UID" class="md-input label-fixed" />
+                                </div>
+                            </div>
+                            <div class="uk-width-large-1-4 uk-width-medium-1-1">
+                                <div class="uk-input-group uk-margin-large-top">
+                                    <button title="Search" type="button" ng-click="GetAssetInfo()" ng-hide="isAdd"
+                                            class="md-btn md-btn-primary premium-btn-sm">
+                                        <i class="material-icons">&#xE8B6;</i> {{loading ? loading : 'Search'}}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Asset Info and Calibration Details -->
+    <div class="uk-grid uk-grid-medium" data-uk-grid-margin>
+        <div class="uk-width-xLarge-2-10 uk-width-large-3-10">
+            <div class="md-card">
+                <div class="md-card-toolbar">
+                    <h3 class="md-card-toolbar-heading-text">
+                        <i class="material-icons">&#xE873;</i> Asset Details
+                    </h3>
+                </div>
+                <div class="md-card-content">
+                    <div class="uk-form-row">
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="uk-icon-cubes"></i>
+                            </span>
+                            <label for="product_edit_quantity_control">Asset Name</label><br />
+                            <label>
+                                <b>{{AssetInfo.IteamName}}</b>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="uk-form-row">
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="uk-icon-barcode"></i>
+                            </span>
+                            <label for="product_edit_sku_control">RFID</label><br />
+                            <label>
+                                <b>{{AssetInfo.RFID}}</b>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="uk-form-row">
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="uk-icon-barcode"></i>
+                            </span>
+                            <label for="product_edit_sku_control">Bar Code</label><br />
+                            <label>
+                                <b>{{AssetInfo.BarCode}}</b>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="uk-width-large-8-10">
+            <div class="md-card">
+                <div class="user_heading" data-uk-sticky="{ top: 48, media: 960 }">
+                    <div class="user_heading_content">
+                        <h2 class="heading_b">
+                            <span class="uk-text-truncate" id="user_edit_uname">{{AssetInfo.IteamName}}</span>
+                        </h2>
+                    </div>
+                </div>
+                <div class="user_content">
+                    <ul id="user_edit_tabs" class="uk-tab" data-uk-tab="{connect:'#user_edit_tabs_content'}">
+                        <li ng-click="GetbyTabInfo()" class="uk-active"><a href="#"><i class="material-icons">&#xE8B0;</i> Calibration Summary</a></li>
+                        <li ng-click="GetbyTabInfo()"><a href="#"><i class="material-icons">&#xE145;</i> Add New Calibration</a></li>
+                    </ul>
+                    <ul id="user_edit_tabs_content" class="uk-switcher uk-margin">
+                        <li>
+                            <div class="uk-margin-top">
+                                <div class="uk-grid">
+                                    <div class="uk-width-1-1">
+                                        <div class="uk-grid uk-grid-width-1-1 uk-grid-width-large-1-1" data-uk-grid-margin>
+                                            <div class="uk-overflow-container">
+                                                <table class="uk-table uk-table-hover uk-table-middle">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="uk-text-nowrap"><b>Calibration Date</b></th>
+                                                            <th class="uk-text-nowrap"><b>Next Due Date</b></th>
+                                                            <th class="uk-text-nowrap"><b>Certificate No</b></th>
+                                                            <th class="uk-text-nowrap"><b>Cost</b></th>
+                                                            <th class="uk-text-nowrap"><b>Remarks</b></th>
+                                                            <th class="uk-text-nowrap"><b>Created By</b></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr class="uk-table-middle" ng-repeat="cal in CalibInfo">
+                                                            <td class="uk-text-small">{{cal.CalibrationDate | jsonDate:'dd MMMM yy'}}</td>
+                                                            <td class="uk-text-small">{{cal.NextDueDate | jsonDate:'dd MMMM yy'}}</td>
+                                                            <td class="uk-text-small">{{cal.CertificateNo}}</td>
+                                                            <td><i class="uk-icon-inr"></i><b> {{cal.Cost}}</b></td>
+                                                            <td>{{cal.Remarks}}</td>
+                                                            <td>{{cal.CreatedBy}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            @using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "_formCalibInfo", @name = "_formCalibInfo" }))
+                            {
+                                <div class="md-card uk-margin-medium-bottom">
+                                    <div class="md-card-toolbar">
+                                        <h3 class="md-card-toolbar-heading-text">
+                                            <i class="material-icons">&#xE145;</i> New Calibration Record
+                                        </h3>
+                                    </div>
+                                    <div class="md-card-content">
+                                        <div class="uk-grid" data-uk-grid-margin>
+                                            <div class="uk-width-large-1-1">
+                                                <div class="uk-grid" data-uk-grid-margin>
+                                                    <div class="uk-width-large-1-4">
+                                                        <input type="text" name="tAssetCalibrationId" ng-model="tAssetCalibrationId" ng-hide="true" />
+                                                        <input type="text" name="tAssetTagId" ng-model="tAssetTagId" ng-hide="true" />
+                                                        <input type="hidden" name="AssetMasterId" ng-model="AssetMasterId" />
+                                                        <input type="hidden" name="AssetId" ng-model="AssetId" />
+                                                        <input type="hidden" name="AssetName" ng-model="AssetName" />
+                                                    </div>
+                                                    <div class="uk-width-large-1-4">
+                                                        <div class="parsley-row">
+                                                            <label><b>Asset</b></label>
+                                                            <input type="text" class="md-input label-fixed" ng-model="AssetInfo.IteamName" readonly style="background: #f5f7fa;" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="uk-width-large-1-4">
+                                                        <div class="uk-input-group">
+                                                            <span class="uk-input-group-addon">
+                                                                <i class="uk-icon-calendar"></i>
+                                                            </span>
+                                                            <label for="wizard_address"><b>Calibration Date</b> <span class="req">*</span></label>
+                                                            <input type="date" name="CalibrationDate" class="md-input label-fixed" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="uk-width-large-1-4">
+                                                        <div class="uk-input-group">
+                                                            <span class="uk-input-group-addon">
+                                                                <i class="uk-icon-calendar"></i>
+                                                            </span>
+                                                            <label for="wizard_address"><b>Next Due Date</b></label>
+                                                            <input type="date" name="NextDueDate" class="md-input label-fixed" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="uk-grid" data-uk-grid-margin>
+                                                    <div class="uk-width-large-1-4">
+                                                        <div class="parsley-row">
+                                                            <label for="product_edit_quantity_control"><b>Certificate No</b></label>
+                                                            <input type="text" class="md-input label-fixed" ng-model="CertificateNo" name="CertificateNo" id="CertificateNo">
+                                                        </div>
+                                                    </div>
+                                                    <div class="uk-width-large-1-4">
+                                                        <div class="uk-input-group">
+                                                            <span class="uk-input-group-addon">
+                                                                <i class="uk-icon-inr"></i>
+                                                            </span>
+                                                            <label for="wizard_address"><b>Cost</b></label>
+                                                            <input type="number" name="Cost" id="Cost" ng-model="Cost" class="md-input label-fixed" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="uk-width-large-1-4">
+                                                        <div class="parsley-row">
+                                                            <label for="wizard_address"><b>Remarks</b></label>
+                                                            <input type="text" name="Remarks" id="Remarks" ng-model="Remarks" class="md-input label-fixed" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="uk-width-large-1-4">
+                                                        <div class="uk-input-group uk-margin-large-top">
+                                                            <button title="Add" type="button" ng-click="CalibCollData()" ng-hide="isAddCalib"
+                                                                    class="md-btn md-btn-primary premium-btn-sm">
+                                                                <i class="material-icons">&#xE161;</i> Add Calibration
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section foot{
+    <script src="@Url.Content("~/Content/assets/js/kendoui_custom.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/assets/js/pages/kendoui.min.js")" type="text/javascript"></script>
+    <script src="~/Content/assets/js/custom/uikit_fileinput.min.js"></script>
+    <script src="~/Content/assets/js/pages/page_user_edit.min.js"></script>
+    <script src="~/Scripts/HexaAgular/AssetCalibration.js"></script>
+}

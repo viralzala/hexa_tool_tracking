@@ -1,0 +1,522 @@
+﻿
+@section head
+{  
+    <!--   -->
+    <link href="@Url.Content("~/Content/bower_components/codemirror/lib/codemirror.css")"
+          rel="stylesheet" type="text/css" media="all" />
+}
+
+   
+        <div class="md-card uk-margin-medium-bottom" style="display:none">
+            <div class="md-card-content">
+                <h3 class="heading_a">
+                    Upload Component
+                    <span class="sub-heading">Allow users to upload files through a file input form element or a placeholder area.</span>
+                </h3>
+                <div class="uk-grid" data-uk-grid-margin="">
+                    <div class="uk-width-medium-1-1 uk-row-first">
+                        <div class="uk-grid" data-uk-grid-margin="">
+                            <div class="uk-width-medium-1-4 uk-row-first">
+                                <div class="parsley-row">
+                                    <div class="md-input-wrapper md-input-filled">
+                                        <label>  <b>  Floor Name</b><span class="req"> </span></label>
+                                        @Html.TextBoxFor(m => m.FloorName, new { @class = "md-input label-fixed" })
+
+                                        <span class="md-input-bar "></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="uk-width-medium-1-4">
+                                <div class="parsley-row">
+                                    <div class="md-input-wrapper md-input-filled">
+                                        <label><b>  Floor No</b><span class="req"> </span></label>
+                                        @Html.TextBoxFor(m => m.FloorNo, new { @class = "md-input label-fixed" })
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="uk-width-medium-1-4">
+                                <div class="parsley-row">
+                                    <div class="md-input-wrapper md-input-filled">
+                                        <label><b>  Description</b><span class="req"> </span></label>
+                                        @Html.TextBoxFor(m => m.Description, new { @class = "md-input label-fixed" })
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="uk-width-large-1-4 uk-width-medium-1-1">
+
+                                <div class="uk-input-group">
+                                    <label><b>  Choose Indoor Map</b><span class="req"> </span></label>
+                                    <div class="md-input-wrapper md-input-filled">
+                                        <input type="file" name="file" id="file" class="md-btn label-fixed">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="md-card uk-margin-medium-bottom" style="display:none">
+            <div class="md-card">
+                <div class="md-card-content">
+                    <div class="uk-grid" data-uk-grid-margin="">
+                        <div class="uk-width-medium-1-2 uk-row-first">
+                            <div class="uk-width-large-1-4 uk-width-medium-1-1">
+                                <div class="uk-input-group">
+                                    <button title="Upload" value="Upload" name="actionType" type="submit" ng-hide="isAdd" class="md-btn md-btn-primary ng-binding">
+                                        Upload
+                                    </button>
+                                    <button title="Update" value="Update" name="actionType" type="button" ng-init="isEdit=true" ng-hide="isEdit" class="md-btn md-btn-primary ng-binding ng-hide">
+                                        Update
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="uk-width-1-2">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+@section foot
+{
+    <!--   -->
+    <script src="~/Content/bower_components/enjoyhint/enjoyhint.js"></script>   
+    <script src="~/AppJs/HexaDash.js"></script>
+}
+
+//console.log(JSON.parse(data.CompartWise));
+    //$.each(JSON.parse(data.CompartWise), function (idx, obj) {
+    //    //alert(obj.tagName);
+    //    Testjson.push(obj.name);        
+    //    //(HeaderArray.push([data.ComWise[i].Tdate]));
+    //})
+    TestFun(data.CompartWise, data._header);
+    //$.each($.parseJSON(data.CompartWise), function (idx, obj) {
+    //    console.log(obj.name);
+    //    console.log(obj[0]);
+    //});  
+
+
+    <script>
+        $(document).ready(function () {
+            var d = new Date();
+            d = ('0' + (d.getMonth() + 1)).slice(-2) + "/" + ('0' + d.getDate()) + "/" + d.getFullYear() + " " + ('0' + d.getHours()).slice(-2) + ":" + ('0' + d.getMinutes()).slice(-2) + " " + (d.getHours() >= 12 ? 'PM' : 'AM');
+            $("#kUI_datetimepicker_range_end").val(d);
+        });
+    </script>
+
+LeadManagment
+
+ //var merged = tagsTrack.Union(tagsTrackMap, new ProductComparer());
+                //foreach (var gObj in tagsTrack)
+                //{
+                //    var original = tagsTrackMap.FirstOrDefault(b => b.Epc == gObj.Epc && obj.PortId != sc.PortId);
+                //    if (original != null)
+                //    {
+                //        original.Epc = gObj.Epc;
+                //        original.Reader = gObj.Reader;
+                //        original.PortId = gObj.PortId;
+                //        original.tDate = gObj.tDate;
+
+                //    }
+                //}
+               
+
+
+
+
+ $('#btnlogin1').click(function () {
+
+        // prevent the default event behaviour
+        //e.preventDefault();
+
+        //$.ajax({
+        //    url: "../Home/SaveDetailedInfo",
+        //    type: "POST",
+        //    data: JSON.stringify({ 'Options': someData }),
+        //    dataType: "json",
+        //    traditional: true,
+        //    contentType: "application/json; charset=utf-8",
+        //    success: function (data) {
+
+        //        // perform your save call here
+
+        //        if (data.status == "Success") {
+        //            alert("Done");
+        //        } else {
+        //            alert("Error occurs on the Database level!");
+        //        }
+        //    },
+        //    error: function () {
+        //        alert("An error has occured!!!");
+        //    }
+        //});
+
+        // response(customer);
+
+    });
+
+
+	 $('#btnlogin1').click(function () {
+
+        // prevent the default event behaviour
+        //e.preventDefault();
+
+        //$.ajax({
+        //    url: "../Home/SaveDetailedInfo",
+        //    type: "POST",
+        //    data: JSON.stringify({ 'Options': someData }),
+        //    dataType: "json",
+        //    traditional: true,
+        //    contentType: "application/json; charset=utf-8",
+        //    success: function (data) {
+
+        //        // perform your save call here
+
+        //        if (data.status == "Success") {
+        //            alert("Done");
+        //        } else {
+        //            alert("Error occurs on the Database level!");
+        //        }
+        //    },
+        //    error: function () {
+        //        alert("An error has occured!!!");
+        //    }
+        //});
+
+        // response(customer);
+
+    });
+
+
+
+	 $('#btnlogin1').click(function () {
+
+        // prevent the default event behaviour
+        //e.preventDefault();
+
+        //$.ajax({
+        //    url: "../Home/SaveDetailedInfo",
+        //    type: "POST",
+        //    data: JSON.stringify({ 'Options': someData }),
+        //    dataType: "json",
+        //    traditional: true,
+        //    contentType: "application/json; charset=utf-8",
+        //    success: function (data) {
+
+        //        // perform your save call here
+
+        //        if (data.status == "Success") {
+        //            alert("Done");
+        //        } else {
+        //            alert("Error occurs on the Database level!");
+        //        }
+        //    },
+        //    error: function () {
+        //        alert("An error has occured!!!");
+        //    }
+        //});
+
+        // response(customer);
+
+    });
+
+
+
+	  // SQL version of the above LINQ code.
+                    //  string query = "SELECT AppUser.AppUserName,AppUser.UniqueId,AppUser.OrgInfoId,AppRole.SortCode FROM AppUser LEFT JOIN AppRole ON AppRole.AppRoleId = AppUser.AppRoleId WHERE AppUser.AppUserName = '" + UserName + "' AND AppUser.Password = '" + Password + "'";
+                    //  IEnumerable<ERPdbEntities> data = db.Database.SqlQuery<ERPdbEntities>(query);
+                    //var obj =  data.ToList();
+
+                    //var obj = db.AppUsers.Where(a => a.AppUserName.Equals(UserName) && a.Password.Equals(Password) && a.IsAllowed.Equals(1)).FirstOrDefault();
+
+
+					 public ActionResult UserDashBoard()
+        {
+            if (Session["UserID"] != null)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Login");
+            }
+        }
+        // GET: AppUser/Details/5
+        public ActionResult Details(int id)
+        {
+            return View();
+        }
+
+        // GET: AppUser/Create
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: AppUser/Create
+        [HttpPost]
+        public ActionResult Create(FormCollection collection)
+        {
+            try
+            {
+                // TODO: Add insert logic here
+
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        // GET: AppUser/Edit/5
+        public ActionResult Edit(int id)
+        {
+            return View();
+        }
+
+        // POST: AppUser/Edit/5
+        [HttpPost]
+        public ActionResult Edit(int id, FormCollection collection)
+        {
+            try
+            {
+                // TODO: Add update logic here
+
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        // GET: AppUser/Delete/5
+        public ActionResult Delete(int id)
+        {
+            return View();
+        }
+
+        // POST: AppUser/Delete/5
+        [HttpPost]
+        public ActionResult Delete(int id, FormCollection collection)
+        {
+            try
+            {
+                // TODO: Add delete logic here
+
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        // [AcceptVerbs(HttpVerbs.Post)]
+        [HttpGet]
+        public JsonResult ModuleMenu()
+        {
+            // Response.Write("<script>"+ Json(db.HexaModules.ToList().ToString()) + "</script>");
+            return Json(db.HexaModules.ToList());
+
+        }
+        [HttpGet]
+        public string GetMessage(string UserName, string Password)
+        {
+            return "Success";
+
+        }
+
+
+		//var secondProfessor = context.TC_Customer.Find(16);
+                    //int kk = secondProfessor.TC_CustomerId;
+                    //Get
+
+
+
+					<span class="uk-margin-right">\
+                                                                    <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">1</span>\
+                                                                </span>\
+                                                                <span class="uk-margin-right">\
+                                                                    <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">615</span>\
+                                                                </span>\
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+																  //  var results = db.tToolTrackDemoes.Where(r => r.PortId != null)
+            //.GroupBy(r => r.PortId)
+            //.Select(gr => new { PortId = (int)gr.Key, Count = gr.Count() }).ToList();
+
+            //List<GetRoomsEntity> eList = new List<GetRoomsEntity>();
+
+            //var ObjDatas = (from tr in db.mReaders    
+            //               select new {tr.mRoomMasterId,tr.ReaderNo,tr.mAttPortId}).ToList();
+
+            //GetRoomsEntity obj = new GetRoomsEntity();
+
+            //foreach (var item in ObjDatas)
+            //{
+            //    eList.Add(new GetRoomsEntity
+            //    {                   
+            //        mAttPortId = item.mAttPortId,
+            //        ReaderNo = Sec.Decrypt(item.ReaderNo)
+            //    });
+            //}
+
+
+
+			  //GetRegService._getDatas().then(function (result) {
+        //    $scope.Location = result.data;
+        //    //console.log($scope.Location);
+        //    //angular.forEach(result.data, function (value, key) {
+        //    //    console.log(value);
+        //    //    $scope.MenuIteam = value;
+
+        //    //    angular.forEach(value,function(v1,k1){//this is nested angular.forEach loop
+        //    //        //console.log(v1.RoomName);
+
+        //    //    });
+        //    //});
+
+        //}, function (error) {
+        //    console.log(error);
+        //});
+
+        //
+        //GetRegService._getRdata().then(function (result) {
+        //    $scope.Areas = result.data;
+        //   // console.log($scope.Areas);
+        //}, function (error) {
+        //    console.log(error);
+        //});
+
+        //
+        //$http({
+        //    method: 'GET',
+        //    url: '../ToolsTrackDemo/getPortsNumber'
+        //}).then(function successCallback(response) {
+        //    // this callback will be called asynchronously
+        //    // when the response is available  
+        //    //console.log(response.data);
+        //    $scope.PortColl = response.data;
+        //}, function errorCallback(response) {
+        //    // called asynchronously if an error occurs
+        //    // or server returns response with an error status.
+        //    console.log("Error : " + response.data.ExceptionMessage);
+        //});
+
+
+		 //
+    //$scope.getReaderCount = function (ReaderNo, PortId, Uid) {
+    //    // $scope.demo = delivery;
+    //    console.log(ReaderNo, PortId, Uid);
+
+    //    //angular.forEach(demo, function (value, key) {//this is nested angular.forEach loop
+    //    //    //console.log(value.RFID);
+    //    //    if (value.ReaderNo == ReaderNo && value.mAttPortId == mAttPortId) {
+    //    //        $scope.demoIData = value.RFID;
+    //    //    }
+    //    //});
+
+    //};
+
+
+	 //$http({
+        //    method: 'GET',
+        //    url: '../ToolsTrackDemo/getGetToTrackData'
+        //}).then(function successCallback(response) {
+        //    // this callback will be called asynchronously
+        //    // when the response is available  
+
+        //}, function errorCallback(response) {
+        //    // called asynchronously if an error occurs
+        //    // or server returns response with an error status.
+        //    console.log("Error : " + response.data.ExceptionMessage);
+        //});
+
+
+        //
+        //$scope.getReaderCount = function (ReaderNo, PortId) {
+        //    // $scope.demo = delivery;
+        //     console.log(ReaderNo, PortId);
+        //     console.log('Called:getReaderCount');
+        //   // console.log(ReaderNo, PortId, Uid);
+        //    //angular.forEach(demo, function (value, key) {//this is nested angular.forEach loop
+        //    //    //console.log(value.RFID);
+        //    //    if (value.ReaderNo == ReaderNo && value.mAttPortId == mAttPortId) {
+        //    //        $scope.demoIData = value.RFID;
+        //    //    }
+        //    //});
+        //};
+
+
+
+		 <h3 class="heading_a uk-margin-bottom">Employee Map</h3>
+            <ul id="filter" class="uk-subnav uk-subnav-pill">
+                <li class="uk-active" data-uk-filter="">
+                    <a href="#">All</a>
+                </li>
+                <div ng-repeat="Iteam in Location">
+                    <li data-uk-filter="{{Iteam.mZoneId}}">
+                        <a href="#">{{Iteam.Zone}}</a>
+                    </li>
+                </div>
+            </ul>
+            <div class="uk-grid uk-grid-width-small-1-2 uk-grid-width-medium-1-3 uk-grid-width-large-1-4 uk-margin-large-bottom hierarchical_show" data-uk-grid="{gutter: 20, controls: '#filter'}">
+
+                <div data-uk-filter="{{Iteam.mZoneId}},{{Iteam.mFloorMasterId}},mudassarinamdar@gmail.com" ng-repeat="Iteam in Areas">
+                    <div class="md-card">
+                        <div class="md-card-toolbar">
+                            @*<div class="md-card-toolbar-actions">
+                                    <div class="md-card-head-subtext uk-text-success" ng-repeat="mI in PortColl | filter:{RoomName: Iteam.RoomName}">
+                                        <i class="md-card-head-icon uk-margin-right"></i>
+                                        <span>{{(FillterIData | filter:{Reader: mI.ReaderNo, PortId:mI.AttPortId}).length}}</span>
+                                    </div>
+                                </div>*@
+                            <h3 class="md-card-toolbar-heading-text">
+                                {{Iteam.FloorName}} <span class="route_km"></span>
+                            </h3>
+                        </div>
+
+                        <div class="md-card-content">
+                            <div ng-repeat="mI in Areas | filter:{mFloorMasterId : Iteam.mFloorMasterId}">
+
+                                <div class="md-list" ng-repeat="rIds in FillterIData | filter:{mFloorMasterId : mI.mFloorMasterId}">
+
+                                    <span class="uk-text-small uk-text-muted uk-text-truncate">
+                                        <a ng-click="setInformation(rIds,Iteam.FloorName)" data-uk-modal="{target:'#modal_overflow'}" data-uk-tooltip="{cls:'long-text'}" title="Name :{{rIds.Name}}</br> Agency: {{rIds.Agency}}</br> Designation: {{rIds.Designation}}</br> SkillCategory :{{rIds.SkillCategory}}</br> WorkCategory :{{rIds.WorkCategory}}</br> Activity :{{rIds.Activity}}"><i class="material-icons md-36  uk-text-success">&#xE8B4;</i>{{rIds.Name}}</a>
+                                    </span>                                 
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>

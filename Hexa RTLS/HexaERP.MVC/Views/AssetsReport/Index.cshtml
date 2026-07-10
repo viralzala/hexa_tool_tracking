@@ -1,0 +1,648 @@
+﻿@{
+    ViewBag.Title = "Index";
+
+    if (Session["SortCode"] != null)
+    {
+        Layout = "~/Views/Shared/_Admin.cshtml";
+    }
+    else
+    {
+        Response.Redirect("/AppUser");
+    }
+}
+
+@section head
+{
+    <!-- additional styles for plugins -->
+    <!-- htmleditor (codeMirror) -->
+    @*<link rel="stylesheet" href="~/Content/bower_components/codemirror/lib/codemirror.css">*@
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.common-material.min.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.material.min.css" rel="stylesheet" />
+}
+
+
+<div id="page_content_inner" ng-controller="AssetsReportCtrl">
+    <h3 class="heading_a">SMT Product Report</h3><br />
+    <form id="FormSearchEngin" role="form" enctype="multipart/form-data">
+        <div class="uk-grid" data-uk-grid-margin>
+            <div class="uk-width-medium-6-10">
+                <div class="md-card">
+                    <div class="md-card-content">
+                        <div class="uk-grid">
+                            <div class="uk-width-large-1-3 uk-width-medium-1-1">
+                                <div class="uk-input-group">
+                                    <span class="uk-input-group-addon"><i class="uk-input-group-icon uk-icon-calendar"></i></span>
+                                    <label for="kUI_datetimepicker_range_start" class="uk-form-label">Start date:</label>
+                                    @*<input id="kUI_datetimepicker_range_start" name="fromDate" />*@
+                                    <input type="datetime-local" class="md-input label-fixed" id="dateFrom" name="fromDate" data-format="dd/MM/yyyy HH:mm:ss PP" />
+                                    @*<label for="uk_dp_start"><b>Start Date</b> </label>
+                                        <input class="md-input label-fixed" type="text" ng-model="fromDate" id="uk_dp_start">*@
+                                </div>
+                            </div>
+
+                            <div class="uk-width-large-1-3 uk-width-1-1">
+                                <div class="uk-input-group">
+                                    <span class="uk-input-group-addon"><i class="uk-input-group-icon uk-icon-calendar"></i></span>
+                                    <label for="kUI_datetimepicker_range_end" class="uk-form-label">End date:</label>
+                                    @*<input id="kUI_datetimepicker_range_end" name="toDate" />*@
+                                    <input class="md-input label-fixed" type="datetime-local" id="toDate" name="toDate" data-format="dd/MM/yyyy HH:mm:ss PP" />
+                                    @*<label for="uk_dp_end"><b>End Date</b> </label>
+                                        <input class="md-input label-fixed" type="text" ng-model="toDate" id="uk_dp_end">*@
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="uk-width-medium-3-10 uk-row-first">
+
+            </div>
+        </div>
+        <div class="uk-grid" data-uk-grid-margin>
+
+            <div class="uk-width-medium-1-4">
+                <div class="md-card">
+                    <div class="md-card-content">
+                        <div class="parsley-row">
+                            <span class="uk-form-help-block">
+                                <b>
+                                    @*<i class="uk-icon-barcode"></i>*@
+                                    Ble
+                                </b>
+                            </span>
+                            <div class="md-input-wrapper md-input-filled">
+                                <input type="text" class="md-input label-fixed" ng-model="Ble" name="Ble" id="Ble">
+                            </div>
+                        </div>
+                        <div class="parsley-row">
+                            <span class="uk-form-help-block">
+                                <b>
+                                    Status
+                                </b>
+                            </span>
+                            <input id="Status"
+                                   class="md-btn md-btn-wave waves-effect waves-button"
+                                   name="Status"
+                                   ng-model="Status"
+                                   required
+                                   placeholder="Select Status" />
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-width-medium-1-4">
+                <div class="md-card">
+                    <div class="md-card-content">
+                        <div class="uk-grid">
+                            <div class="uk-width-large-1-1">
+                                <div class="parsley-row">
+                                    <span class="uk-form-help-block">
+                                        <b>
+                                            SerialNumber
+                                        </b>
+                                    </span>
+                                    <div class="md-input-wrapper md-input-filled">
+                                        <input type="text"
+                                               class="md-input label-fixed"
+                                               ng-model="SerialNumber"
+                                               name="SerialNumber"
+                                               id="SerialNumber">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="uk-grid">
+                            <div class="uk-width-large-1-1">
+                                <div class="parsley-row">
+                                    <span class="uk-form-help-block">
+                                        <b>
+                                            PartNumber
+                                        </b>
+                                    </span>
+                                    <div class="md-input-wrapper md-input-filled">
+                                        <input type="text"
+                                               class="md-input label-fixed"
+                                               ng-model="PartNumber"
+                                               name="PartNumber"
+                                               id="PartNumber">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="uk-grid">
+                            <div class="uk-width-large-1-1">
+                                <div class="parsley-row">
+                                    <span class="uk-form-help-block">
+                                        <b>
+                                            Lot
+                                        </b>
+                                    </span>
+                                    <div class="md-input-wrapper md-input-filled">
+                                        <input type="text"
+                                               class="md-input label-fixed"
+                                               ng-model="Lot"
+                                               name="Lot"
+                                               id="Lot">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-width-medium-1-4" style="display:none">
+                <div class="md-card">
+                    <div class="md-card-content">
+                        <div class="uk-form-row">
+                            <div class="uk-grid" data-uk-grid-margin="">
+                                <div class="uk-width-1-1">
+                                    <div class="parsley-row">
+                                        <span class="uk-form-help-block"><b>Location</b></span>
+                                        <input class="md-btn md-btn-wave waves-effect waves-button"
+                                               id="mSiteMasterId"
+                                               name="mSiteMasterId"
+                                               ng-model="Iform.mSiteMasterId"
+                                               placeholder="Select Location" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="uk-form-row">
+                            <div class="uk-grid" data-uk-grid-margin="">
+                                <div class="uk-width-medium-1-1 uk-row-first">
+                                    <div class="parsley-row">
+                                        <span class="uk-form-help-block"><b> Zone</b></span>
+                                        <select id="mZoneId" name="mZoneId" ng-model="Iform.mZoneId" class="uk-form-width-medium"></select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-width-medium-1-4">
+                <div class="md-card">
+                    <div class="md-card-content">
+                        <div class="uk-form-row">
+                            <div class="parsley-row">
+
+                                <button type="button" class="md-btn md-btn-primary uk-margin-small-top"
+                                        id="formSearchEngineSubmit">
+                                    View
+                                </button>
+                                <span class="uk-form-help-block">
+                                    <strong>
+                                        Submit To Get Asset Report
+                                    </strong>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*<div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-medium-2-10 uk-row-first">
+                </div>
+                <div class="uk-width-medium-8-10">
+
+                </div>
+            </div>*@
+    </form>
+    <hr />
+    <div class="uk-grid" data-uk-grid-margin="">
+        <div class="uk-width-1-1">
+            <div class="md-card">
+                <div class="md-card-content">
+
+                    <div class="uk-grid">
+                        <div class="uk-width-large-1-2 uk-row-first">
+                            <div class="md-card">
+                                <div class="md-card-content">
+                                    <div class="uk-input-group">
+                                        <span class="uk-input-group-addon">
+                                            <i class="uk-icon-search"></i>
+                                        </span>
+                                        <div class="md-input-wrapper md-input-filled">
+                                            <label for="product_edit_quantity_control"><strong> Filter</strong></label>
+                                            <input type="text" class="md-input label-fixed" ng-model="assetFilter">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="uk-width-large-1-2">
+                            <div class="md-card">
+                                <div class="md-card-content">
+                                    <div class="scrum_task critical">
+                                        <a class="md-btn md-btn-flat scrum_task_title" href="@Url.Action("ExportExcelAsset","AssetsReport")">Excel Export</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="printablediv">
+                        <div class="scrum_task success">
+                            <strong> Total Records <h1>{{totalRecords}}</h1></strong>
+                        </div>
+                        <div class="uk-overflow-container">
+                            <div class="table-responsive">
+                                <table class="uk-table uk-table-hover" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr class="uk-text-nowrap">
+                                            <th>
+                                                <strong>
+                                                    Part Number
+                                                </strong>
+                                            </th>
+                                            <th>
+                                                <strong>
+                                                    Lot
+                                                </strong>
+                                            </th>
+
+                                            <th>
+                                                <strong>
+                                                    Serial No
+                                                </strong>
+                                            </th>
+                                            <th>
+                                                <strong>
+                                                    Quantity
+                                                </strong>
+                                            </th>
+                                            <th>
+                                                <strong>
+                                                    Status
+                                                </strong>
+                                            </th>
+                                            <th>
+                                                <strong>
+                                                    Customer Code
+                                                </strong>
+                                            </th>
+                                            <th>
+                                                <strong>
+                                                    Part Id
+                                                </strong>
+                                            </th>
+                                            <th>
+                                                <strong>
+                                                    Ble
+                                                </strong>
+                                            </th>
+                                            <th>
+                                                <strong>
+                                                    Shelf Name
+                                                </strong>
+                                            </th>
+                                            <th>
+                                                <strong>
+                                                    Remark
+                                                </strong>
+                                            </th>
+                                            <th>
+                                                <strong>
+                                                    Comment
+                                                </strong>
+                                            </th>
+                                            <th>
+                                                <strong>
+                                                    Created By
+                                                </strong>
+                                            </th>
+                                            <th>
+                                                <strong>
+                                                    Created Date
+                                                </strong>
+                                            </th>
+                                            <th>
+                                                <strong>
+                                                    Modified By
+                                                </strong>
+                                            </th>
+                                            <th>
+                                                <strong>
+                                                    Modified Date
+                                                </strong>
+                                            </th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="Iteam in AssetReportList | filter : assetFilter track by $index">
+                                            <td class="uk-table-nowrap">
+                                                <span class="uk-text-small">
+                                                    <strong>  {{ Iteam.PartNumber}}</strong>
+                                                </span>
+                                            </td>
+                                            <td class="uk-table-nowrap">
+                                                <span class="uk-text-small">
+                                                    <strong>  {{ Iteam.Lot}}</strong>
+                                                </span>
+                                            </td>
+                                            <td class="uk-table-nowrap">
+                                                <span class="uk-text-small">
+                                                    {{ Iteam.SerialNumber}}
+                                                </span>
+                                            </td>
+                                            <td class="uk-table-nowrap">
+                                                <span class="uk-text-small">
+                                                    {{ Iteam.Quantity}}
+                                                </span>
+                                            </td>
+                                            <td class="uk-table-nowrap">
+                                                <span class="uk-text-small">
+                                                    {{ Iteam.Status}}
+                                                </span>
+                                            </td>
+                                            <td class="uk-table-nowrap">
+                                                <span class="uk-text-small">
+                                                    {{ Iteam.CustomerCode}}
+                                                </span>
+                                            </td>
+                                            <td class="uk-table-nowrap">
+                                                <span class="uk-text-small">
+                                                    {{ Iteam.PartId}}
+                                                </span>
+                                            </td>
+                                            <td class="uk-table-nowrap">
+                                                <span class="uk-text-small">
+                                                    {{ Iteam.Ble}}
+                                                </span>
+                                            </td>
+                                            <td class="uk-table-nowrap">
+                                                <span class="uk-text-small">
+                                                    {{ Iteam.ShelfName}}
+                                                </span>
+                                            </td>
+                                            <td class="uk-table-nowrap">
+                                                <span class="uk-text-small">
+                                                    {{ Iteam.Remark}}
+                                                </span>
+                                            </td>
+                                            <td class="uk-table-nowrap">
+                                                <span class="uk-text-small">
+                                                    {{ Iteam.Comment}}
+                                                </span>
+                                            </td>
+                                            <td class="uk-table-nowrap">
+                                                <span class="uk-text-small">
+                                                    {{ Iteam.CreatedBy}}
+                                                </span>
+                                            </td>
+                                            <td class="uk-table-nowrap">
+                                                <span class="uk-text-small">
+                                                    {{ Iteam.CreatedDate | jsonDate :'dd-MMM-yy hh:mm a'}}
+                                                </span>
+                                            </td>
+                                            <td class="uk-table-nowrap">
+                                                <span class="uk-text-small">
+                                                    {{ Iteam.ModifiedBy}}
+                                                </span>
+                                            </td>
+                                            <td class="uk-table-nowrap">
+                                                <span class="uk-text-small">
+                                                    {{ Iteam.ModifiedDate | jsonDate :'dd-MMM-yy hh:mm a'}}
+                                                </span>
+                                            </td>
+                                            <td class="uk-table-nowrap">
+                                                <a data-uk-tooltip="{cls:'uk-tooltip-small',pos:'bottom'}" title="Click here to view asset history" data-uk-modal="{target:'#Asset_moreDetails'}" ng-click="AssetMoreDetail(Iteam.mSMTProductId)">
+                                                    View History
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td>
+                                                <span><h1> {{AssetReportList.length?AssetReportList.length:0}}</h1></span>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                        <ul class="uk-pagination uk-margin-medium-top uk-margin-medium-bottom">
+                            <li ng-if="currentPage <= 1">
+                                <a class="uk-disabled">
+                                    <span>
+                                        <i class="uk-icon-angle-double-left">
+                                        </i>
+                                    </span>
+                                </a>
+                            </li>
+                            <li ng-if="currentPage > 1">
+                                <a ng-click="pageChanged(currentPage - 1,'ASSETREPORT')">
+                                    <span>
+                                        <i class="uk-icon-angle-double-left">
+                                        </i>
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="uk-active">
+                                <a ng-click="pageChanged(currentPage,'ASSETREPORT')">
+                                    <span>
+                                        {{currentPage}}
+                                    </span>
+                                </a>
+                            </li>
+                            <li ng-if="totalRecords > 10">
+                                <a ng-click="pageChanged(currentPage + 1,'ASSETREPORT')">
+                                    {{currentPage + 1}}
+                                </a>
+                            </li>
+                            <li ng-if="totalRecords > 20">
+                                <a ng-click="pageChanged(currentPage + 2,'ASSETREPORT')">
+                                    {{currentPage + 2}}
+                                </a>
+                            </li>
+                            <li><span>&hellip;</span></li>
+                            <li>
+                                <a ng-click="pageChanged(currentPage + 1,'ASSETREPORT')">
+                                    <i class="uk-icon-angle-double-right">
+                                    </i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="uk-modal uk-modal-card-fullscreen" id="Asset_moreDetails">
+        <div class="uk-modal-dialog uk-modal-dialog-blank">
+            <div class="md-card uk-height-viewport">
+                <div class="md-card-toolbar">
+                    <span class="md-icon material-icons uk-modal-close">
+                        <i class="md-icon material-icons md-card-overlay-toggler"></i>
+                    </span>
+                    <h3 class="md-card-toolbar-heading-text">
+                        <strong> SMT Product Tracking History</strong>
+                    </h3>
+                </div>
+                <div class="md-card-content">
+
+                    <div class="md-card uk-margin-medium-bottom">
+                        <div class="md-card-content">
+                            <div class="uk-overflow-container">
+                                <div class="table-responsive">
+                                    <table class="uk-table" cellspacing="0" width="100%" id="tblHistory">
+                                        <thead>
+                                            <tr class="uk-text-nowrap">
+                                                <th><b>DateTime</b></th>
+                                                <th><b>Record Changes</b></th>
+                                                <th><b>Action</b></th>
+                                                <th><b>Record Owner</b></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="Iteam in AssetDetailList | filter : assetFilter track by $index">
+                                                <td>
+                                                    <span class="uk-width-2-10  uk-text-small">
+                                                        {{Iteam.DmlTimestamp | jsonDate :'dd-MMM-yy hh:mm a'}}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <div class="md-list-content">
+                                                        <div ng-repeat="(k,v) in Iteam.outerChange">
+                                                            <div class="uk-text-small uk-text-muted">{{v}}</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="uk-text-small">
+                                                    <span class="uk-text-small uk-badge uk-notify-message-primary wrap_controls">
+                                                        {{ Iteam.DmlType }}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span class="uk-text-small uk-badge uk-notify-message-info wrap_controls">
+                                                        {{ Iteam.DmlCreatedBy }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="6">
+                                                    <ul class="uk-pagination uk-margin-medium-top uk-margin-medium-bottom">
+                                                        <li ng-if="currentPage <= 1">
+                                                            <a class="uk-disabled">
+                                                                <span>
+                                                                    <i class="uk-icon-angle-double-left">
+                                                                    </i>
+                                                                </span>
+                                                            </a>
+                                                        </li>
+                                                        <li ng-if="currentPage > 1">
+                                                            <a ng-click="pageChanged(currentPage - 1,'ASSETMOREDETAILREPORT')">
+                                                                <span>
+                                                                    <i class="uk-icon-angle-double-left">
+                                                                    </i>
+                                                                </span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="uk-active">
+                                                            <a ng-click="pageChanged(currentPage,'ASSETMOREDETAILREPORT')">
+                                                                <span>
+                                                                    {{currentPage}}
+                                                                </span>
+                                                            </a>
+                                                        </li>
+                                                        <li ng-if="TotalAuditRecord > 10">
+                                                            <a ng-click="pageChanged(currentPage + 1,'ASSETMOREDETAILREPORT')">
+                                                                {{currentPage + 1}}
+                                                            </a>
+                                                        </li>
+                                                        <li ng-if="TotalAuditRecord > 20">
+                                                            <a ng-click="pageChanged(currentPage + 2,'ASSETMOREDETAILREPORT')">
+                                                                {{currentPage + 2}}
+                                                            </a>
+                                                        </li>
+                                                        <li><span>&hellip;</span></li>
+                                                        <li>
+                                                            <a ng-click="pageChanged(currentPage + 1,'ASSETMOREDETAILREPORT')">
+                                                                <i class="uk-icon-angle-double-right">
+                                                                </i>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+@section foot
+{
+
+    <!-- kendo UI -->
+    <script src="@Url.Content("~/Content/assets/js/kendoui_custom.min.js")"
+            type="text/javascript"></script>
+
+    <!--  kendoui functions -->
+    <script src="@Url.Content("~/Content/assets/js/pages/kendoui.min.js")"
+            type="text/javascript"></script>
+
+    <script>
+        function printDiv(divID) {
+            var divElements = document.getElementById(divID).innerHTML;
+            var oldPage = document.body.innerHTML;
+            document.body.innerHTML = "<html><head><title></title></head><body>" + divElements + "</body>";
+            window.print();
+            document.body.innerHTML = oldPage;
+        }
+
+        function printDiv(divID) {
+            var divElements = document.getElementById(divID).innerHTML;
+            var oldPage = document.body.innerHTML;
+            document.body.innerHTML = "<html><head><title></title></head><body>" + divElements + "</body>";
+            window.print();
+            document.body.innerHTML = oldPage;
+        }
+    </script>
+
+    <!-- additional styles for plugins -->
+    <!-- kendo UI -->
+    <script src="~/Scripts/HexaAgular/AssetsReport.js"></script>
+    @*<script>
+        $(document).ready(function () {
+            //$("#dateFrom").val(new Date().toJSON().slice(0, 19));
+            //$("#toDate").val(new Date().toJSON().slice(0, 19));
+            var d = new Date();
+            //console.log(d);
+            function zeroPadded(val) {
+                if (val >= 10)
+                    return val;
+                else
+                    return '0' + val;
+            }
+            $("#dateFrom").val(d.getFullYear() + "-" + zeroPadded(d.getMonth() + 1) + "-" + zeroPadded(d.getDate() - 1) + "T" + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds());
+            $('#toDate').val(d.getFullYear() + "-" + zeroPadded(d.getMonth() + 1) + "-" + zeroPadded(d.getDate()) + "T" + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds());
+            //var d = new Date();
+            //d = (new Date().toISOString().substring(0, 10) + " " + ('0' + d.getHours()).slice(-2) + ":" + ('0' + d.getMinutes()).slice(-2) + " " + (d.getHours() >= 12 ? 'PM' : 'AM'));
+            //$("#dateFrom").val(d);
+            //$("#kUI_datetimepicker_range_end").val(d);
+
+        });
+    </script>*@
+}

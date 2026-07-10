@@ -1,0 +1,497 @@
+﻿@{
+    ViewBag.Title = "Index";
+
+    if (Session["SortCode"] != null)
+    {
+        if (Convert.ToString(Session["SortCode"]) == "SA")
+        {
+            Layout = "~/Views/Shared/_Site.cshtml";
+        }
+        else if (Convert.ToString(Session["SortCode"]) == "AD")
+        {
+            Layout = "~/Views/Shared/_Admin.cshtml";
+        }
+        else if (new string[] { "OT", "SA" }.Contains(Convert.ToString(Session["SortCode"])))
+        {
+            Layout = "~/Views/Shared/_Users.cshtml";
+        }
+    }
+    else
+    {
+
+    }
+}
+
+
+@section head
+{
+    <!-- additional styles for plugins -->
+    <!-- htmleditor (codeMirror) -->
+    <link rel="stylesheet" href="~/Content/bower_components/codemirror/lib/codemirror.css">
+
+    <script src="~/Scripts/HexaAgular/EmployeeTrackSummary.js"></script>
+    <!-- additional styles for plugins -->
+    <!-- kendo UI -->
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.common-material.min.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.material.min.css" rel="stylesheet" />
+
+    @*<link href="@Url.Content("~/Content/bower_components/kendo-ui/styles/kendo.common-material.min.css")"
+              rel="stylesheet" type="text/css" media="all" />
+        <link href="@Url.Content("~/Content/bower_components/kendo-ui/styles/kendo.material.min.css")"
+              rel="stylesheet" type="text/css" media="all" id="kendoCSS" />*@
+
+}
+<div id="page_content_inner" ng-controller="EmployeeTrackSummaryCtrl">
+
+    <h3 class="heading_a">Employee Track Report</h3><br />
+    <form id="_formColl">
+        <div class="uk-grid" data-uk-grid-margin>
+            <div class="uk-width-medium-1-4">
+                <div class="md-card">
+                    <div class="md-card-content">
+                        <div class="uk-form-row">
+                            <div class="uk-grid" data-uk-grid-margin="">
+                                <div class="uk-width-1-1">
+                                    <div class="parsley-row">
+                                        <span class="uk-form-help-block"><b>Location</b></span>
+                                        <input class="md-btn md-btn-wave waves-effect waves-button" id="mSiteMasterId" name="mSiteMasterId" ng-model="Iform.mSiteMasterId" required placeholder="Select Location" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="uk-form-row">
+                            <div class="uk-grid" data-uk-grid-margin="">
+                                <div class="uk-width-medium-1-1 uk-row-first">
+                                    <div class="parsley-row">
+                                        <span class="uk-form-help-block"><b> Zone</b></span>
+                                        @*<input id="mZoneId" name="mZoneId" ng-model="Iform.mZoneId" placeholder="Select Zone" />*@
+                                        <select id="mZoneId" name="mZoneId" ng-model="Iform.mZoneId" class="uk-form-width-medium"></select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="uk-form-row">
+                            <div class="uk-grid" data-uk-grid-margin="">
+                                <div class="uk-width-medium-1-1 uk-row-first">
+                                    <div class="parsley-row">
+                                        <span class="uk-form-help-block"><b>Sub Zone</b></span>
+                                        <input id="mFloorMasterId" name="mFloorMasterId" ng-model="Iform.mFloorMasterId" required placeholder="Select Sub Zone" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="uk-width-medium-1-4">
+                <div class="md-card">
+                    <div class="md-card-content">
+                        <div class="uk-grid" data-uk-grid-margin>
+                            <div class="uk-width-1-1">
+                                <div class="parsley-row">
+                                    <label for="wizard_fullname"><b>Employee Name</b> </label>
+                                    <input type="text" id="EmployeeName" name="EmployeeName" ng-model="EmployeeName" class="md-input label-fixed" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="uk-grid">
+                            <div class="uk-width-large-1-1">
+                                <div class="parsley-row">
+                                    <label for="wizard_address"><b>Employee Id</b> </label>
+                                    <input type="text" id="EmployeeId" name="EmployeeId" ng-model="EmployeeId" required class="md-input label-fixed" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="uk-grid">
+                            <div class="uk-width-large-1-1">
+                                <div class="parsley-row">
+                                    <span class="uk-form-help-block"><b>Agency</b></span>
+                                    <input id="mAgencyId" class="md-btn md-btn-wave waves-effect waves-button" name="mAgencyId" ng-model="Iform.mAgencyId" required placeholder="Select Agency" />
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="uk-width-medium-1-4">
+                <div class="md-card">
+                    <div class="md-card-content">
+                        <div class="uk-grid">
+                            <div class="uk-width-large-1-2">
+                                <div class="parsley-row">
+                                    <span class="uk-form-help-block"><b>Designation</b></span>
+                                    <input id="mDesignationId" class="md-btn md-btn-wave waves-effect waves-button" name="mDesignationId" ng-model="Iform.mDesignationId" required placeholder="Select Designation" />
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="uk-grid">
+                            <div class="uk-width-large-1-2">
+                                <div class="parsley-row">
+                                    <span class="uk-form-help-block"><b>Skill Category</b></span>
+                                    <input id="mSkillCategoryId" class="md-btn md-btn-wave waves-effect waves-button" name="mSkillCategoryId" ng-model="Iform.mSkillCategoryId" required placeholder="Select Skill" />
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="uk-width-medium-1-4">
+                <div class="md-card">
+                    <div class="md-card-content">
+                        <div class="uk-grid">
+                            <div class="uk-width-large-1-2">
+                                <div class="parsley-row">
+                                    <span class="uk-form-help-block"><b>Work Category</b></span>
+                                    <input id="mWorkCategoryId" class="md-btn md-btn-wave waves-effect waves-button" name="mWorkCategoryId" ng-model="Iform.mWorkCategoryId" required placeholder="Select Work" />
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="uk-grid">
+                            <div class="uk-width-large-1-2">
+                                <div class="parsley-row">
+                                    <span class="uk-form-help-block"><b>Activity</b></span>
+                                    <input id="mActivityId" class="md-btn md-btn-wave waves-effect waves-button" name="mActivityId" ng-model="Iform.mActivityId" required placeholder="Select Activity" />
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="uk-grid" data-uk-grid-margin>
+            <div class="uk-width-medium-7-10">
+                <div class="md-card">
+                    <div class="md-card-content">
+                        <div class="uk-grid">
+                            <div class="uk-width-large-1-3 uk-width-medium-1-1">
+                                <div class="uk-input-group">
+                                    <span class="uk-input-group-addon"><i class="uk-input-group-icon uk-icon-calendar"></i></span>
+                                    <label for="kUI_datetimepicker_range_start" class="uk-form-label">Start date:</label>
+                                    @*<input id="kUI_datetimepicker_range_start" name="fromDate" />*@
+                                    <input type="datetime-local" class="md-input label-fixed" id="dateFrom" name="fromDate" data-format="dd/MM/yyyy HH:mm:ss PP" />
+                                    @*<label for="uk_dp_start"><b>Start Date</b> </label>
+                                        <input class="md-input label-fixed" type="text" ng-model="fromDate" id="uk_dp_start">*@
+                                </div>
+                            </div>
+
+                            <div class="uk-width-large-1-3 uk-width-1-1">
+                                <div class="uk-input-group">
+                                    <span class="uk-input-group-addon"><i class="uk-input-group-icon uk-icon-calendar"></i></span>
+                                    <label for="kUI_datetimepicker_range_end" class="uk-form-label">End date:</label>
+                                    @*<input id="kUI_datetimepicker_range_end" name="toDate" />*@
+                                    <input class="md-input label-fixed" type="datetime-local" id="toDate" name="toDate" data-format="dd/MM/yyyy HH:mm:ss PP" />
+                                    @*<label for="uk_dp_end"><b>End Date</b> </label>
+                                        <input class="md-input label-fixed" type="text" ng-model="toDate" id="uk_dp_end">*@
+                                </div>
+                            </div>
+
+                            <div class="uk-width-large-1-3 uk-width-medium-1-1">
+                                <div class="uk-input-group">
+                                    <span class="uk-input-group-addon"></span>
+                                    <br />
+                                    <a class="md-btn md-btn-primary md-btn-wave-light waves-effect waves-button waves-light" ng-click="SaveFormCollData()">View Report</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="uk-width-medium-3-10 uk-row-first">
+                <div class="md-card">
+                    <div class="md-card-content">
+                        <span class="uk-input-group-addon"></span>
+                        <br />
+                        <a href="@Url.Action("SafetyExportExcelAsync","EmployeeTrackSummary")" class="md-btn md-btn-primary md-btn-wave-light waves-effect waves-button waves-light">Safety Report</a>
+                        <a data-uk-modal="{target:'#mailbox_new_message'}" class="md-btn md-btn-primary md-btn-wave-light waves-effect waves-button waves-light" ng-click="GetEmployess()">Site Attendance</a>
+                        @*<input type="button" class="md-btn md-btn-primary" ng-click="GetEmployess()" value="View Employees" />*@
+                        <input type="reset" class="md-btn md-btn-primary" value="Reset" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+
+    <br />
+
+
+    <div class="uk-grid" data-uk-grid-margin data-uk-grid-match id="user_profile">
+        <div class="uk-width-large-10-12">
+            <div class="md-card" id="printablediv">
+                <div class="user_heading">
+                    <div class="user_heading_menu hidden-print">
+                        <div class="uk-display-inline-block" data-uk-dropdown="{pos:'left-top'}">
+                            @*<a target="_blank" onclick="javascript:printDiv('printablediv')" id="btnprint" class="btn btn-block btn-info"><i class="md-icon material-icons md-icon-light">&#xE5D4;</i></a>*@
+                            <i class="md-icon material-icons md-icon-light">&#xE5D4;</i>
+                            <div class="uk-dropdown uk-dropdown-small">
+                                <ul class="uk-nav">
+                                    @*<li><a class="md-btn md-btn-flat md-btn-flat-primary" href="#" ng-click="export()">PDF</a></li>*@
+                                    <li><a href="@Url.Action("ExportExcel","EmployeeTrackSummary")" class="md-btn md-btn-flat md-btn-flat-primary">Excel</a></li>
+                                    <li><a target="_blank" onclick="javascript:printDiv('printablediv')" id="btnprint" class="md-btn md-btn-flat md-btn-flat-primary"><i class="fa fa-print"></i>Print</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="uk-display-inline-block"><i class="md-icon md-icon-light material-icons" id="page_print">&#xE8ad;</i></div>
+                    </div>
+
+                    <img src="~/Content/assets/img/Sonicwall_logo_final_transparent_black.png" style="height:45px;" />
+                    <div class="user_heading_content">
+                        <h2 class="heading_b uk-margin-bottom">
+                            <span class="uk-text-truncate">Employee Track Report</span>
+                        </h2>
+                    </div>
+                </div>
+                <div class="user_content">
+
+                    <table class="uk-table" id="tblReport">
+                        <thead>
+                            <tr>
+                                <th><b>Employee ID</b></th>
+                                <th><b>Employee Name</b></th>
+                                <th><b>Agency Name</b></th>
+                                <th><b>Designation</b></th>
+                                <th><b>Skill Category</b></th>
+                                <th><b>Work Category</b></th>
+                                <th><b>Activity</b></th>
+                                <th><b>Location</b></th>
+                                <th><b>Zone</b></th>
+
+                                <th>
+                                    <b>   Track Date/Time</b>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="uk-table uk-table-nowrap table_check" ng-repeat="Iteam in EmpColl">
+
+                                <td>
+                                    <span class="uk-text-muted uk-text-small">{{ Iteam.EmployeeId }}</span>
+
+                                </td>
+                                <td>
+                                    <span class="uk-text-muted uk-text-small">{{ Iteam.EmployeeName }}</span>
+                                </td>
+                                <td>
+                                    <span class="uk-text-muted uk-text-small">
+                                        <b> {{Iteam.Agency}}</b>
+                                    </span>
+                                </td>
+                                <td><span class="uk-text-muted uk-text-small">{{ Iteam.Designation}}</span></td>
+                                <td><span class="uk-text-muted uk-text-small">{{ Iteam.SkillCategory }}</span></td>
+                                <td><span class="uk-text-muted uk-text-small">{{ Iteam.WorkCategory }}</span></td>
+                                <td><span class="uk-text-muted uk-text-small">{{ Iteam.Activity }}</span></td>
+                                <td><span class="uk-text-muted uk-text-small">{{ Iteam.Site }}</span></td>
+                                <td><span class="uk-text-muted uk-text-small">{{ Iteam.Zone }}</span></td>
+                                <td class="uk-text-muted uk-text-small">{{Iteam.tDate | jsonDate:'dd MMMM HH:mm:ss'}}</td>
+
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td> <span><h1> {{EmpColl.length?EmpColl.length:0}}</h1></span> </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <br />
+    <div class="md-card uk-margin-medium-bottom">
+        <div class="md-card-content">
+            <table id="dt_default" class="uk-table" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th><b>Employee ID</b> </th>
+                        <th><b>Employee Name</b></th>
+                        <th><b>Agency Name</b></th>
+                        <th><b>Designation</b></th>
+                        <th><b>Skill Category</b></th>
+                        <th><b>Work Category</b></th>
+                        <th><b>Activity</b></th>
+                        <th><b>Location</b></th>
+                        <th><b>Zone</b></th>
+                        <th>
+                            <b> Track Date/Time</b>
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+
+    <div>
+        <div class="uk-modal" id="mailbox_new_message">
+            <div class="uk-modal-dialog uk-modal-dialog-large" style="width:95%;">
+                <button class="uk-modal-close uk-close" type="button"></button>
+                <div class="md-card" id="printabledivEmp">
+                    <div class="user_heading">
+                        <div class="user_heading_menu hidden-print">
+                            <div class="uk-display-inline-block" data-uk-dropdown="{pos:'left-top'}">
+                                <i class="md-icon material-icons md-icon-light">&#xE5D4;</i>
+                                <div class="uk-dropdown uk-dropdown-small">
+                                    <ul class="uk-nav">
+                                        <li>
+                                            <a target="_blank" href="@Url.Action("EmpWiseExportExcel","EmployeeTrackSummary")" id="btnprint" class="md-btn md-btn-flat md-btn-flat-primary">
+                                                Excel
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <img src="~/Content/assets/img/Sonicwall_logo_final_transparent_black.png" style="height:45px;" />
+                        <div class="user_heading_content">
+                            <h4 class="heading_b uk-margin-bottom">
+                                <span class="uk-text-truncate">No.of Employees</span>
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="md-card-content">
+                        <table class="uk-table">
+                            <thead>
+                                <tr>
+                                    <th><b>Employee ID</b></th>
+                                    <th><b>Employee Name</b></th>
+                                    <th><b>Agency Name</b></th>
+                                    <th><b>Designation</b></th>
+                                    <th><b>Skill Category</b></th>
+                                    <th><b>Work Category</b></th>
+                                    <th><b>Activity</b></th>
+                                    <th><b>Location</b></th>
+                                    <th><b>Zone</b></th>
+                                    <th>
+                                        <b> Sub Zone</b>
+                                    </th>
+                                    <th>
+                                        <b>   Track Date/Time</b>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="uk-table uk-table-nowrap table_check" ng-repeat="Iteam in EmpColl |  unique:'EmployeeName'">
+                                    <td>
+                                        <span class="uk-text-muted uk-text-small">{{ Iteam.EmployeeId }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="uk-text-muted uk-text-small">{{ Iteam.EmployeeName }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="uk-text-muted uk-text-small">
+                                            <b> {{Iteam.Agency}}</b>
+                                        </span>
+                                    </td>
+                                    <td><span class="uk-text-muted uk-text-small">{{ Iteam.Designation}}</span></td>
+                                    <td><span class="uk-text-muted uk-text-small">{{ Iteam.SkillCategory }}</span></td>
+                                    <td><span class="uk-text-muted uk-text-small">{{ Iteam.WorkCategory }}</span></td>
+                                    <td><span class="uk-text-muted uk-text-small">{{ Iteam.Activity }}</span></td>
+                                    <td><span class="uk-text-muted uk-text-small">{{ Iteam.Site }}</span></td>
+                                    <td><span class="uk-text-muted uk-text-small">{{ Iteam.Zone }}</span></td>
+                                    <td><span class="uk-text-muted uk-text-small">{{ Iteam.FloorName }}</span></td>
+                                    <td class="uk-text-muted uk-text-small">{{Iteam.tDate | jsonDate:'dd MMMM HH:mm:ss'}}</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td><span><h1>{{(EmpColl |  unique:'EmployeeName').length}}</h1> </span> </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+@section foot
+{
+    <!-- page specific plugins -->
+    <!-- datatables -->
+    <script src="~/Content/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+    <!-- datatables buttons-->
+    <script src="~/Content/bower_components/datatables-buttons/js/dataTables.buttons.js"></script>
+
+
+
+
+
+
+    <!-- datatables custom integration -->
+    <script src="~/Content/assets/js/custom/datatables/datatables.uikit.min.js"></script>
+    <!--  datatables functions -->
+    <script src="~/Content/assets/js/pages/plugins_datatables.min.js"></script>
+
+    @*<!-- page specific plugins -->
+        <!-- ionrangeslider -->
+        <script src="~/Content/bower_components/ion.rangeslider/js/ion.rangeSlider.min.js"></script>
+        <!-- htmleditor (codeMirror) -->
+        <script src="~/Content/assets/js/uikit_htmleditor_custom.min.js"></script>
+        <!-- inputmask-->
+        <script src="~/Content/bower_components/jquery.inputmask/dist/jquery.inputmask.bundle.js"></script>
+        <!--  forms advanced functions -->
+        <script src="~/Content/assets/js/pages/forms_advanced.min.js"></script>*@
+
+    <!-- page specific plugins -->
+    <!-- kendo UI -->
+
+    <script src="@Url.Content("~/Content/assets/js/kendoui_custom.min.js")"
+            type="text/javascript"></script>
+
+    <!--  kendoui functions -->
+    <script src="@Url.Content("~/Content/assets/js/pages/kendoui.min.js")"
+            type="text/javascript"></script>
+
+    <script>
+        function printDiv(divID) {
+            var divElements = document.getElementById(divID).innerHTML;
+            var oldPage = document.body.innerHTML;
+            document.body.innerHTML = "<html><head><title></title></head><body>" + divElements + "</body>";
+            window.print();
+            document.body.innerHTML = oldPage;
+        }
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            //$("#dateFrom").val(new Date().toJSON().slice(0, 19));
+            //$("#toDate").val(new Date().toJSON().slice(0, 19));
+            var d = new Date();
+            //console.log(d);
+            function zeroPadded(val) {
+                if (val >= 10)
+                    return val;
+                else
+                    return '0' + val;
+            }
+            $("#dateFrom").val(d.getFullYear() + "-" + zeroPadded(d.getMonth() + 1) + "-" + zeroPadded(d.getDate() - 1) + "T" + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds());
+            $('#toDate').val(d.getFullYear() + "-" + zeroPadded(d.getMonth() + 1) + "-" + zeroPadded(d.getDate()) + "T" + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds());
+            //var d = new Date();
+            //d = (new Date().toISOString().substring(0, 10) + " " + ('0' + d.getHours()).slice(-2) + ":" + ('0' + d.getMinutes()).slice(-2) + " " + (d.getHours() >= 12 ? 'PM' : 'AM'));
+            //$("#dateFrom").val(d);
+            //$("#kUI_datetimepicker_range_end").val(d);
+
+        });
+    </script>
+}

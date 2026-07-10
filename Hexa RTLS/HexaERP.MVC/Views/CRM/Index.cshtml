@@ -1,0 +1,673 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Users.cshtml";
+}
+
+
+@section head
+{
+    <!-- themes -->
+    <link rel="stylesheet" href="~/Content/assets/css/themes/themes_combined.min.css" media="all">
+    <!-- kendo -->
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.common-material.min.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.material.min.css" rel="stylesheet" />
+}
+
+<div id="page_heading" data-uk-sticky="{ top: 48, media: 960 }">
+    <span class="uk-text-upper uk-text-small"></span>
+</div>
+<div id="page_content_inner">
+    <div class="uk-grid" data-uk-grid-margin="">
+        <div class="uk-width-medium-1-1 uk-row-first">
+            <div class="md-card">
+                <div class="user_heading">
+                    <a class="md-fab md-fab-primary" href="#mailboxCompose" data-uk-tooltip="{cls:'uk-tooltip-small',pos:'left'}" title="Send Mails" data-uk-modal="{center:true}">
+                        <i class="md-list-addon-icon material-icons">&#xE158;</i>
+                    </a>
+                </div>
+
+                <div class="user_content">
+                    <div class="dt_colVis_buttons"></div>
+                    <table id="dt_tableExport" class="uk-table uk-table-nowrap table_check" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Name</th>
+                                <th>Contact</th>
+                                <th>Created On</th>
+                                <th>Created By</th>
+                                <th>Lead</th>
+                                <th>Inquiry</th>
+                                <th>Disposition</th>
+                                <th>FollowUp Date/Time</th>
+                                <th>FollowUp Action</th>
+                                <th>Appointment</th>
+                                <th>FollowUp</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="uk-grid" data-uk-grid-margin="">
+        <div class="uk-width-medium-1-2 uk-row-first">
+            <div class="md-card">
+                <div class="md-card-content">
+                    <div class="md-top-bar">
+                        <div class="uk-clearfix">
+                            <div class="md-top-bar-actions-left">
+                                <div class="md-top-bar-checkbox">
+                                    <a style="display: none" id="mbtnrefresh" class="md-fab md-fab-small md-fab-primary"><i class="material-icons">&#xE5D5;</i></a>
+                                </div>
+                                <div class="md-btn-group">
+                                    <a href="#" class="md-btn md-btn-flat md-btn-small md-btn-wave" data-uk-tooltip="{pos:'bottom'}" title="Delete"><i class="material-icons">&#xE872;</i></a>
+                                </div>
+                            </div>
+                            <div class="md-top-bar-actions-right">
+                                <a style="display: block" id="processmail" class="md-fab md-fab-small md-fab-primary"><i class="uk-icon-refresh uk-icon-medium uk-icon-spin"></i></a>
+                                <div class="md-top-bar-icons">
+                                    <i id="mailbox_list_split" class=" md-icon material-icons">&#xE8EE;</i>
+                                    <i id="mailbox_list_combined" class="md-icon material-icons">&#xE8F2;</i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="md-card-list-wrapper" id="mailbox">
+                    <div class="uk-width-large-1-1 uk-container-center">
+                        <div class="md-card-list">
+                            <div class="md-card-list-header heading_list">&nbsp&nbsp&nbsp Today</div>
+                            <div class="md-card-list-header md-card-list-header-combined heading_list" style="display: none">&nbsp&nbsp&nbsp All Leads</div>
+                            <ul class="hierarchical_slide" id="maillist">
+                                <li style="display: none">
+                                    <div class="md-card-list-item-menu" data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
+                                        <a href="#" class="md-icon material-icons">&#xE5D4;</a>
+                                        <div class="uk-dropdown uk-dropdown-small">
+                                            <ul class="uk-nav">
+                                                <li><a href="#"><i class="material-icons">&#xE15E;</i> Reply</a></li>
+                                                <li><a href="#"><i class="material-icons">&#xE149;</i> Archive</a></li>
+                                                <li><a href="#"><i class="material-icons">&#xE872;</i> Delete</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <span class="md-card-list-item-date">20 Oct</span>
+                                    <div class="md-card-list-item-select">
+                                        <input type="checkbox" data-md-icheck />
+                                    </div>
+                                    <div class="md-card-list-item-avatar-wrapper">
+                                        <span class="md-card-list-item-avatar md-bg-cyan">sx</span>
+                                    </div>
+                                    <div class="md-card-list-item-sender">
+                                        <span></span>
+                                    </div>
+                                    <div class="md-card-list-item-subject">
+                                        <div class="md-card-list-item-sender-small">
+                                            <span></span>
+                                        </div>
+                                        <span>Nemo sint repellat est ad velit pariatur tempore.</span>
+                                    </div>
+                                    <div class="md-card-list-item-content-wrapper">
+                                        <div class="md-card-list-item-content">
+                                        </div>
+                                        <form class="md-card-list-item-reply">
+                                            <label for="mailbox_reply_1295">Reply to <span></span></label>
+                                            <textarea class="md-input md-input-full" name="mailbox_reply_1295" id="mailbox_reply_1295" cols="30" rows="4"></textarea>
+                                            <button class="md-btn md-btn-flat md-btn-flat-primary">Send</button>
+                                        </form>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <br />
+            </div>
+        </div>
+
+        <div class="uk-width-medium-1-2 uk-row-first">
+            <div class="md-card">
+                <div class="md-card-content">
+                    <form action="" id="quickdata">
+                        <div class="uk-grid" data-uk-grid-margin="">
+                            <div class="uk-width-medium-1-4 uk-row-first">
+                                <div class="md-input-wrapper md-input-filled">
+                                    <input type="text" required class="md-input" name="Name" id="Nameq" value="">
+                                    <span class="md-input-bar "></span>
+                                </div>
+
+                            </div>
+                            <div class="uk-width-medium-1-4">
+                                <div class="md-input-wrapper md-input-filled">
+                                    <input type="text" class="md-input" name="LastName" id="LastNameq" value="">
+                                    <span class="md-input-bar "></span>
+                                </div>
+                            </div>
+                            <div class="uk-width-medium-1-4 uk-row-first">
+                                <div class="md-input-wrapper md-input-filled">
+                                    <input class="md-input masked_input" required name="Contact" id="Contactq" type="text" data-inputmask="'mask': '9999999999'" data-inputmask-showmaskonhover="false">
+                                    <span class="md-input-bar "></span>
+                                </div>
+                            </div>
+                            <div class="uk-width-medium-1-4">
+                                <div class="md-input-wrapper md-input-filled">
+                                    <input type="text" class="md-input" name="EmailId" id="Emailidq" value="">
+                                    <span class="md-input-bar "></span>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="uk-grid" data-uk-grid-margin="">
+                            <div class="uk-width-medium-1-4 uk-row-first">
+                                <div class="md-input-wrapper md-input-filled">
+                                    <p class="uk-text-muted uk-text-small"><b>Lead Type</b></p>
+
+                                    <input id="ddLeadTypeq" name="TC_LeadTypeId" required placeholder="Select Lead..." />
+                                </div>
+                            </div>
+                            <div class="uk-width-medium-1-4">
+                                <div class="md-input-wrapper md-input-filled">
+                                    <p class="uk-text-muted uk-text-small"><b>Inquiry Type</b></p>
+
+                                    <input id="ddInquiryTypeq" name="TC_InquiryTypeId" required placeholder="Select Inquiry" />
+
+                                </div>
+                            </div>
+                            <div class="uk-width-medium-1-4 uk-row-first">
+                                <div class="md-input-wrapper md-input-filled">
+                                    <p class="uk-text-muted uk-text-small"><b>Lead Disposition</b></p>
+
+                                    <input id="ddLeadDispositionq" name="TC_LeadDispositionId" required placeholder="Select Disposition" />
+
+                                </div>
+                            </div>
+                            <div class="uk-width-medium-1-4">
+                                <div class="md-input-wrapper md-input-filled">
+                                    <p class="uk-text-muted uk-text-small"><b>Source</b></p>
+                                    <div class="parsley-row">
+                                        <input id="ddInquirySourceq" name="TC_InquirySourceId" required placeholder="Select Source" />
+
+                                    </div>
+                                    <span class="md-input-bar "></span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="uk-grid" data-uk-grid-margin="">
+                        <div class="uk-width-medium-1-4">
+                            <div class="md-input-wrapper md-input-filled">
+                                <a class="md-btn md-btn-primary md-btn-small md-btn-wave-light" id="btnquickl" data-uk-tooltip="{cls:'uk-tooltip-small',pos:'left'}" title="Create Lead" data-uk-modal="{center:true}"><i class="material-icons">&#xE150;</i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section foot
+{
+    <div class="uk-modal" id="mailboxCompose">
+        <div class="uk-modal-dialog">
+            <button class="uk-modal-close uk-close" type="button"></button>
+            <form>
+                <div class="uk-modal-header">
+                    <h3 class="uk-modal-title">Compose Message</h3>
+                </div>
+
+                <div class="uk-margin-medium-bottom">
+                    <label for="mail_new_to">Subject</label>
+                    <input type="text" class="md-input" id="mail_Sub" />
+                </div>
+
+                <div class="uk-margin-medium-bottom">
+                    <label for="mail_new_to">Body</label>
+                    <textarea id="wysiwyg_ckeditor" cols="30" rows="20">
+                        Dear,
+                    </textarea>
+                </div>
+                <div class="uk-modal-footer">
+                    <button type="button" id="btnmails" class="uk-float-right md-btn md-btn-flat md-btn-flat-primary">Send</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="md-fab-wrapper md-fab-speed-dial">
+        <a class="md-fab md-fab-primary" data-uk-tooltip="{pos:'right'}" title="Lead Menu"><i class="material-icons">&#xE5D4;</i></a>
+        <div class="md-fab-wrapper-small">
+            <a class="md-fab md-fab-small md-fab-success" id="btnnewlead" href="#mailbox_new_message" data-uk-tooltip="{cls:'uk-tooltip-small',pos:'left'}" title="Create Lead" data-uk-modal="{center:true}"><i class="material-icons">&#xE150;</i></a>
+            <a class="md-fab md-fab-small md-fab-danger" href="LeadUpload.aspx" data-uk-tooltip="{cls:'uk-tooltip-small',pos:'left'}" title="Upload"><i class="material-icons">&#xE153;</i></a>
+            @*<a class="md-fab md-fab-small" href="#" data-uk-tooltip="{cls:'uk-tooltip-small',pos:'left'}" title="Download"><i class="material-icons">&#xE163;</i></a>
+                <a class="md-fab md-fab-small md-fab-warning" href="#" data-uk-tooltip="{cls:'uk-tooltip-small',pos:'left'}" title="Flag"><i class="material-icons">&#xE2C3;</i></a>
+                <a class="md-fab md-fab-small md-fab-danger" href="#" data-uk-tooltip="{cls:'uk-tooltip-small',pos:'left'}" title="Upload"><i class="material-icons">&#xE153;</i></a>
+                <a class="md-fab md-fab-small md-fab-success" href="#" data-uk-tooltip="{cls:'uk-tooltip-small',pos:'left'}" title="Send"><i class="material-icons">&#xE149;</i></a>*@
+        </div>
+    </div>
+    <div>
+        <input type="hidden" id="custid" />
+        <form action="" class="uk-form-stacked" id="page_settings">
+            <div class="uk-modal" id="mailbox_new_message">
+                <div class="uk-modal-dialog uk-modal-dialog-large">
+                    <button class="uk-modal-close uk-close" type="button"></button>
+                    <div class="uk-modal-header">
+                        <span id="lbltext" class="uk-badge uk-badge-primary"></span>
+                    </div>
+                    <div class="uk-width-large-12-10 uk-row-first">
+                        <div class="md-card">
+                            <div class="user_content">
+                                <ul id="user_edit_tabs" class="uk-tab" data-uk-tab="{connect:'#user_edit_tabs_content'}">
+                                    <li class="uk-active" aria-expanded="true"><a href="#">Basic</a></li>
+                                    <li aria-expanded="false" class=""><a href="#">Lead Information</a></li>
+                                    <li class="uk-tab-responsive uk-active uk-hidden" aria-haspopup="true" aria-expanded="false">
+                                        <a>Basic</a>
+                                        <div class="uk-dropdown uk-dropdown-small" aria-hidden="true">
+                                            <ul class="uk-nav uk-nav-dropdown"></ul>
+                                            <div></div>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <ul id="user_edit_tabs_content" class="uk-switcher uk-margin">
+                                    <li aria-hidden="false" class="uk-active">
+                                        <div class="uk-margin-top">
+                                            <h6 class="full_width_in_card heading_c">
+                                                General info
+                                            </h6>
+                                            <div class="uk-grid" data-uk-grid-margin="">
+                                                <div class="uk-width-medium-1-4 uk-row-first">
+                                                    <div class="md-input-wrapper md-input-filled">
+                                                        <label for="user_edit_uname_control">Customer Name</label>
+                                                        <input type="text" required class="md-input" name="Name" id="Name" value="">
+                                                        <span class="md-input-bar "></span>
+                                                    </div>
+
+                                                </div>
+                                                <div class="uk-width-medium-1-4">
+                                                    <div class="md-input-wrapper md-input-filled">
+                                                        <label for="user_edit_position_control">Last Name</label>
+                                                        <input type="text" class="md-input" name="LastName" id="LastName" value="">
+                                                        <span class="md-input-bar "></span>
+                                                    </div>
+                                                </div>
+                                                <div class="uk-width-medium-1-4 uk-row-first">
+                                                    <div class="md-input-wrapper md-input-filled">
+                                                        <label for="user_edit_uname_control">Company Name</label>
+                                                        <input type="text" class="md-input" name="CompanyName" id="CompanyName" value="">
+                                                    </div>
+
+                                                </div>
+                                                <div class="uk-width-medium-1-4">
+                                                    <div class="md-input-wrapper md-input-filled">
+                                                        <label for="user_edit_position_control">Designation</label>
+                                                        <input type="text" class="md-input" name="Designation" id="Designation" value="">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="uk-grid" data-uk-grid-margin="">
+                                                <div class="uk-width-medium-1-4">
+                                                    <span class="icheck-inline">
+                                                        <input type="radio" value="Male" name="Gender" />
+                                                        <label for="radio_demo_inline_1" class="inline-label">Male</label>
+                                                    </span>
+                                                    <span class="icheck-inline">
+                                                        <input type="radio" value="Female" name="Gender" />
+                                                        <label for="radio_demo_inline_2" class="inline-label">Female</label>
+                                                    </span>
+                                                </div>
+                                                <div class="uk-width-medium-1-4">
+                                                    <div class="md-input-wrapper md-input-filled">
+                                                        <div class="uk-input-group">
+                                                            <span class="uk-input-group-addon">
+                                                                <i class="md-list-addon-icon material-icons"></i>
+                                                            </span>
+                                                            <div class="md-input-wrapper md-input-filled">
+                                                                <label>Email</label><input type="text" class="md-input" name="EmailId" id="EmailId" value="">
+                                                                <span class="md-input-bar "></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="uk-width-medium-1-4">
+                                                    <div class="md-input-wrapper md-input-filled">
+                                                        <div class="uk-input-group">
+                                                            <span class="uk-input-group-addon">
+                                                                <i class="md-list-addon-icon material-icons"></i>
+                                                            </span>
+                                                            <div class="md-input-wrapper md-input-filled">
+                                                                <label>Phone Number</label><input class="md-input masked_input" required name="Contact" id="Contact" type="text" data-inputmask="'mask': '9999999999'" data-inputmask-showmaskonhover="false">
+                                                                <span class="md-input-bar "></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <h6 class="full_width_in_card heading_c">
+                                                Contact info
+                                            </h6>
+                                            <div class="uk-grid" data-uk-grid-margin="">
+                                                <div class="uk-width-medium-1-2 uk-row-first">
+                                                    <div class="md-input-wrapper md-input-filled">
+                                                        <div class="uk-input-group">
+                                                            <div class="md-input-wrapper md-input-filled">
+                                                                <label>Address</label>
+                                                                <textarea class="md-input" rows="2" cols="200" name="Address" id="Address"></textarea>
+                                                                <span class="md-input-bar "></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="uk-width-medium-1-4">
+                                                    <div class="md-input-wrapper md-input-filled">
+                                                        <div class="uk-input-group">
+                                                            <div class="md-input-wrapper md-input-filled">
+                                                                <label>City</label>
+                                                                <input type="text" class="md-input" name="City" id="City" value="">
+                                                                <span class="md-input-bar "></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="uk-width-medium-1-4">
+                                                    <div class="md-input-wrapper md-input-filled">
+                                                        <div class="uk-input-group">
+                                                            <div class="md-input-wrapper md-input-filled">
+                                                                <label>State</label>
+                                                                <input type="text" class="md-input" name="State" id="State" value="">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="uk-grid" data-uk-grid-margin="">
+                                                <div class="uk-width-medium-1-2 uk-row-first">
+                                                    <div class="md-input-wrapper md-input-filled">
+                                                        <div class="uk-input-group">
+                                                            <div class="md-input-wrapper md-input-filled">
+                                                                <label>Pin Code</label>
+                                                                <input type="text" class="md-input" name="PinCode" id="PinCode" value="">
+                                                                <span class="md-input-bar "></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li aria-hidden="true" class="">
+                                        <p class="uk-text-muted uk-text-small">select lead type and source of the leads</p>
+                                        <div class="uk-grid" data-uk-grid-margin="">
+                                            <div class="uk-width-medium-1-4 uk-row-first">
+                                                <div class="md-input-wrapper md-input-filled">
+                                                    <p class="uk-text-muted uk-text-small"><b>Lead Type</b></p>
+                                                    <select id="ddLeadType" name="TC_LeadTypeId" class="md-input" required data-uk-tooltip="{pos:'top'}">
+                                                        <option value="" disabled="" selected="" hidden="">Select...</option>
+                                                    </select><span class="md-input-bar "></span>
+                                                </div>
+                                            </div>
+                                            <div class="uk-width-medium-1-4">
+                                                <div class="md-input-wrapper md-input-filled">
+                                                    <p class="uk-text-muted uk-text-small"><b>Inquiry Type</b></p>
+                                                    <select id="ddInquiryType" name="TC_InquiryTypeId" class="md-input" data-uk-tooltip="{pos:'top'}">
+                                                        <option value="" disabled="" selected="" hidden="">Select...</option>
+                                                    </select><span class="md-input-bar "></span>
+                                                </div>
+                                            </div>
+                                            <div class="uk-width-medium-1-4 uk-row-first">
+                                                <div class="md-input-wrapper md-input-filled">
+                                                    <p class="uk-text-muted uk-text-small"><b>Lead Disposition</b></p>
+                                                    <select id="ddLeadDisposition" name="TC_LeadDispositionId" class="md-input" data-uk-tooltip="{pos:'top'}">
+                                                        <option value="" disabled="" selected="" hidden="">Select...</option>
+
+                                                    </select><span class="md-input-bar "></span>
+                                                </div>
+                                            </div>
+                                            <div class="uk-width-medium-1-4">
+                                                <div class="md-input-wrapper md-input-filled">
+                                                    <p class="uk-text-muted uk-text-small"><b>Source</b></p>
+                                                    <div class="parsley-row">
+                                                        <select id="ddInquirySource" name="TC_InquirySourceId" class="md-input" data-uk-tooltip="{pos:'top'}">
+                                                            <option value="" disabled="" selected="" hidden="">Select...</option>
+                                                        </select>
+                                                    </div>
+                                                    <span class="md-input-bar "></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="uk-modal-footer">
+                        <div class="md-fab-wrapper">
+                            <div class="md-fab md-fab-toolbar md-fab-small md-fab-accent">
+                                <i class="material-icons"></i>
+                                <div class="md-fab-toolbar-actions">
+                                    <button type="submit" id="user_edit_save" style="display: none" data-uk-tooltip="{cls:'uk-tooltip-small',pos:'bottom'}" title="Save"><i class="material-icons md-color-white"></i></button>
+                                    <button type="submit" id="user_edit" style="display: none" data-uk-tooltip="{cls:'uk-tooltip-small',pos:'bottom'}" title="Save"><i class="material-icons md-color-white"></i></button>                                    
+                                    <button type="button" id="user_edit_delete" data-uk-tooltip="{cls:'uk-tooltip-small',pos:'bottom'}" title="Delete"><i class="material-icons md-color-white"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="uk-width-medium-1-3">
+        <div class="uk-modal" id="modal_large">
+            <div class="uk-modal-dialog uk-modal-dialog-large">
+                <button type="button" class="uk-modal-close uk-close"></button>
+                <div class="uk-grid" data-uk-grid-margin data-uk-grid-match id="user_profile">
+                    <div class="uk-width-large-7-10">
+                        <div class="md-card">
+                            <div class="user_heading">
+                                <div class="user_heading_menu hidden-print">
+                                    <div class="uk-display-inline-block" data-uk-dropdown="{pos:'left-top'}">
+                                        <i class="md-icon material-icons md-icon-light">&#xE5D4;</i>
+                                        <div class="uk-dropdown uk-dropdown-small">
+                                            <ul class="uk-nav">
+                                                <li><a>Lead Stage</a></li>                                              
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="user_heading_avatar">
+                                    <div class="thumbnail">
+                                        <img src="~/Content/assets/img/avatars/avatar_11.png" alt="user avatar" />
+                                    </div>
+                                </div>
+                                <div class="user_heading_content">
+                                    <h2 class="heading_b uk-margin-bottom">
+                                        <span class="uk-text-truncate" id="txtName"></span>
+                                        <span class="sub-heading" id="contact"></span>
+                                    </h2>                                  
+                                </div>                              
+                            </div>
+
+                            <div class="user_content">
+                                <div class="md-card" data-uk-grid-margin="">
+                                    <div class="md-card-content uk-row-first">
+                                        <ul class="uk-tab" data-uk-tab="{connect:'#tabs_anim3', animation:'slide-vertical'}">
+                                            <li class="uk-active" aria-expanded="true"><a>Follow Up</a></li>
+                                            <li aria-expanded="false" class=""><a>History</a></li>
+
+                                            <li class="uk-tab-responsive uk-active uk-hidden" aria-haspopup="true" aria-expanded="false">
+                                                <a>Active</a><div class="uk-dropdown uk-dropdown-small" aria-hidden="true">
+                                                    <ul class="uk-nav uk-nav-dropdown"></ul>
+                                                    <div></div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                        <ul id="tabs_anim3" class="uk-switcher uk-margin">
+                                            <li aria-hidden="false" class="uk-active" style="animation-duration: 200ms;">
+                                                <form action="" class="uk-margin-medium-top" id="pageFollowup">
+                                                    <input type="hidden" name="TC_LeadId" id="TC_LeadId">
+                                                    <div class="uk-grid" data-uk-grid-margin>
+                                                        <div class="uk-width-medium-1-4">
+                                                            <label>Title</label>
+                                                            <input type="text" class="md-input" id="Title" name="Title" value="" />
+                                                        </div>
+                                                        <div class="uk-width-medium-1-4">
+                                                            <input id="DDAction" name="TC_ActionId" required placeholder="Select" />
+                                                          
+                                                        </div>
+                                                        <div class="uk-width-medium-1-3">
+                                                            <div class="uk-input-group">
+                                                                <span class="uk-input-group-addon"><i class="uk-input-group-icon uk-icon-calendar"></i></span>
+                                                                <label for="uk_dp_fs">Select date</label>
+                                                                <input class="md-input" name="FollowUpDate" value="" type="text" id="FollowUpDate" data-uk-datepicker="{format:'MM/DD/YYYY HH:MM:SS', addClass: 'dropdown-fs'}">
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="uk-grid" data-uk-grid-margin>
+                                                        <div class="uk-width-medium-1-4">
+                                                            <label>Comments</label>
+                                                            <input type="text" class="md-input" value="" name="Comments" />
+                                                        </div>
+                                                        <div class="uk-width-medium-1-4">
+                                                            <a class="md-btn md-btn-primary md-btn-small md-btn-wave-light waves-effect waves-button waves-light" id="saveleads">
+                                                                <i class="material-icons">&#xE161;</i>
+                                                            </a>
+
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </li>
+                                            <li aria-hidden="true" class="" style="animation-duration: 200ms;">
+                                                <ul class="md-list" id="followups"></ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-width-large-3-10 hidden-print">
+                        <div class="md-card">
+                            <div class="md-card-content">
+                                <div class="uk-margin-medium-bottom">
+                                    <h3 class="heading_c uk-margin-bottom"><b>Next Follow Up Schedule</b></h3>
+                                    <form action="" id="formnextfollowup">
+                                        <input type="hidden" name="TC_LeadId" id="TC_NextLeadId">
+                                        <ul class="md-list md-list-addon">
+                                            <li>
+                                                <div class="md-list-addon-element">
+                                                    Date.  <i class="uk-input-group-icon uk-icon-calendar"></i>
+                                                </div>
+                                                <div class="md-list-content">
+                                                    <input class="md-input" name="NextFollowUpDate" value="" type="text" id="NextFollowUpDate" data-uk-datepicker="{format:'MM/DD/YYYY HH:MM:SS', addClass: 'dropdown-fs'}">
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="md-list-addon-element">
+                                                    Action.
+                                                </div>
+                                                <div class="md-list-content">
+                                                    <input id="DDNextAction" name="TC_ActionId" required placeholder="Select" />
+                                                    
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="md-list-content">
+                                                    <a class="md-btn md-btn-primary md-btn-small md-btn-wave-light waves-effect waves-button waves-light" id="btnNextfollow">
+                                                        <i class="material-icons">&#xE161;</i>
+                                                    </a>
+                                                </div>
+                                            </li>
+
+                                        </ul>
+                                    </form>
+                                </div>
+                                <h3 class="heading_c uk-margin-bottom"><b>Appointment</b></h3>
+                                <form action="" id="formappointment">
+                                    <input type="hidden" name="TC_LeadId" id="AppointLeadId">
+                                    <ul class="md-list md-list-addon">
+                                        <li>
+                                            <div class="md-list-addon-element">
+                                                Date.  <i class="uk-input-group-icon uk-icon-calendar"></i>
+                                            </div>
+                                            <div class="md-list-content">
+                                                <input class="md-input" name="AppointmentDate" value="" type="text" id="AppointmentDate" data-uk-datepicker="{format:'MM/DD/YYYY HH:MM:SS', addClass: 'dropdown-fs'}">
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="md-list-content">
+                                                <a class="md-btn md-btn-primary md-btn-small md-btn-wave-light waves-effect waves-button waves-light" id="btnappointment">
+                                                    <i class="material-icons">&#xE161;</i>
+                                                </a>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- page specific plugins -->
+    <!-- ionrangeslider -->
+    <script src="~/Content/bower_components/ion.rangeslider/js/ion.rangeSlider.min.js"></script>
+    <!-- htmleditor (codeMirror) -->
+    <script src="~/Content/assets/js/uikit_htmleditor_custom.min.js"></script>
+    <!-- inputmask-->
+    <script src="~/Content/bower_components/jquery.inputmask/dist/jquery.inputmask.bundle.js"></script>
+    <!--  forms advanced functions -->
+    <script src="~/Content/assets/js/pages/forms_advanced.min.js"></script>
+
+    <!-- page specific plugins -->
+    <!--  mailbox functions -->
+    <script src="~/Content/assets/js/pages/page_mailbox.min.js"></script>
+
+    <!-- My Js -->
+    <script src="~/AppJs/CRM/LeadsJS.js"></script>
+
+
+    <!-- page specific plugins -->
+    <!-- datatables -->
+    <script src="~/Content/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+    <!-- datatables buttons-->
+    <script src="~/Content/bower_components/datatables-buttons/js/dataTables.buttons.js"></script>
+    <script src="~/Content/assets/js/custom/datatables/buttons.uikit.js"></script>
+    <script src="~/Content/bower_components/jszip/dist/jszip.min.js"></script>
+    <script src="~/Content/bower_components/pdfmake/build/pdfmake.min.js"></script>
+    <script src="~/Content/bower_components/pdfmake/build/vfs_fonts.js"></script>
+    <script src="~/Content/bower_components/datatables-buttons/js/buttons.colVis.js"></script>
+    <script src="~/Content/bower_components/datatables-buttons/js/buttons.html5.js"></script>
+    <script src="~/Content/bower_components/datatables-buttons/js/buttons.print.js"></script>
+
+    <!-- datatables custom integration -->
+    <script src="~/Content/assets/js/custom/datatables/datatables.uikit.min.js"></script>
+
+    <!--  datatables functions -->
+    <script src="~/Content/assets/js/pages/plugins_datatables.min.js"></script>
+
+
+    <!-- page specific plugins -->
+    <!-- ckeditor -->
+    <script src="~/Content/bower_components/ckeditor/ckeditor.js"></script>
+    <script src="~/Content/bower_components/ckeditor/adapters/jquery.js"></script>
+
+    <!--  wysiwyg editors functions -->
+    <script src="~/Content/assets/js/pages/forms_wysiwyg.min.js"></script>
+
+    <!--  notifications -->
+    <script src="~/AppJs/CRM/Notification.js"></script>
+
+    <script src="~/Content/assets/js/kendoui_custom.min.js"></script>
+    <!--  kendoui functions -->
+    <script src="~/Content/assets/js/pages/kendoui.min.js"></script>
+}

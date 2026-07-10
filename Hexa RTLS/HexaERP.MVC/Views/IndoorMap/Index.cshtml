@@ -1,0 +1,196 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+
+    if (Session["SortCode"] != null)
+    {
+        Layout = "~/Views/Shared/_Admin.cshtml";
+    }
+    else
+    {
+        Response.Redirect("/AppUser");
+    }
+}
+@section head
+{
+
+}
+
+<div id="page_content" ng-controller="IndoorMapCtrl">
+
+
+    <div id="page_content_inner">
+
+        <div class="uk-grid uk-grid-medium" data-uk-grid-margin>
+            <div class="uk-width-xLarge-2-10 uk-width-large-3-10">
+                <div class="md-card">
+                    <div class="md-card-toolbar">
+                        <h3 class="md-card-toolbar-heading-text">
+                            View Tracked Employee & Asset Details
+                        </h3>
+                    </div>
+                    <div class="md-card-content">
+                        <div class="uk-overflow-container">
+                            <table class="uk-table uk-text-nowrap">
+                                <thead>
+                                    <tr>
+                                        <th>Employee</th>
+                                        <th>Asset</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td>
+                                            <h1>   <span class="uk-icon-button md-color-blue-500" id="tEmTot"></span></h1>
+                                        </td>
+                                        <td>
+                                            <h1> <span class="uk-icon-button md-color-blue-500" id="tAsTot"></span></h1>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <hr />
+                        <ul class="md-list md-list-addon uk-margin-bottom" id="lEmp"></ul>
+                        <ul class="md-list md-list-addon uk-margin-bottom" id="lAst"></ul>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-width-xLarge-8-10  uk-width-large-7-10">
+                <div class="scrum_task critical">
+                    <p class="scrum_task_description">Indoor Location plan</p>
+                </div>
+                <div ng-repeat="Iteam in IndoorMaps">
+                    <div class="md-card">
+                        <div class="md-card-toolbar">
+                            <div class="md-card-toolbar-actions">
+                                <a href="@Url.Action("","IndoorMap")">
+                                    <i class="md-icon material-icons">
+                                        refresh
+                                    </i>
+                                </a>
+                            </div>
+                            @*<div class="md-card-toolbar-actions">
+                                <i class="md-icon material-icons">&#xE616;</i>
+                            </div>*@
+                            <h3 class="md-card-toolbar-heading-text">
+                                {{Iteam.FloorName}}, {{Iteam.FloorNo}} <span class="route_km"></span>
+                            </h3>
+                        </div>
+                        <div class="md-card-content mydiv" id="{{Iteam.mIndooMapsId}}" name="{{Iteam.ImgPath}}">
+                            <img src="{{Iteam.ImgPath}}" ng-click="setImgPara(Iteam)" class="mydiv" />
+                        </div>
+                    </div>
+                    <div class="uk-modal" id="gmap_route_modal">
+                        <div class="uk-modal-dialog">
+                            <button type="button" class="uk-modal-close uk-close"></button>
+                            <div class="uk-modal-header">
+                                <h3 class="uk-modal-title">{{Iteam.FloorName}}, {{Iteam.Description}}<span class="route_km"></span></h3>
+                            </div>
+                            <div class="uk-overflow-container">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="uk-modal uk-modal-card-fullscreen" id="modal_full">
+        <div class="uk-modal-dialog uk-modal-dialog-blank">
+            <div class="md-card uk-height-viewport">
+                <div class="md-card-toolbar">
+                    <span class="md-icon material-icons uk-modal-close">&#xE5C4;</span>
+                    <h3 class="md-card-toolbar-heading-text">
+                        SonicWall
+                    </h3>
+                </div>
+                <div class="md-card-content">
+                    <div class="uk-grid" data-uk-grid-margin data-uk-grid-match>
+                        <div class="uk-width-large-1-1">
+                            <div class="md-card">
+                                <div class="uk-overflow-container">
+                                    <table class="uk-table uk-text-nowrap" id="tEmp">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>EmployeeId</th>
+                                                <th>Designation</th>
+                                                <th>DateTime</th>
+                                                <th>Track Location</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="2"><h2><span></span></h2></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="uk-grid" data-uk-grid-margin>
+                        <div class="uk-width-large-1-1">
+                            <div class="md-card">
+                                <div class="md-card">
+                                    <div class="uk-overflow-container">
+                                        <table class="uk-table uk-text-nowrap" id="tAsset">
+                                            <thead>
+                                                <tr>
+                                                    <td></td>
+                                                    <th class="uk-text-nowrap uk-text-left">Asset</th>
+                                                    <th class="uk-text-nowrap uk-text-left">Model</th>
+                                                    <th class="uk-text-nowrap">Model No</th>
+                                                    <th class="uk-text-nowrap">Asset Location</th>
+                                                    <th class="uk-text-nowrap">DateTime</th>
+                                                    <th class="uk-text-nowrap">Track Location</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="2"><h2><span id="tAsTot"></span></h2></td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section foot
+{
+
+
+    <script src="~/Scripts/HexaAgular/IndoorMap.js"></script>
+
+    <style type="text/css">
+
+        /*canvas {
+            height: 100vh;
+            width: 100vw;
+        }*/
+        /*#pointer_div {
+            position: relative;
+        }*/
+        .mydiv {
+            position: relative;
+        }
+    </style>
+
+
+}

@@ -1,0 +1,224 @@
+﻿
+
+@{
+    ViewBag.Title = "Index";
+
+    if (Session["SortCode"] != null)
+    {
+        Layout = "~/Views/Shared/_Admin.cshtml";
+    }
+    else
+    {
+        Response.Redirect("/AppUser");
+    }
+}
+
+@section head
+{
+    <style type="text/css">
+        body {
+            font-family: Arial;
+            font-size: 10pt;
+        }
+    </style>
+}
+
+<div id="page_content" ng-controller="GoogleMapLocatorCtrl">
+
+    <div id="page_content_inner">
+
+        <div class="scrum_task critical">
+
+            <h3 class="scrum_task_title">Note.</h3>
+            <p class="scrum_task_description">clicke on icon to get asset/employee info with track datetime</p>
+
+        </div>
+        <div class="uk-grid" data-uk-grid-margin>
+
+            <div class="uk-width-large-1-1">
+                <div class="md-card">
+                    <div class="md-card-toolbar">
+                        <div class="md-card-toolbar-actions">
+                            <a href="@Url.Action("","GoogleMapLocator")">
+                                <i class="md-icon material-icons">
+                                    refresh
+                                </i>
+                            </a>
+                        </div>
+                        <h3 class="md-card-toolbar-heading-text">
+                            SonicWall
+                        </h3>
+                    </div>
+                    <div class="md-card-content">
+
+                        <p class="scrum_task_description">Out Door Location</p>
+                        <div class="uk-grid" data-uk-grid-margin>
+                            <div class="uk-width-1-1">
+                                <div id="gmap_markers" class="gmap" style="width:100%;height:400px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="uk-grid uk-grid-medium" data-uk-grid-margin style="display:none;">
+            <div class="uk-width-large-1-1">
+                <div class="md-card">
+                    <div class="md-card-toolbar">
+                        <h3 class="md-card-toolbar-heading-text">sd</h3>
+                    </div>
+                    <div class="md-card-content large-padding">
+                        <div class="uk-grid uk-grid-divider uk-grid-medium">
+                            <div id="dvMap" style="width: 80%; height: 400px">
+                                <div id="vmaps_world_connected" class="vm_wrapper">
+                                    <div class="map">
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section foot
+{
+    <!-- page specific plugins -->
+    <!-- maplace (google maps) -->
+    @*<script src="http ://maps.google.com/maps/api/js"></script>*@
+
+
+    <script src="~/Scripts/HexaAgular/GoogleMapLocator.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA_MSEHX9IwOkrzUJc1eBLT4KWzYOGgN98&signed_in=true">
+    </script>
+    <script src="~/Content/bower_components/maplace-js/dist/maplace.js"></script>
+    <script src="Content/bower_components/maplace-js/dist/maplace.min.js"></script>
+    <!--  google maps functions -->
+    <script src="Content/assets/js/pages/plugins_google_maps.min.js"></script>
+
+    <script>
+        var timer = null,
+            interval = 5000;
+
+        SetControll();
+
+        $("#start").click(function () {
+            if (timer !== null) return;
+            timer = setInterval("SetControll()", interval);
+            $("#_timerMsg").text('Start');
+        });
+
+        $("#stop").click(function () {
+            $("#_timerMsg").text('Stop');
+            clearInterval(timer);
+            timer = null
+        });
+
+
+
+        function SetControll() {
+
+            //console.log('Called:HexaTracker');
+            //var d = new Date();
+            ////$scope.lastTracked = d.toLocaleTimeString();
+            //$http({
+            //    method: 'GET',
+            //    url: '../GoogleMapLocator/getGetToTrackData'
+            //}).then(function successCallback(response) {
+            //    console.log(response.data);
+            //    //$scope.FillterIData = response.data;
+            //   // LoadMap(response.data);
+            //}, function errorCallback(response) {
+            //    console.log("Error : " + response.data.ExceptionMessage);
+            //});
+        }
+        function LoadMap(markers) {
+
+            var mapOptions = {
+                center: new google.maps.LatLng(markers[0].lat, markers[0].lng),
+                mapTypeControl: true,
+                mapTypeControlOptions: { style: google.maps.MapTypeControlStyle.DROPDOWN_MENU },
+                navigationControl: true,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+
+            var infoWindow = new google.maps.InfoWindow();
+            var latlngbounds = new google.maps.LatLngBounds();
+            var map = new google.maps.Map(document.getElementById("dvMap"), mapOptions);
+
+            for (var i = 0; i < markers.length; i++) {
+                var data = markers[i]
+                var myLatlng = new google.maps.LatLng(data.lat, data.lng);
+                var marker = new google.maps.Marker({
+                    position: myLatlng,
+                    map: map,
+                    title: data.title,
+                    draggable: true,
+                });
+
+                (function (marker, data) {
+                    google.maps.event.addListener(marker, "click", function (e) {
+                        infoWindow.setContent("<div style = 'width:200px;min-height:40px'>" + data.title, data.description + "</div>");
+                        infoWindow.open(map, marker);
+                    });
+                })(marker, data);
+                latlngbounds.extend(marker.position);
+            }
+            var bounds = new google.maps.LatLngBounds();
+            map.setCenter(latlngbounds.getCenter());
+            map.fitBounds(latlngbounds);
+        }
+    </script>
+    @*<script type="text/javascript">
+            var markers = [
+                {
+                    "title": 'Mudassar',
+                    "lat": '12.9166128',
+                    "lng": '77.61344749999999',
+                    "description": '5, Outer Ring Rd, Jay Bheema Nagar, 1st Stage, BTM Layout, Bengaluru, Karnataka 560068, India'
+                }
+            ];
+
+            window.onload = function () {
+                LoadMap();
+            }
+            function LoadMap() {
+                var mapOptions = {
+                    center: new google.maps.LatLng(markers[0].lat, markers[0].lng),
+                    zoom: 8,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+                var infoWindow = new google.maps.InfoWindow();
+                var latlngbounds = new google.maps.LatLngBounds();
+                var map = new google.maps.Map(document.getElementById("dvMap"), mapOptions);
+
+                for (var i = 0; i < markers.length; i++) {
+                    var data = markers[i]
+                    var myLatlng = new google.maps.LatLng(data.lat, data.lng);
+                    var marker = new google.maps.Marker({
+                        position: myLatlng,
+                        map: map,
+                        title: data.title
+                    });
+                    (function (marker, data) {
+                        google.maps.event.addListener(marker, "click", function (e) {
+                            infoWindow.setContent("<div style = 'width:200px;min-height:40px'>" + data.description + "</div>");
+                            infoWindow.open(map, marker);
+                        });
+                    })(marker, data);
+                    latlngbounds.extend(marker.position);
+                }
+                var bounds = new google.maps.LatLngBounds();
+                map.setCenter(latlngbounds.getCenter());
+                map.fitBounds(latlngbounds);
+            }
+        </script>*@
+}
+

@@ -1,0 +1,157 @@
+﻿
+
+<div class=""><div class="aHl"></div><div id=":on" tabindex="-1"></div><div id=":p0" class="ii gt"><div id=":p1" class="a3s aXjCH m1641cb42efe08076"><u></u>
+  <div class="m_-5394726929200715053body" style="font-size:15px;line-height:19px;background:#ffffff;font-family:'Cera Pro','Helvetica Neue',Helvetica,Arial,sans-serif;background:#f6f6f7;padding:0!important;margin:0!important;display:block!important;min-width:100%!important;width:100%!important;padding:0!important;margin:0!important;display:block!important;width:100%!important;background:#ffffff">
+    <span class="m_-5394726929200715053preheader" style="display:none!important;opacity:0;color:transparent;height:0;width:0">  Thanks for visiting <span class="il">SonicWALL</span>!
+  </span>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#f6f6f7">
+      <tbody><tr>
+        <td align="center" valign="top">
+          <table width="600" border="0" cellspacing="0" cellpadding="0" class="m_-5394726929200715053mobile-shell">
+            <tbody><tr>
+              <td class="m_-5394726929200715053td" style="width:600px;min-width:600px;font-size:0pt;line-height:0pt;padding:0;margin:0;font-weight:normal;Margin:0" bgcolor="#ffffff">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                  <tbody><tr>
+                    <td style="border:1px solid #e9e9ea">
+                      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        
+                        <tbody><tr>
+                          <td style="padding:48px 0 42px;font-size:0pt;line-height:0pt;text-align:center" align="center" class="m_-5394726929200715053p30-20-35">
+                              <img src="https://ci3.googleusercontent.com/proxy/kL09hESdCxB0FSC19sQyWF8FR68EdmK4S8Tl524u_081ip-9FVLQ5HQyDULLA07bVQZdaZX6ZzTNqsltAcgyqlHkDAEZmeFKTqEJTd7q_LbVhqE-Ltp09BJN1TkDTLWyOHFLYWQ3Ar06ApttPiPTq84bG4ZM3sS84HDPXb7otV2sN3zc8M395I8Pyr87XrQaoIc6nHBhNnOWS8WoEJ7CHJROTA=s0-d-e1-ft#https://envoyuserentries.s3.amazonaws.com/device_configs/32064/company-logo-email/Sonicwall_logo_final_transparent-1512562305.png?1512562305" width="" height="60" style="max-width:402px;max-height:60px;width:auto;margin:0 auto" border="0" alt="SonicWALL" class="CToWUd">
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding:0 85px 37px" class="m_-5394726929200715053p0-20-33">
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                              <tbody><tr>
+                                <td class="m_-5394726929200715053intro-title" style="font-family:'Cera Pro','Helvetica Neue',Helvetica,Arial,sans-serif!important;font-family:'Cera Pro Bold','Helvetica Neue',Helvetica,Arial,sans-serif!important;padding-bottom:11px;color:#282c36;font-family:'Helvetica_Neue','Helvetica Neue',Helvetica,Arial,sans-serif,'CPB';font-size:32px;line-height:36px;text-align:center;font-weight:bold">
+                                 {0}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td class="m_-5394726929200715053intro-text" style="font-family:'Cera Pro','Helvetica Neue',Helvetica,Arial,sans-serif!important;padding-bottom:10px;color:#282c36;font-family:'Helvetica_Neue','Helvetica Neue',Helvetica,Arial,sans-serif,'CP';font-size:16px;line-height:24px;text-align:center">
+                                 Model     : {1} <br>
+                                 Serial No : {2} 
+                                  <span class="il"></span>
+                                </td>
+                              </tr>
+                            </tbody></table>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding:0 40px" class="m_-5394726929200715053p0-20">
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                              <tbody><tr>
+                                <td style="border-top:1px solid #e8e8e9;padding:30px 0" class="m_-5394726929200715053p35-0-25">
+                                  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                    <tbody><tr>
+                                      <th class="m_-5394726929200715053column" style="font-size:0pt;line-height:0pt;padding:0;margin:0;font-weight:normal;Margin:0" width="177">
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                          <tbody><tr>
+                                            <td align="left">
+                                              <table border="0" cellspacing="0" cellpadding="0" class="m_-5394726929200715053center">
+                                                <tbody><tr>
+                                                  <td style="border:1px solid #e9e9ea;border-radius:2px">
+                                                    <table width="175" border="0" cellspacing="0" cellpadding="0" class="m_-5394726929200715053callout-img-box" style="font-size:0pt;line-height:0pt;text-align:left">
+                                                      <tbody><tr>
+                                                        <td style="background-size:cover" bgcolor="#f9f9fa" height="175" valign="top">
+                                                          
+                                                          <div>
+                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                              <tbody><tr>
+                                                                <td class="m_-5394726929200715053content-spacing" style="font-size:0pt;line-height:0pt;text-align:left" width="25">&nbsp;</td>
+                                                                <td class="m_-5394726929200715053callout-img" style="font-size:0pt;line-height:0pt;text-align:center;padding:30px 0">
+                                                                
+                                                                </td>
+                                                                <td class="m_-5394726929200715053content-spacing" style="font-size:0pt;line-height:0pt;text-align:left" width="25">&nbsp;</td>
+                                                              </tr>
+                                                            </tbody></table>
+                                                          </div>
+                                                          
+                                                                 
+                                                        </td>
+                                                      </tr>
+                                                    </tbody></table>
+													
+                                                  </td>
+                                                </tr>
+                                              </tbody></table>
+											  <br>
+                                                Signiture
+                                            </td>
+                                          </tr>
+                                        </tbody></table>
+                                      </th>
+                                      <th class="m_-5394726929200715053column" style="font-size:0pt;line-height:0pt;padding:0;margin:0;font-weight:normal;Margin:0" width="43"><div style="font-size:0pt;line-height:0pt" class="m_-5394726929200715053mobile-br-25"></div>
+  </th>
+                                      <th class="m_-5394726929200715053column" style="font-size:0pt;line-height:0pt;padding:0;margin:0;font-weight:normal;Margin:0" width="300">
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                          <tbody><tr>
+                                            <td class="m_-5394726929200715053callout-title" style="font-family:'Cera Pro','Helvetica Neue',Helvetica,Arial,sans-serif!important;font-family:'Cera Pro Bold','Helvetica Neue',Helvetica,Arial,sans-serif!important;padding-bottom:8px;color:#282c36;font-family:'Helvetica_Neue','Helvetica Neue',Helvetica,Arial,sans-serif,'CPB';font-size:22px;line-height:30px;text-align:left;font-weight:bold">
+                                                Asset Issued Details
+                                          </td>
+                                          </tr>
+                                          <tr>
+                                            <td class="m_-5394726929200715053callout-text" style="font-family:'Cera Pro','Helvetica Neue',Helvetica,Arial,sans-serif!important;padding-bottom:10px;color:#282c36;font-family:'Helvetica_Neue','Helvetica Neue',Helvetica,Arial,sans-serif,'CP';font-size:16px;line-height:24px;text-align:left">
+                                                <span>Name  </span> :{3}<br>
+                                                <span>Id    </span> :{4} <br> <hr>
+
+                                                <span>Issued By</span>    :{5}<br>
+                                                <span>Issued Date</span>  :{6}<br>
+                                                <span>End Date </span> :{7}	<br>			
+
+                                            </td>																				
+                                          </tr>
+                                        </tbody></table>
+                                      </th>
+                                    </tr>
+                                  </tbody></table>
+                                </td>
+                              </tr>
+                            </tbody></table>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding:0 40px" class="m_-5394726929200715053p0-20">
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                              <tbody><tr>
+                                <td style="border-top:1px solid #e8e8e9;padding:17px 70px 45px" class="m_-5394726929200715053p25-0">
+                                  <div class="m_-5394726929200715053text-1-c" style="font-family:'Cera Pro','Helvetica Neue',Helvetica,Arial,sans-serif!important;color:#282c36;font-family:'Helvetica_Neue','Helvetica Neue',Helvetica,Arial,sans-serif,'CP';font-size:16px;line-height:22px;text-align:center;font-style:italic">
+                  
+                  SonicWall
+                  </div>
+                                </td>
+                              </tr>
+                            </tbody></table>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding:32px 65px 20px" bgcolor="#f6f6f7" class="m_-5394726929200715053footer">
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="m_-5394726929200715053footer-inner">
+                              <tbody><tr>
+                                <td style="padding-bottom:21px;font-size:0pt;line-height:0pt;text-align:center" align="center" class="m_-5394726929200715053footer-logo">
+                                <a href="http://www.hexahash.com" style="color:#59a3e8;text-decoration:underline;color:#282c36;text-decoration:none" target="_blank">
+                                
+                                </td>
+                              </tr>
+                              <tr>
+                                <td class="m_-5394726929200715053footer-text" style="font-family:'Cera Pro','Helvetica Neue',Helvetica,Arial,sans-serif!important;color:#a3a5aa;font-family:'Helvetica_Neue','Helvetica Neue',Helvetica,Arial,sans-serif,'CP';font-size:12px;line-height:18px;text-align:center">
+                                Powerd By 
+                                  <span class="il">HexaHash Technologies Private Limited</span> Bangalore
+                                  <br> 7, Outer Ring Rd, Jay Bheema Nagar, 1st Stage, BTM Layout 1, Bengaluru, Karnataka 560068 | <a href="https://www.hexahash.com" class="m_-5394726929200715053link-1-u" style="color:#59a3e8;text-decoration:underline;color:#282c36;color:#a3a5aa;text-decoration:none;color:#a3a5aa;text-decoration:underline" target="_blank"><span class="m_-5394726929200715053link-1-u" style="color:#a3a5aa;text-decoration:underline">www.hexahash.com</span></a>
+                                </td>
+                              </tr>
+                            </tbody></table>
+                          </td>
+                        </tr>
+                        
+                      </tbody></table>
+                    </td>
+                  </tr>
+                </tbody></table>
+              </td>
+            </tr>
+          </tbody></table>
+        </td>
+      </tr>
+    </tbody></table>

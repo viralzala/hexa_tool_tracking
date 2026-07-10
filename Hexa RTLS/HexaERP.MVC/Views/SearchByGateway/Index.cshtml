@@ -1,0 +1,167 @@
+﻿@{
+    /**/
+
+    ViewBag.Title = "Index";
+
+    if (Session["SortCode"] != null)
+    {
+        if (Convert.ToString(Session["SortCode"]) == "SA")
+        {
+            Layout = "~/Views/Shared/_Site.cshtml";
+        }
+        else if (Convert.ToString(Session["SortCode"]) == "AD")
+        {
+            Layout = "~/Views/Shared/_Admin.cshtml";
+        }
+        else if (new string[] { "OT", "SA" }.Contains(Convert.ToString(Session["SortCode"])))
+        {
+            Layout = "~/Views/Shared/_Users.cshtml";
+        }
+        else if (Convert.ToString(Session["SortCode"]) == "NAP")
+        {
+            Layout = "~/Views/Shared/_NormalApproval.cshtml";
+        }
+        else if (Convert.ToString(Session["SortCode"]) == "QAP")
+        {
+            Layout = "~/Views/Shared/_QualityApproval.cshtml";
+        }
+    }
+    else
+    {
+        Response.Redirect("/AppUser");
+    }
+}
+
+@section head
+{
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.common-material.min.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.material.min.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/datatables/media/css/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/datatables/media/css/jquery.dataTables.min.css" rel="stylesheet" />
+}
+
+<div ng-controller="SearchByGatewayCtrl">
+    <div id="page_content">
+        <div id="page_content_inner">
+
+            <h3 class="heading_b uk-margin-bottom">SMT Search</h3>
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-large-3-10 hidden-print">
+                    <div class="md-card">
+                        <div class="scrum_task critical">
+                            
+                        </div>
+                        <div class="md-card-content">
+                            <div class="uk-form-row">
+                                <div class="uk-grid" data-uk-grid-margin="">
+                                    <div class="uk-width-1-1">
+                                        <div class="parsley-row">
+                                            <span class="uk-form-help-block">
+                                                <i class="uk-icon-barcode"></i>
+                                                <b>
+                                                    Ble
+                                                </b>
+                                            </span>
+                                            <input type="text" class="md-input label-fixed" 
+                                                   focus-on="PartNumber" 
+                                                   name="PartNumber" id="PartNumber" placeholder="Ble" ng-model="PartNumber" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="uk-width-large-8-10 uk-row-first">
+                    @*<div class="md-card">
+                            <div class="md-card-content">
+                                dd
+                            </div>
+                        </div>*@
+                </div>
+            </div>
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-large-8-10 uk-row-first">
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <div class="uk-form-row">
+                                <div class="uk-grid" data-uk-grid-margin="">
+                                    <div class="uk-width-medium-1-1 uk-row-first">
+                                        <div class="uk-overflow-container">
+                                            <table id="example1" class="uk-table uk-table-nowrap table_check">
+                                                <thead>
+                                                    <tr>
+                                                        <th><b>Ble Tag</b></th>
+                                                        <td>Last Seen</td>
+                                                        <td></td>
+                                                        <td>RSSI</td>
+                                                        <td>Gateway</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat="i in SmtProducts | filter: PartNumber">
+                                                        <td>{{i.Epc}}</td>
+
+                                                        <td>
+                                                            <span class="uk-badge uk-badge-warning">
+                                                                {{i.tDate  | jsonDate:'dd MMMM yy hh.mm a' }}
+                                                            </span>
+                                                        </td>
+                                                        <td class="uk-width-large-3-10">
+                                                            <div class="uk-progress uk-progress-mini uk-margin-remove">
+                                                                <div class="uk-progress-bar" style="width: {{100-((i.RSSI)/100 * -100) | number :2}}%;">
+
+                                                                </div>
+                                                            </div>
+                                                           
+                                                        </td>
+                                                        <td>
+                                                            {{i.RSSI}}
+                                                        </td>
+                                                        <td>
+                                                            {{i.Name}}
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <td colspan="7"></td>
+                                                        <td>
+                                                            <div class="uk-input-group">
+                                                                {{i.ShelfName}}
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section foot
+{
+
+    <!-- page specific plugins -->
+    <script src="~/Content/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/bower_components/datatables/media/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/Content/assets/js/kendoui_custom.min.js"></script>
+    <!--  kendoui functions -->
+    <script src="~/Content/assets/js/pages/kendoui.min.js"></script>
+    <script src="~/Scripts/HexaAgular/SMT/SearchByGateway.js"></script>
+    @*<script type="text/javascript">
+            $(function () {
+                document.getElementById('ReaderNo').focus();
+            });
+
+        </script>*@
+
+}

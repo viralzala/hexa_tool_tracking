@@ -1,0 +1,862 @@
+@{
+    ViewBag.Title = "Enterprise Dashboard";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+
+@section head{
+    <style>
+        /* ================================================
+           HEXA ENTERPRISE DASHBOARD v2.0
+           Premium Analytics Dashboard Design
+           ================================================ */
+
+        /* ---------- Page Banner ---------- */
+        .dash-banner {
+            background: linear-gradient(135deg, #1a237e 0%, #283593 40%, #0d47a1 100%);
+            color: white;
+            border-radius: 16px;
+            padding: 28px 32px;
+            margin-bottom: 28px;
+            box-shadow: 0 8px 24px rgba(26, 35, 126, 0.25);
+            position: relative;
+            overflow: hidden;
+        }
+        .dash-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 400px;
+            height: 400px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 50%;
+        }
+        .dash-banner::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            right: 10%;
+            width: 250px;
+            height: 250px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 50%;
+        }
+        .dash-banner .dash-user-info {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .dash-banner .dash-avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.18);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            border: 2px solid rgba(255,255,255,0.3);
+            flex-shrink: 0;
+        }
+
+        .dash-greeting h1 .greeting-text{
+            color: #FFA726 !important;
+        }
+        .dash-banner .dash-greeting h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        .dash-banner .dash-greeting p {
+            margin: 2px 0 0 0;
+            opacity: 0.82;
+            font-size: 13px;
+        }
+        .dash-banner .dash-meta {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .dash-banner .dash-meta .dash-date {
+            font-size: 13px;
+            opacity: 0.9;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .dash-banner .dash-meta .dash-badge {
+            background: rgba(255,255,255,0.15);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .dash-breadcrumb {
+            margin-top: 12px;
+            font-size: 12px;
+            opacity: 0.75;
+            position: relative;
+            z-index: 1;
+        }
+        .dash-breadcrumb a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+        }
+        .dash-breadcrumb span {
+            color: white;
+        }
+
+        /* ---------- Glassmorphism ---------- */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            border-radius: 14px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.04);
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            box-shadow: 0 8px 28px rgba(26, 35, 126, 0.10);
+            transform: translateY(-2px);
+        }
+
+        /* ---------- KPI Grid ---------- */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+        @@media (max-width: 1100px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+        @@media (max-width: 600px) { .kpi-grid { grid-template-columns: 1fr; } }
+
+        .kpi-card {
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            cursor: default;
+        }
+        .kpi-card .kpi-icon-wrap {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            font-size: 22px;
+            color: white;
+        }
+        .kpi-card .kpi-value {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0;
+            line-height: 1.2;
+        }
+        .kpi-card .kpi-label {
+            font-size: 12px;
+            color: #777;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+            margin: 4px 0 0 0;
+        }
+        .kpi-card .kpi-sub {
+            font-size: 11px;
+            color: #999;
+            margin-top: 2px;
+        }
+        .kpi-card .kpi-bg-icon {
+            position: absolute;
+            right: -8px;
+            bottom: -8px;
+            font-size: 64px;
+            opacity: 0.06;
+            color: #1a237e;
+        }
+
+        /* KPI Color Variants */
+        .kpi-primary .kpi-icon-wrap { background: linear-gradient(135deg, #1a237e, #3949ab); }
+        .kpi-primary .kpi-value { color: #1a237e; }
+        .kpi-success .kpi-icon-wrap { background: linear-gradient(135deg, #2e7d32, #43a047); }
+        .kpi-success .kpi-value { color: #2e7d32; }
+        .kpi-warning .kpi-icon-wrap { background: linear-gradient(135deg, #e65100, #ef6c00); }
+        .kpi-warning .kpi-value { color: #e65100; }
+        .kpi-danger .kpi-icon-wrap { background: linear-gradient(135deg, #c62828, #e53935); }
+        .kpi-danger .kpi-value { color: #c62828; }
+        .kpi-info .kpi-icon-wrap { background: linear-gradient(135deg, #01579b, #0288d1); }
+        .kpi-info .kpi-value { color: #01579b; }
+        .kpi-purple .kpi-icon-wrap { background: linear-gradient(135deg, #4a148c, #7b1fa2); }
+        .kpi-purple .kpi-value { color: #4a148c; }
+        .kpi-teal .kpi-icon-wrap { background: linear-gradient(135deg, #00695c, #00897b); }
+        .kpi-teal .kpi-value { color: #00695c; }
+        .kpi-amber .kpi-icon-wrap { background: linear-gradient(135deg, #f57f17, #fbc02d); }
+        .kpi-amber .kpi-value { color: #f57f17; }
+
+        /* ---------- Section Title ---------- */
+        .dash-section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a237e;
+            margin: 0 0 16px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .dash-section-title i {
+            font-size: 20px;
+        }
+
+        /* ---------- Dashboard Content Grid ---------- */
+        .dash-row {
+            display: grid;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+        .dash-row-2 { grid-template-columns: 1fr 1fr; }
+        .dash-row-3 { grid-template-columns: 1fr 1fr 1fr; }
+        .dash-row-4 { grid-template-columns: repeat(4, 1fr); }
+        .dash-row-main { grid-template-columns: 2fr 1fr; }
+        @@media (max-width: 900px) {
+            .dash-row-2, .dash-row-3, .dash-row-4, .dash-row-main { grid-template-columns: 1fr; }
+        }
+
+        /* ---------- Card Inner ---------- */
+        .dash-card-body {
+            padding: 20px;
+        }
+        .dash-card-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .dash-card-header h3 {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .dash-card-header h3 i { color: #1a237e; font-size: 18px; }
+        .dash-card-header .dash-link {
+            font-size: 12px;
+            color: #1a237e;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .dash-card-header .dash-link:hover { text-decoration: underline; }
+
+        /* ---------- Activity List ---------- */
+        .activity-list { list-style: none; padding: 0; margin: 0; }
+        .activity-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        .activity-list li:last-child { border-bottom: none; }
+        .activity-list .act-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: white;
+            flex-shrink: 0;
+        }
+        .activity-list .act-icon.blue { background: linear-gradient(135deg, #1a237e, #5c6bc0); }
+        .activity-list .act-icon.green { background: linear-gradient(135deg, #2e7d32, #66bb6a); }
+        .activity-list .act-icon.orange { background: linear-gradient(135deg, #e65100, #ffa726); }
+        .activity-list .act-icon.red { background: linear-gradient(135deg, #c62828, #ef5350); }
+        .activity-list .act-content { flex: 1; }
+        .activity-list .act-content .act-title {
+            font-size: 13px;
+            font-weight: 500;
+            color: #333;
+        }
+        .activity-list .act-content .act-meta {
+            font-size: 11px;
+            color: #999;
+            margin-top: 2px;
+        }
+
+        /* ---------- Alert List ---------- */
+        .alert-list { list-style: none; padding: 0; margin: 0; }
+        .alert-list li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        .alert-list li:last-child { border-bottom: none; }
+        .alert-list .alert-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .alert-list .alert-dot.red { background: #e53935; }
+        .alert-list .alert-dot.amber { background: #ffa000; }
+        .alert-list .alert-dot.green { background: #43a047; }
+        .alert-list .alert-dot.blue { background: #1e88e5; }
+        .alert-list .alert-content { flex: 1; }
+        .alert-list .alert-content .alert-title {
+            font-size: 13px;
+            font-weight: 500;
+            color: #333;
+        }
+        .alert-list .alert-content .alert-meta {
+            font-size: 11px;
+            color: #999;
+            margin-top: 2px;
+        }
+        .alert-list .alert-badge {
+            font-size: 10px;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .alert-list .alert-badge.due { background: #fff3e0; color: #e65100; }
+        .alert-list .alert-badge.soon { background: #e8f5e9; color: #2e7d32; }
+
+        /* ---------- Quick Actions ---------- */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        .quick-action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 14px 8px;
+            background: #f5f7fa;
+            border-radius: 12px;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-decoration: none;
+            color: #333;
+        }
+        .quick-action-btn:hover {
+            background: #e8eaf6;
+            border-color: #c5cae9;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(26, 35, 126, 0.10);
+        }
+        .quick-action-btn i {
+            font-size: 24px;
+            color: #1a237e;
+        }
+        .quick-action-btn span {
+            font-size: 11px;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        /* ---------- Premium Table ---------- */
+        .dash-table-wrap {
+            overflow-x: auto;
+        }
+        .dash-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        .dash-table thead {
+            background: #f5f7fa;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+        .dash-table thead th {
+            padding: 12px 10px;
+            font-weight: 600;
+            color: #333;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #e0e0e0;
+            text-align: left;
+            white-space: nowrap;
+        }
+        .dash-table tbody td {
+            padding: 10px;
+            color: #555;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .dash-table tbody tr {
+            transition: background 0.15s;
+        }
+        .dash-table tbody tr:nth-child(even) {
+            background: #fafafa;
+        }
+        .dash-table tbody tr:hover {
+            background: #e8eaf6;
+        }
+        .dash-table .status-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .dash-table .status-badge.success { background: #e8f5e9; color: #2e7d32; }
+        .dash-table .status-badge.warning { background: #fff3e0; color: #e65100; }
+        .dash-table .status-badge.info { background: #e1f5fe; color: #01579b; }
+
+        /* ---------- Chart Placeholder ---------- */
+        .chart-box {
+            height: 220px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fafafa;
+            border-radius: 8px;
+            border: 1px dashed #e0e0e0;
+            color: #999;
+            font-size: 13px;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .chart-box i {
+            font-size: 36px;
+            color: #bbb;
+        }
+        .chart-box-small {
+            height: 160px;
+        }
+
+        /* ---------- Responsive ---------- */
+        @@media (max-width: 768px) {
+            .dash-banner { padding: 20px; }
+            .dash-banner .dash-user-info { flex-direction: column; align-items: flex-start; }
+            .dash-banner .dash-meta { margin-left: 0; width: 100%; justify-content: flex-start; }
+            .dash-banner .dash-greeting h1 { font-size: 20px; }
+            .quick-actions { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* ---------- Empty State ---------- */
+        .dash-empty {
+            text-align: center;
+            padding: 20px;
+            color: #aaa;
+        }
+        .dash-empty i {
+            font-size: 36px;
+            margin-bottom: 8px;
+            color: #ccc;
+        }
+        .dash-empty p {
+            margin: 0;
+            font-size: 13px;
+        }
+    </style>
+}
+
+<div id="page_content_inner" ng-controller="NewDashboardCtrl">
+
+    <!-- ============================================== -->
+    <!-- 1. PREMIUM HEADER -->
+    <!-- ============================================== -->
+    <div class="dash-banner">
+        <div class="dash-user-info">
+            <div class="dash-avatar">
+                <i class="material-icons">&#xE7FD;</i>
+            </div>
+            <div class="dash-greeting">
+                <h1>Good {{currentDate.getHours() < 12 ? 'Morning' : currentDate.getHours() < 17 ? 'Afternoon' : 'Evening'}}, {{userName}}</h1>
+                <p>Welcome to Hexa Enterprise Asset Management Platform</p>
+            </div>
+            <div class="dash-meta">
+                <div class="dash-date">
+                    <i class="material-icons" style="font-size:16px;">&#xE192;</i>
+                    {{currentDate | date:'EEEE, MMMM d, yyyy'}}
+                </div>
+                <div class="dash-badge">
+                    <i class="material-icons" style="font-size:14px;">&#xE88A;</i>
+                    {{orgName}}
+                </div>
+            </div>
+        </div>
+        <div class="dash-breadcrumb">
+            <a href="#">Home</a> / <span>Enterprise Dashboard</span>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- 2. KPI CARDS (8 Dynamic) -->
+    <!-- ============================================== -->
+    <div class="kpi-grid">
+        <!-- Total Assets -->
+        <div class="glass-card kpi-card kpi-primary">
+            <div class="kpi-icon-wrap"><i class="material-icons">&#xE86E;</i></div>
+            <p class="kpi-value">{{totalAssets}}</p>
+            <p class="kpi-label">Total Assets</p>
+            <p class="kpi-sub">All registered assets in system</p>
+            <div class="kpi-bg-icon"><i class="material-icons">&#xE86E;</i></div>
+        </div>
+
+        <!-- Active Assets -->
+        <div class="glass-card kpi-card kpi-success">
+            <div class="kpi-icon-wrap"><i class="material-icons">&#xE86C;</i></div>
+            <p class="kpi-value">{{activeAssets}}</p>
+            <p class="kpi-label">Active Assets</p>
+            <p class="kpi-sub">Currently operational</p>
+            <div class="kpi-bg-icon"><i class="material-icons">&#xE86C;</i></div>
+        </div>
+
+        <!-- Assets Issued -->
+        <div class="glass-card kpi-card kpi-warning">
+            <div class="kpi-icon-wrap"><i class="material-icons">&#xE2C4;</i></div>
+            <p class="kpi-value">{{assetsIssued}}</p>
+            <p class="kpi-label">Assets Issued</p>
+            <p class="kpi-sub">Checked out to employees</p>
+            <div class="kpi-bg-icon"><i class="material-icons">&#xE2C4;</i></div>
+        </div>
+
+        <!-- Assets Available -->
+        <div class="glass-card kpi-card kpi-info">
+            <div class="kpi-icon-wrap"><i class="material-icons">&#xE2C6;</i></div>
+            <p class="kpi-value">{{assetsAvailable}}</p>
+            <p class="kpi-label">Assets Available</p>
+            <p class="kpi-sub">Ready for use</p>
+            <div class="kpi-bg-icon"><i class="material-icons">&#xE2C6;</i></div>
+        </div>
+
+        <!-- Calibration Due -->
+        <div class="glass-card kpi-card kpi-purple">
+            <div class="kpi-icon-wrap"><i class="material-icons">&#xE8B0;</i></div>
+            <p class="kpi-value">{{calibrationDue}}</p>
+            <p class="kpi-label">Calibration Due</p>
+            <p class="kpi-sub">Pending calibration records</p>
+            <div class="kpi-bg-icon"><i class="material-icons">&#xE8B0;</i></div>
+        </div>
+
+        <!-- Inspection Due -->
+        <div class="glass-card kpi-card kpi-amber">
+            <div class="kpi-icon-wrap"><i class="material-icons">&#xE86C;</i></div>
+            <p class="kpi-value">{{inspectionDue}}</p>
+            <p class="kpi-label">Inspection Due</p>
+            <p class="kpi-sub">Pending inspections</p>
+            <div class="kpi-bg-icon"><i class="material-icons">&#xE86C;</i></div>
+        </div>
+
+        <!-- Maintenance Due -->
+        <div class="glass-card kpi-card kpi-danger">
+            <div class="kpi-icon-wrap"><i class="material-icons">&#xE86E;</i></div>
+            <p class="kpi-value">{{maintenanceDue}}</p>
+            <p class="kpi-label">Maintenance Due</p>
+            <p class="kpi-sub">Upcoming maintenance tasks</p>
+            <div class="kpi-bg-icon"><i class="material-icons">&#xE86E;</i></div>
+        </div>
+
+        <!-- Expired Assets -->
+        <div class="glass-card kpi-card kpi-teal">
+            <div class="kpi-icon-wrap"><i class="material-icons">&#xE5CD;</i></div>
+            <p class="kpi-value">{{expiredAssets}}</p>
+            <p class="kpi-label">Expired Assets</p>
+            <p class="kpi-sub">Warranty / calibration expired</p>
+            <div class="kpi-bg-icon"><i class="material-icons">&#xE5CD;</i></div>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- 3. QUICK ACTIONS -->
+    <!-- ============================================== -->
+    <div class="glass-card" style="margin-bottom: 24px;">
+        <div class="dash-card-header">
+            <h3><i class="material-icons">&#xE80B;</i> Quick Actions</h3>
+        </div>
+        <div class="dash-card-body">
+            <div class="quick-actions">
+                <a href="/AssetTag" class="quick-action-btn" title="Add New Asset">
+                    <i class="material-icons">&#xE145;</i>
+                    <span>Add Asset</span>
+                </a>
+                <a href="/MoreAssetDetail" class="quick-action-btn" title="Issue Asset to Employee">
+                    <i class="material-icons">&#xE2C4;</i>
+                    <span>Issue Asset</span>
+                </a>
+                <a href="/MoreAssetDetail" class="quick-action-btn" title="Return Asset from Employee">
+                    <i class="material-icons">&#xE2C6;</i>
+                    <span>Return Asset</span>
+                </a>
+                <a href="/AssetCalibration" class="quick-action-btn" title="Calibrate Asset">
+                    <i class="material-icons">&#xE8B0;</i>
+                    <span>Calibration</span>
+                </a>
+                <a href="/AssetInspection" class="quick-action-btn" title="Inspect Asset">
+                    <i class="material-icons">&#xE86C;</i>
+                    <span>Inspection</span>
+                </a>
+                <a href="/MoreAssetDetail" class="quick-action-btn" title="Perform Maintenance">
+                    <i class="material-icons">&#xE86E;</i>
+                    <span>Maintenance</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- 4. MAIN CONTENT GRID -->
+    <!-- ============================================== -->
+    <div class="dash-row dash-row-main">
+
+        <!-- LEFT COLUMN -->
+        <div class="dash-left-col">
+
+            <!-- Recent Activities: Latest Assets -->
+            <div class="glass-card" style="margin-bottom: 20px;">
+                <div class="dash-card-header">
+                    <h3><i class="material-icons">&#xE889;</i> Latest Assets</h3>
+                </div>
+                <div class="dash-card-body">
+                    <div ng-if="latestAssets.length > 0">
+                        <ul class="activity-list">
+                            <li ng-repeat="item in latestAssets">
+                                <div class="act-icon blue"><i class="material-icons">&#xE86E;</i></div>
+                                <div class="act-content">
+                                    <div class="act-title">{{item.IteamName}} <span ng-if="item.ModelNo">- {{item.ModelNo}}</span></div>
+                                    <div class="act-meta">Added by {{item.CreatedBy}} on {{item.CreatedDate | jsonDate:'dd MMM yy'}}</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="dash-empty" ng-if="latestAssets.length === 0">
+                        <i class="material-icons">&#xE889;</i>
+                        <p>No assets added yet</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Transactions Table -->
+            <div class="glass-card" style="margin-bottom: 20px;">
+                <div class="dash-card-header">
+                    <h3><i class="material-icons">&#xE8B0;</i> Recent Transactions</h3>
+                </div>
+                <div class="dash-card-body" style="padding: 0;">
+                    <div class="dash-table-wrap">
+                        <table class="dash-table" ng-if="recentTransactions.length > 0">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Issue Date</th>
+                                    <th>Return Date</th>
+                                    <th>Created By</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="txn in recentTransactions">
+                                    <td><span class="status-badge info">{{txn.TransactionType}}</span></td>
+                                    <td>{{txn.IssueDate | jsonDate:'dd MMM yy'}}</td>
+                                    <td>{{txn.ReturnDate ? (txn.ReturnDate | jsonDate:'dd MMM yy') : 'N/A'}}</td>
+                                    <td>{{txn.CreatedBy}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="dash-empty" ng-if="recentTransactions.length === 0" style="padding:30px;">
+                            <i class="material-icons">&#xE8B0;</i>
+                            <p>No transactions recorded yet</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row: Asset Status (Donut placeholder) & Assets by Department -->
+            <div class="dash-row dash-row-2" style="margin-bottom: 20px;">
+                <div class="glass-card">
+                    <div class="dash-card-header">
+                        <h3><i class="material-icons">&#xE8AF;</i> Asset Status</h3>
+                    </div>
+                    <div class="dash-card-body">
+                        <div class="chart-box chart-box-small">
+                            <i class="material-icons">&#xE8AF;</i>
+                            <span>Asset Status Distribution</span>
+                            <span style="font-size:11px;color:#bbb;">{{totalAssets}} total records</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card">
+                    <div class="dash-card-header">
+                        <h3><i class="material-icons">&#xE8B6;</i> By Department</h3>
+                    </div>
+                    <div class="dash-card-body">
+                        <div class="chart-box chart-box-small">
+                            <i class="material-icons">&#xE8B6;</i>
+                            <span>Assets by Department</span>
+                            <span style="font-size:11px;color:#bbb;">{{assetsByDepartment.length}} departments</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts: Calibration & Maintenance Trends -->
+            <div class="dash-row dash-row-2" style="margin-bottom: 20px;">
+                <div class="glass-card">
+                    <div class="dash-card-header">
+                        <h3><i class="material-icons">&#xE8B0;</i> Calibration Trend</h3>
+                    </div>
+                    <div class="dash-card-body">
+                        <div class="chart-box chart-box-small">
+                            <i class="material-icons">&#xE8B0;</i>
+                            <span>Monthly Calibration Records</span>
+                            <span style="font-size:11px;color:#bbb;">{{monthlyCalibrations.length}} months</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card">
+                    <div class="dash-card-header">
+                        <h3><i class="material-icons">&#xE86E;</i> Maintenance Trend</h3>
+                    </div>
+                    <div class="dash-card-body">
+                        <div class="chart-box chart-box-small">
+                            <i class="material-icons">&#xE86E;</i>
+                            <span>Maintenance by Type</span>
+                            <span style="font-size:11px;color:#bbb;">{{maintenanceByType.length}} categories</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div class="dash-right-col">
+
+            <!-- Latest Calibrations -->
+            <div class="glass-card" style="margin-bottom: 20px;">
+                <div class="dash-card-header">
+                    <h3><i class="material-icons">&#xE8B0;</i> Latest Calibrations</h3>
+                </div>
+                <div class="dash-card-body">
+                    <div ng-if="latestCalibrations.length > 0">
+                        <ul class="activity-list">
+                            <li ng-repeat="item in latestCalibrations">
+                                <div class="act-icon orange"><i class="material-icons">&#xE8B0;</i></div>
+                                <div class="act-content">
+                                    <div class="act-title">Cert: {{item.CertificateNo || 'N/A'}}</div>
+                                    <div class="act-meta">{{item.CreatedBy}} - {{item.CalibrationDate | jsonDate:'dd MMM yy'}}</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="dash-empty" ng-if="latestCalibrations.length === 0">
+                        <i class="material-icons">&#xE8B0;</i>
+                        <p>No calibrations recorded</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Latest Inspections -->
+            <div class="glass-card" style="margin-bottom: 20px;">
+                <div class="dash-card-header">
+                    <h3><i class="material-icons">&#xE86C;</i> Latest Inspections</h3>
+                </div>
+                <div class="dash-card-body">
+                    <div ng-if="latestInspections.length > 0">
+                        <ul class="activity-list">
+                            <li ng-repeat="item in latestInspections">
+                                <div class="act-icon green"><i class="material-icons">&#xE86C;</i></div>
+                                <div class="act-content">
+                                    <div class="act-title">{{item.InspectionNo}} <span class="status-badge" ng-class="item.Status === 'Passed' ? 'success' : 'warning'">{{item.Status}}</span></div>
+                                    <div class="act-meta">{{item.Inspector}} - {{item.InspectionDate | jsonDate:'dd MMM yy'}}</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="dash-empty" ng-if="latestInspections.length === 0">
+                        <i class="material-icons">&#xE86C;</i>
+                        <p>No inspections recorded</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Latest Maintenance -->
+            <div class="glass-card" style="margin-bottom: 20px;">
+                <div class="dash-card-header">
+                    <h3><i class="material-icons">&#xE86E;</i> Latest Maintenance</h3>
+                </div>
+                <div class="dash-card-body">
+                    <div ng-if="latestMaintenance.length > 0">
+                        <ul class="activity-list">
+                            <li ng-repeat="item in latestMaintenance">
+                                <div class="act-icon red"><i class="material-icons">&#xE86E;</i></div>
+                                <div class="act-content">
+                                    <div class="act-title">{{item.Title}}</div>
+                                    <div class="act-meta">{{item.CreatedBy}} - Cost: &#8377;{{item.Cost}}</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="dash-empty" ng-if="latestMaintenance.length === 0">
+                        <i class="material-icons">&#xE86E;</i>
+                        <p>No maintenance records</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upcoming Alerts -->
+            <div class="glass-card" style="margin-bottom: 20px;">
+                <div class="dash-card-header">
+                    <h3><i class="material-icons">&#xE7F4;</i> Upcoming Alerts</h3>
+                </div>
+                <div class="dash-card-body">
+                    <div ng-if="upcomingCalibrations.length > 0 || upcomingInspections.length > 0">
+                        <p style="font-size:12px;font-weight:600;color:#e65100;margin:0 0 8px 0;">Calibration Due</p>
+                        <ul class="alert-list" ng-if="upcomingCalibrations.length > 0">
+                            <li ng-repeat="item in upcomingCalibrations">
+                                <span class="alert-dot red"></span>
+                                <div class="alert-content">
+                                    <div class="alert-title">{{item.CertificateNo || 'Calibration'}}</div>
+                                    <div class="alert-meta">Due: {{item.DueDate | jsonDate:'dd MMM yy'}}</div>
+                                </div>
+                                <span class="alert-badge due">Due</span>
+                            </li>
+                        </ul>
+                        <p style="font-size:12px;font-weight:600;color:#01579b;margin:12px 0 8px 0;">Inspection Due</p>
+                        <ul class="alert-list" ng-if="upcomingInspections.length > 0">
+                            <li ng-repeat="item in upcomingInspections">
+                                <span class="alert-dot blue"></span>
+                                <div class="alert-content">
+                                    <div class="alert-title">{{item.InspectionNo}}</div>
+                                    <div class="alert-meta">Date: {{item.InspectionDate | jsonDate:'dd MMM yy'}}</div>
+                                </div>
+                                <span class="alert-badge soon">{{item.Status || 'Pending'}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="dash-empty" ng-if="upcomingCalibrations.length === 0 && upcomingInspections.length === 0">
+                        <i class="material-icons">&#xE7F4;</i>
+                        <p>No upcoming alerts</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section foot{
+    <script src="~/Scripts/HexaAgular/NewDashboard.js"></script>
+}

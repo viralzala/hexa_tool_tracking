@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="c5dd373ecdb448cd9f84de417a037c82" Name="Diagram1" ZoomLevel="81">
+        <EntityTypeShape EntityType="ERPModel.AppMenu" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="ERPModel.AppRole" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="ERPModel.AppUser" Width="1.5" PointX="4.75" PointY="0.75" />
+        <EntityTypeShape EntityType="ERPModel.ConfigureModel" Width="1.5" PointX="6.75" PointY="0.75" />
+        <EntityTypeShape EntityType="ERPModel.DepartMent" Width="1.5" PointX="0.75" PointY="6.75" />
+        <EntityTypeShape EntityType="ERPModel.HexaModule" Width="1.5" PointX="6.75" PointY="3.75" />
+        <EntityTypeShape EntityType="ERPModel.Icon" Width="1.5" PointX="6.75" PointY="6.75" />
+        <EntityTypeShape EntityType="ERPModel.mActivity" Width="1.5" PointX="8.75" PointY="0.75" />
+        <EntityTypeShape EntityType="ERPModel.mAgency" Width="1.5" PointX="2.75" PointY="8.75" />
+        <EntityTypeShape EntityType="ERPModel.mDesignation" Width="1.5" PointX="8.75" PointY="4.75" />
+        <EntityTypeShape EntityType="ERPModel.mEmployeeJobOrder" Width="1.5" PointX="8.75" PointY="8.75" />
+        <EntityTypeShape EntityType="ERPModel.mEmployeeZone" Width="1.5" PointX="4.75" PointY="9.75" />
+        <EntityTypeShape EntityType="ERPModel.mFloorMaster" Width="1.5" PointX="10.75" PointY="0.75" />
+        <EntityTypeShape EntityType="ERPModel.mGroupMaster" Width="1.5" PointX="10.75" PointY="4.75" />
+        <EntityTypeShape EntityType="ERPModel.mIndooMap" Width="1.5" PointX="10.75" PointY="8.75" />
+        <EntityTypeShape EntityType="ERPModel.mIteamMaster" Width="1.5" PointX="12.75" PointY="0.75" />
+        <EntityTypeShape EntityType="ERPModel.mIteamTypeMaster" Width="1.5" PointX="0.75" PointY="12.75" />
+        <EntityTypeShape EntityType="ERPModel.mLocationMaster" Width="1.5" PointX="12.75" PointY="4.75" />
+        <EntityTypeShape EntityType="ERPModel.mLocatorMaster" Width="1.5" PointX="6.75" PointY="12.75" />
+        <EntityTypeShape EntityType="ERPModel.mMailConfig" Width="1.5" PointX="12.75" PointY="8.75" />
+        <EntityTypeShape EntityType="ERPModel.mMaintenanceType" Width="1.5" PointX="2.75" PointY="13.75" />
+        <EntityTypeShape EntityType="ERPModel.mReader" Width="1.5" PointX="8.75" PointY="13.75" />
+        <EntityTypeShape EntityType="ERPModel.mReaderSettup" Width="1.5" PointX="14.75" PointY="0.75" />
+        <EntityTypeShape EntityType="ERPModel.mRoomMaster" Width="1.5" PointX="14.75" PointY="6.75" />
+        <EntityTypeShape EntityType="ERPModel.mSetDistance" Width="1.5" PointX="10.75" PointY="14.75" />
+        <EntityTypeShape EntityType="ERPModel.mShelf" Width="1.5" PointX="14.75" PointY="11.75" />
+        <EntityTypeShape EntityType="ERPModel.mShift" Width="1.5" PointX="12.75" PointY="15.75" />
+        <EntityTypeShape EntityType="ERPModel.mSiteMaster" Width="1.5" PointX="14.75" PointY="15.75" />
+        <EntityTypeShape EntityType="ERPModel.mSkillCategory" Width="1.5" PointX="16.75" PointY="0.75" />
+        <EntityTypeShape EntityType="ERPModel.mSMTProduct" Width="1.5" PointX="16.75" PointY="4.75" />
+        <EntityTypeShape EntityType="ERPModel.mStatusMaster" Width="1.5" PointX="16.75" PointY="13.75" />
+        <EntityTypeShape EntityType="ERPModel.mSupplier" Width="1.5" PointX="0.75" PointY="17.75" />
+        <EntityTypeShape EntityType="ERPModel.mUnitMaster" Width="1.5" PointX="2.75" PointY="17.75" />
+        <EntityTypeShape EntityType="ERPModel.mVendor" Width="1.5" PointX="4.75" PointY="17.75" />
+        <EntityTypeShape EntityType="ERPModel.mWarehouseMaster" Width="1.5" PointX="16.75" PointY="17.75" />
+        <EntityTypeShape EntityType="ERPModel.mWorkCategory" Width="1.5" PointX="18.75" PointY="0.75" />
+        <EntityTypeShape EntityType="ERPModel.mWorkOrder" Width="1.5" PointX="18.75" PointY="4.75" />
+        <EntityTypeShape EntityType="ERPModel.mZone" Width="1.5" PointX="6.75" PointY="18.75" />
+        <EntityTypeShape EntityType="ERPModel.OrgInfo" Width="1.5" PointX="18.75" PointY="8.75" />
+        <EntityTypeShape EntityType="ERPModel.RoleAcess" Width="1.5" PointX="8.75" PointY="18.75" />
+        <EntityTypeShape EntityType="ERPModel.RoleMenu" Width="1.5" PointX="18.75" PointY="11.75" />
+        <EntityTypeShape EntityType="ERPModel.Rolemodule" Width="1.5" PointX="18.75" PointY="16.75" />
+        <EntityTypeShape EntityType="ERPModel.SmtProductAuditLog" Width="1.5" PointX="10.75" PointY="19.75" />
+        <EntityTypeShape EntityType="ERPModel.tAssetCheckOut" Width="1.5" PointX="12.75" PointY="19.75" />
+        <EntityTypeShape EntityType="ERPModel.tAssetMonitor" Width="1.5" PointX="18.75" PointY="19.75" />
+        <EntityTypeShape EntityType="ERPModel.tAssetStockIn" Width="1.5" PointX="20.75" PointY="0.75" />
+        <EntityTypeShape EntityType="ERPModel.tAssetStockIssue" Width="1.5" PointX="20.75" PointY="5.75" />
+        <EntityTypeShape EntityType="ERPModel.tAssetStockTranfer" Width="1.5" PointX="20.75" PointY="10.75" />
+        <EntityTypeShape EntityType="ERPModel.tAssetTag" Width="1.5" PointX="20.75" PointY="15.75" />
+        <EntityTypeShape EntityType="ERPModel.TC_Action" Width="1.5" PointX="14.75" PointY="21.75" />
+        <EntityTypeShape EntityType="ERPModel.TC_Customer" Width="1.5" PointX="22.75" PointY="0.75" />
+        <EntityTypeShape EntityType="ERPModel.TC_EmailConfiguration" Width="1.5" PointX="22.75" PointY="5.75" />
+        <EntityTypeShape EntityType="ERPModel.TC_InquiryGroupSource" Width="1.5" PointX="22.75" PointY="10.75" />
+        <EntityTypeShape EntityType="ERPModel.TC_InquirySource" Width="1.5" PointX="22.75" PointY="14.75" />
+        <EntityTypeShape EntityType="ERPModel.TC_InquiryStatus" Width="1.5" PointX="16.75" PointY="22.75" />
+        <EntityTypeShape EntityType="ERPModel.TC_InquiryType" Width="1.5" PointX="22.75" PointY="18.75" />
+        <EntityTypeShape EntityType="ERPModel.TC_Lead" Width="1.5" PointX="22.75" PointY="22.75" />
+        <EntityTypeShape EntityType="ERPModel.TC_LeadDisposition" Width="1.5" PointX="0.75" PointY="23.75" />
+        <EntityTypeShape EntityType="ERPModel.TC_LeadFollowUp" Width="1.5" PointX="2.75" PointY="23.75" />
+        <EntityTypeShape EntityType="ERPModel.TC_LeadStage" Width="1.5" PointX="4.75" PointY="23.75" />
+        <EntityTypeShape EntityType="ERPModel.TC_LeadSubDisposition" Width="1.5" PointX="6.75" PointY="23.75" />
+        <EntityTypeShape EntityType="ERPModel.TC_LeadType" Width="1.5" PointX="8.75" PointY="23.75" />
+        <EntityTypeShape EntityType="ERPModel.tEmployeeTag" Width="1.5" PointX="10.75" PointY="23.75" />
+        <EntityTypeShape EntityType="ERPModel.tExtendWarranty" Width="1.5" PointX="24.75" PointY="0.75" />
+        <EntityTypeShape EntityType="ERPModel.tMaintenance" Width="1.5" PointX="24.75" PointY="5.75" />
+        <EntityTypeShape EntityType="ERPModel.toCategoryMaster" Width="1.5" PointX="24.75" PointY="11.75" />
+        <EntityTypeShape EntityType="ERPModel.toMonitor" Width="1.5" PointX="24.75" PointY="15.75" />
+        <EntityTypeShape EntityType="ERPModel.toRFIDType" Width="1.5" PointX="24.75" PointY="19.75" />
+        <EntityTypeShape EntityType="ERPModel.toSupplier" Width="1.5" PointX="24.75" PointY="23.75" />
+        <EntityTypeShape EntityType="ERPModel.toSupplierCategory" Width="1.5" PointX="12.75" PointY="25.75" />
+        <EntityTypeShape EntityType="ERPModel.toSupplierType" Width="1.5" PointX="18.75" PointY="25.75" />
+        <EntityTypeShape EntityType="ERPModel.toToolMaintenance" Width="1.5" PointX="26.75" PointY="0.75" />
+        <EntityTypeShape EntityType="ERPModel.toToolStockIn" Width="1.5" PointX="26.75" PointY="5.75" />
+        <EntityTypeShape EntityType="ERPModel.toTooltag" Width="1.5" PointX="26.75" PointY="10.75" />
+        <EntityTypeShape EntityType="ERPModel.toTrackInfo" Width="1.5" PointX="14.75" PointY="26.75" />
+        <EntityTypeShape EntityType="ERPModel.tPortChangeLog" Width="1.5" PointX="26.75" PointY="18.75" />
+        <EntityTypeShape EntityType="ERPModel.tReaderLog" Width="1.5" PointX="26.75" PointY="22.75" />
+        <EntityTypeShape EntityType="ERPModel.tRFIDType" Width="1.5" PointX="26.75" PointY="26.75" />
+        <EntityTypeShape EntityType="ERPModel.tSpeedTrack" Width="1.5" PointX="4.75" PointY="27.75" />
+        <EntityTypeShape EntityType="ERPModel.tToolTrackDemo" Width="1.5" PointX="6.75" PointY="27.75" />
+        <EntityTypeShape EntityType="ERPModel.tTrackInfo" Width="1.5" PointX="28.75" PointY="0.75" />
+        <EntityTypeShape EntityType="ERPModel.mEmployeeJobOrderAudit" Width="1.5" PointX="0.75" PointY="28.75" />
+        <AssociationConnector Association="ERPModel.FK_AppUser_AppRole_AppRoleId" />
+        <AssociationConnector Association="ERPModel.FK_DepartMent_OrgInfo_OrgInfoId" />
+        <AssociationConnector Association="ERPModel.FK_mDesignation_OrgInfo_OrgInfoId" />
+        <EntityTypeShape EntityType="ERPModel.AssetCalibration" Width="1.5" PointX="29.375" PointY="4.75" />
+        <EntityTypeShape EntityType="ERPModel.AssetInspection" Width="1.5" PointX="29.375" PointY="9.75" />
+        <EntityTypeShape EntityType="ERPModel.tAssetCalibration" Width="1.5" PointX="15" PointY="37.125" />
+        <EntityTypeShape EntityType="ERPModel.tAssetMaintenance" Width="1.5" PointX="15" PointY="31.75" />
+        <AssociationConnector Association="ERPModel.FK_tAssetCalibration_mIteamMaster" />
+        <AssociationConnector Association="ERPModel.FK_tAssetMaintenance_mIteamMaster" />
+        <EntityTypeShape EntityType="ERPModel.tAssetInspection" Width="1.5" PointX="15" PointY="42.875" />
+        <AssociationConnector Association="ERPModel.FK_tAssetInspection_mIteamMaster" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

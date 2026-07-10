@@ -1,0 +1,102 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+
+@section head
+{
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.common-material.min.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.material.min.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/datatables/media/css/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/datatables/media/css/jquery.dataTables.min.css" rel="stylesheet" />
+}
+
+<div id="page_content">
+    <div id="page_content_inner">
+        <h3 class="heading_b uk-margin-bottom" ng-bind="'RolePermissions'|translate"></h3>
+        <div class="md-card">
+            <div class="md-card-content large-padding">
+                <form action="" class="uk-form-stacked" enctype="multipart/form-data" method="post" name="RolePermissions" id="RolePermissions">
+                    <div class="uk-grid" data-uk-grid-margin>
+
+                        <div class="parsley-row" hidden="hidden">
+                            <input type="text" name="RolePemissionsid" id="RolePemissionsid" class="md-input" />
+                        </div>
+                        <div class="uk-width-medium-1-2">
+                            <div class="parsley-row">
+                                <label class="uk-form-label" for="AppUserId" ng-bind="'API.UserAuthentication'|translate"><span class="req">*</span></label>
+                                <input id="AppUserId123" name="AppUserId" required placeholder="{{'API.UserAuthentication'|translate}}" class="uk-form-width-medium" />
+                            </div>
+                            <div class="parsley-row">
+                                <label class="uk-form-label" for="moduleID" ng-bind="'Module'|translate"><span class="req">*</span></label>
+                                <input id="moduleID123" name="moduleID" required placeholder="{{'Module'|translate}}" onchange="moduleonselected();" class="uk-form-width-medium" />
+                            </div>
+                            <div class="parsley-row">
+                                <label class="uk-form-label" for="AppMenuId" ng-bind="'Windows'|translate"><span class="req">*</span></label>
+                                <input id="AppMenuId123" name="AppMenuIdrr" required placeholder="{{'Windows'|translate}}" class="uk-form-width-medium" />
+                            </div>
+                            <div class="parsley-row">
+                                <label class="uk-form-label" for="IsRead" ng-bind="'Read'|translate"><span class="req">*</span></label>
+                                <input type="checkbox" id="IsRead" name="IsRead123" required value="IsRead" class="uk-form-width-medium" />
+                            </div>
+                            <div class="parsley-row">
+                                <label class="uk-form-label" for="Iswrite" ng-bind="'Write'|translate"><span class="req">*</span></label>
+                                <input type="checkbox" id="Iswrite" name="Iswrite123" required value="IsWrite" class="uk-form-width-medium" />
+                            </div>
+                        </div>
+                        <div class="uk-width-1-1">
+
+                            <button type="button" class="md-btn md-btn-primary" id="btnsave" onclick="SaveRolePermissions()" ng-bind="'Submit'|translate"></button>
+                            <button type="button" class="md-btn md-btn-primary" id="btnupdate" onclick="UpdateWindow()" ng-bind="'Update'|translate"></button>
+                            <button type="reset" class="md-btn md-btn-primary" id="btnCancel" onclick="CancelWindow()" ng-bind="'Cancel'|translate"></button>
+
+                            @*<button type="submit" class="md-btn md-btn-primary" id="btnsave" value="Submit" onclick="SaveRolePermissions()">Submit</button>
+                                <input type="button" class="md-btn md-btn-primary" id="btnupdate" value="Update" onclick="UpdateWindow()" />
+                                <input type="button" class="md-btn md-btn-primary" id="btnCancel" value="Cancel" onclick="CancelWindow()" />*@
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="md-card uk-margin-medium-bottom">
+            <div class="md-card-content">
+                <div class="uk-overflow-container">
+                    <table id="example1" class="uk-table uk-table-nowrap table_check">
+                        <thead>
+                            <tr>
+                                <th ng-bind="'Id'|translate"></th>
+                                <th ng-bind="'Id'|translate"></th>
+                                <th ng-bind="'Organization'|translate"></th>
+                                <th ng-bind="'Username'|translate"></th>
+                                <th ng-bind="'Module'|translate"></th>
+                                <th ng-bind="'MenuName'|translate"></th>
+                                <th ng-bind="'Read'|translate"></th>
+                                <th ng-bind="'Write'|translate"></th>
+                                <th ng-bind="'General.Action'|translate"></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section foot
+{
+    <!-- page specific plugins -->
+    <script src="~/Content/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/bower_components/datatables/media/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/AppJs/UserManagement/RolePermissions.js"></script>
+
+    <script src="~/Content/assets/js/kendoui_custom.min.js"></script>
+    <!--  kendoui functions -->
+    <script src="~/Content/assets/js/pages/kendoui.min.js"></script>
+}
+
+
+
+

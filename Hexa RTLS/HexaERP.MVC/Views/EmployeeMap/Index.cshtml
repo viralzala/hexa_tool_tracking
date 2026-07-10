@@ -1,0 +1,394 @@
+﻿@{
+    ViewBag.Title = "Index";
+
+    if (Session["SortCode"] != null)
+    {
+        if (Convert.ToString(Session["SortCode"]) == "SA")
+        {
+            Layout = "~/Views/Shared/_Site.cshtml";
+        }
+        else if (Convert.ToString(Session["SortCode"]) == "AD")
+        {
+            Layout = "~/Views/Shared/_Admin.cshtml";
+        }
+        else if (new string[] { "OT", "SA" }.Contains(Convert.ToString(Session["SortCode"])))
+        {
+            Layout = "~/Views/Shared/_Users.cshtml";
+        }
+    }
+    else
+    {
+
+    }
+}
+
+@section head
+{
+    <!-- htmleditor (codeMirror) -->
+    <link href="@Url.Content("~/Content/bower_components/codemirror/lib/codemirror.css")"
+          rel="stylesheet" type="text/css" media="all" />
+
+    <!-- kendo UI -->
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.common-material.min.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.material.min.css" rel="stylesheet" />
+
+    <link href="@Url.Content("~/Content/bower_components/datatables/media/css/jquery.dataTables.min.css")"
+          rel="stylesheet" type="text/css" media="all" />
+
+    <link href="@Url.Content("~/Content/bower_components/datatables/media/css/dataTables.bootstrap.css")"
+          rel="stylesheet" type="text/css" media="all" />
+}
+
+<div ng-controller="EmployeeMapCtrl">
+    <div id="page_content">
+        <div id="page_content_inner">
+
+            <div class="md-card uk-margin-medium-bottom">
+                <div class="md-card-content">
+                    <div class="uk-grid" data-uk-grid-margin>
+                        <div class="uk-width-medium-1-1">
+                            <div class="uk-vertical-align">
+                                <div class="uk-vertical-align-middle">
+                                    <ul id="contact_list_filter" class="uk-subnav uk-subnav-pill uk-margin-remove">
+                                        <li class="uk-active" data-uk-filter=""><a class="" href="#">All</a></li>
+                                        <div ng-repeat="Iteam in Location">
+                                            <li data-uk-filter="{{Iteam.mZoneId}}">
+                                                <a href="#">{{Iteam.Zone}}</a>
+                                            </li>
+                                        </div>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="heading_b uk-text-center grid_no_results" style="display:none">No Locations found</h3>
+            <div class="uk-grid-width-small-1-2 uk-grid-width-medium-1-3 uk-grid-width-large-1-4 uk-grid-width-xlarge-1-4 hierarchical_show" id="contact_list">
+                <div data-uk-filter="{{Iteam.mZoneId}},{{Iteam.mFloorMasterId}},mudassarinamdar@gmail.com" ng-repeat="Iteam in Areas">
+                    <div class="md-card md-card-hover">
+                        <div class="md-card-content">
+                            <div>
+                                <div class="md-card-head-menu">
+                                    <i class="md-icon material-icons md-icon-light">&#xE5D5;</i>
+                                </div>
+                            </div>
+                            <ul class="md-list">
+                                <li>
+                                    <div class="uk-grid" data-uk-grid-margin="">
+                                        <div class="uk-width-medium-1-2 uk-row-first">
+                                            <div class="md-list-content">
+                                                <i title="" class="material-icons md-36">&#xE532;</i><br />
+                                                <hr />
+                                                <span class="md-list-heading"><b> {{Iteam.FloorName}}</b></span><br />
+                                                <span class="uk-text-small uk-text-muted">{{Iteam.Zone}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="uk-width-medium-1-4">
+
+                                        </div>
+                                        <div class="uk-width-medium-1-4">
+                                            <div class="right-align" ng-repeat="mI in Areas | filter:{mFloorMasterId: Iteam.mFloorMasterId}">
+                                                <h1>
+                                                    {{(FillterIData | filter:{mFloorMasterId:mI.mFloorMasterId}).length}}
+                                                </h1>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div>
+                                        <div ng-repeat="mI in Areas | filter:{mFloorMasterId : Iteam.mFloorMasterId}" class="mainDiv" id="Zone{{Iteam.mFloorMasterId}}">
+                                            @*<div class="md-list" ng-repeat="rIds in FillterIData | filter:{mFloorMasterId : mI.mFloorMasterId}">
+                                                         <span class="uk-text-small uk-text-muted uk-text-truncate">
+                                                             <a ng-click="setInformation(rIds,Iteam.FloorName)" data-uk-modal="{target:'#modal_overflow'}" data-uk-tooltip="{cls:'long-text'}" title="Name :{{rIds.Name}}</br> Agency: {{rIds.Agency}}</br> Designation: {{rIds.Designation}}</br> SkillCategory :{{rIds.SkillCategory}}</br> WorkCategory :{{rIds.WorkCategory}}</br> Activity :{{rIds.Activity}}">
+                                                                 <i class="material-icons md-36">&#xE7FD;</i>
+                                                                 <span class="uk-badge uk-badge-primary">{{rIds.Name}}</span>
+                                                             </a>
+                                                         </span>
+                                                </div>*@
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="modal_overflow" class="uk-modal">
+        <div class="uk-modal-dialog uk-modal-dialog-large">
+            <button type="button" class="uk-modal-close uk-close"></button>
+            <div class="uk-grid" data-uk-grid-margin data-uk-grid-match id="user_profile">
+                <div class="uk-width-large-1-3">
+                    <div class="md-card">
+                        <div class="user_heading">
+                            @*<div class="user_heading_avatar">
+                                    <div class="thumbnail">
+                                        <img src="Content/assets/img/avatars/avatar_11.png" alt="user avatar" />
+                                    </div>
+                                </div>*@
+                            <div class="user_heading_content">
+                                <h2 class="heading_b uk-margin-bottom">
+                                    <span class="uk-text-truncate">{{_Name}}</span>
+                                    <span class="sub-heading">{{_EmpId}}</span>
+                                    <span class="sub-heading">{{_RFID}}</span>
+                                </h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="uk-width-large-1-3">
+                    <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
+                        <div class="uk-width-large-1-1">
+                            <h4 class="heading_c uk-margin-small-bottom">Track Info</h4>
+                            <div class="timeline">
+                                <div class="timeline_item">
+                                    <div class="timeline_icon timeline_icon_warning"><i class="material-icons">&#xE7FE;</i></div>
+                                    <div class="timeline_content">
+                                        Employee Information
+                                        <div class="timeline_content_addon">
+                                            <div>
+                                                Agency &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:<span><b> {{_Agency}}</b></span><br />
+                                                Designation &nbsp;&nbsp;&nbsp;  :<span><b>{{_Designation}}</b></span><br />
+                                                <span>SkillCategory &nbsp;&nbsp;:<b>{{_SkillCategory}}</b></span><br />
+                                                <span>WorkCategory  :<b>{{_WorkCategory}}</b></span><br />
+                                                <span>Activity &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:<b>{{_Activity}}</b></span><br />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="uk-width-large-1-3">
+                    <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
+                        <div class="uk-width-large-1-1">
+                            <h4 class="heading_c uk-margin-small-bottom">Track Info</h4>
+                            <div class="timeline">
+
+                                <div class="timeline_item">
+                                    <div class="timeline_icon timeline_icon_danger"><i class="material-icons">&#xE88A;</i></div>
+                                    <div class="timeline_content">
+                                        Track Location
+                                        <div class="timeline_content_addon">
+                                            <div class="md-list-content">
+                                                <span class="md-list-heading"><b>{{_trackWork}}</b></span><br />
+                                                <span class="md-list-heading">{{_tDate | jsonDate: "yyyy-MM-dd HH:mm:ss"}} </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section foot
+{
+    <style>
+        .mainDiv {
+            width: 320px;
+            height: 200px;
+            background: #f0f0f0;
+            position: relative;
+        }
+
+        .boxDiv {
+            /*width: 100px;
+            height: 100px;*/
+            /*background: #e00;*/
+            border-radius: 50px;
+            position: absolute;
+            /* parent width - box width */
+        }
+    </style>
+
+    @*<script src="@Url.Content("~/Content/bower_components/dragula.js/dist/dragula.min.js")"
+        type="text/javascript"></script>*@
+
+    <!--  sortable functions -->
+    @*<script src="@Url.Content("~/Content/assets/js/pages/components_sortable.min.js")"
+        type="text/javascript"></script>*@
+
+    <!-- functions -->
+    <script src="@Url.Content("~/Content/assets/js/kendoui_custom.min.js")"
+            type="text/javascript"></script>
+
+    <script src="@Url.Content("~/Content/assets/js/pages/kendoui.min.js")"
+            type="text/javascript"></script>
+
+
+    <!--  mailbox functions -->
+    @*<script src="@Url.Content("~/Content/assets/js/pages/page_mailbox.min.js")"
+        type="text/javascript"></script>*@
+
+    <!-- page specific plugins -->
+    <!--  contact list functions -->
+    <script src="@Url.Content("~/Content/assets/js/pages/page_contact_list.min.js")"
+            type="text/javascript"></script>
+
+    <!-- product edit functions -->
+    <script src="@Url.Content("~/Content/assets/js/pages/ecommerce_product_edit.min.js")"
+            type="text/javascript"></script>
+
+    <!--  kendoui functions -->
+    <script src="~/Scripts/HexaAgular/EmployeeMap.js"></script>
+
+    <script>
+        //$(document).ready(function () {
+
+        //    console.log('BindArea');
+        //    var heightArray = $(".post-container").map(function () {
+        //        return $(this).height();
+        //    }).get();
+
+        //    var maxHeight = Math.max.apply(Math, heightArray);
+        //    $(".room").height(maxHeight);
+        //    $(".room").height(maxHeight);
+
+        //    var ww = $(window).width();
+        //    console.log(maxHeight);
+        //    var wh = $(window).height();
+        //    $(".ticket").each(function (i) {
+        //        var rotationNum = Math.round((Math.random() * 360) + 1);
+        //        var rotation = "rotate(" + rotationNum + "deg)";
+        //        var posx = Math.round(Math.random() * maxHeight) - 20;
+        //        var posy = Math.round(Math.random() * heightArray) - 20;
+        //        $(this).css("top", posy + "px").css("left", posx + "px").css("transform", rotation).css("-ms-transform", rotation).css("-webkit-transform", rotation);
+        //    });
+
+        //});
+
+        //$(document).ready(function () {
+
+        //    $('#room1').html('');
+        //    $(".room").height("");
+        //    $(".room").height("");
+
+        //    $.ajax({
+        //        type: 'GET',
+        //        url: '../EmployeeLocator/Details',
+        //        dataType: 'json',
+        //        success: function (data) {
+        //            $.each(data, function (i, item) {
+        //                console.log(item.RFID);
+        //                var ticket = "<i class='material-icons'>room</i>";
+        //                //var ticket = "<a data-toggle='tooltip' title='" + item.RFID + "'><i class='glyphicon glyphicon-map-marker text-lightred ticket'>" + item.EmployeeName + "</i></a>";
+        //                BindArea();
+        //                $(ticket).appendTo("#room1");
+        //            });
+        //        },
+        //        error: function (ex) {
+        //            var r = jQuery.parseJSON(response.responseText);
+        //            alert("Message: " + r.Message);
+        //            alert("StackTrace: " + r.StackTrace);
+        //            alert("ExceptionType: " + r.ExceptionType);
+        //        }
+        //    });
+
+        //    $.getJSON("../EmployeeLocator/Details", function (response) {
+        //        $.each(response, function (i, item) {
+        //            console.log(item.RFID);
+        //        });
+        //    });
+        //});
+
+
+
+        //$.ajax({
+        //    type: "GET",
+        //    url: '../EmployeeLocator/Details',
+        //    contentType: "application/json; charset=utf-8",
+        //    datatype: "jsondata",
+        //    async: "true",
+        //    error: function (response) { },
+        //    success: function (response) {
+        //        if (response.d == '' || response.d == null) { return false; }
+        //        var data = $.parseJSON(response.d);
+        //        console.log(response);
+        //        $.each(data, function (i, item) {
+
+
+        //            var tk = ""; var tools = "";
+        //            tools = (item[2] + " | " + item[1]).toString();
+        //            console.log(tools);
+        //            if (item[3] == 0) {
+        //                var ticket = "<a data-toggle='tooltip' title='" + tools + "'><i class='glyphicon glyphicon-map-marker text-lightred ticket'></i></a>";
+        //            }
+        //            else if (item[3] == 1) {
+        //                var ticket = "<a data-toggle='tooltip' title='" + tools + "'><i class='glyphicon glyphicon-map-marker text-greensea ticket'></i></a>";
+        //            }
+
+        //            if (item[5] == 1) {
+        //                BindArea();
+        //                $(ticket).appendTo("#room1");
+        //            }
+        //            else if (item[5] == 9) {
+        //                BindArea();
+        //                $(ticket).appendTo("#room2");
+
+        //            }
+        //            else if (item[5] == 17) {
+        //                BindArea();
+        //                $(ticket).appendTo("#room3");
+
+        //            }
+        //            else if (item[5] == 25) {
+        //                BindArea();
+        //                $(ticket).appendTo("#room4");
+
+        //            }
+
+        //        });
+        //    },
+        //    error: function (xhr, textStatus, errorThrown) {
+        //        console.log(errorThrown);
+        //    }
+        //});
+
+
+        function BindArea() {
+
+            console.log('BindArea');
+            var heightArray = $(".post-container").map(function () {
+                return $(this).height();
+            }).get();
+
+            var maxHeight = Math.max.apply(Math, heightArray);
+            $(".room").height(maxHeight);
+            $(".room").height(maxHeight);
+
+            //var ticket = "<div class='ticket'><i class='glyphicon glyphicon-map-marker'></i></div>";
+            //var ticket = "<i class='glyphicon glyphicon-map-marker ticket'></i>";
+            //var numTickets = 10;
+            //for (var x = 1; x <= numTickets; x++) {
+            //    $(ticket).appendTo("#room1");
+            //}
+            //for (var x = 1; x <= 20; x++) {
+            //    $(ticket).appendTo("#room");
+            //}
+            // get window dimentions
+
+            var ww = $(window).width();
+            console.log(maxHeight);
+            var wh = $(window).height();
+            $(".ticket").each(function (i) {
+                var rotationNum = Math.round((Math.random() * 360) + 1);
+                var rotation = "rotate(" + rotationNum + "deg)";
+                var posx = Math.round(Math.random() * maxHeight) - 20;
+                var posy = Math.round(Math.random() * heightArray) - 20;
+                $(this).css("top", posy + "px").css("left", posx + "px").css("transform", rotation).css("-ms-transform", rotation).css("-webkit-transform", rotation);
+            });
+
+        }
+    </script>
+}
