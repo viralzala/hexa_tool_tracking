@@ -120,7 +120,7 @@ namespace HexaERP.MVC.Controllers.RFID
         }
 
         [HttpPost]
-        public ActionResult CreateCalib(AssetCalibration obj)
+        public ActionResult CreateCalib(tAssetCalibration obj)
         {
             JsonResult result = new JsonResult();
 
@@ -138,7 +138,7 @@ namespace HexaERP.MVC.Controllers.RFID
                     }, JsonRequestBehavior.AllowGet);
                 }
 
-                if (string.IsNullOrWhiteSpace(obj.AssetId))
+                if (obj.AssetId == 0)
                 {
                     return Json(new
                     {
@@ -147,7 +147,7 @@ namespace HexaERP.MVC.Controllers.RFID
                     }, JsonRequestBehavior.AllowGet);
                 }
 
-                if (!obj.CalibrationDate.HasValue)
+                if (obj.CalibrationDate == null || obj.CalibrationDate == default(DateTime))
                 {
                     return Json(new
                     {
@@ -159,10 +159,11 @@ namespace HexaERP.MVC.Controllers.RFID
                 // Required fields
                 obj.OrgInfoId = orgId;
                 obj.CreatedBy = userName;
-                obj.CreatedAt = DateTime.Now;
-                obj.CreatedDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                obj.CreatedDate = DateTime.Now;
+                obj.IsAction = true;
+                obj.Result = "Pass";
 
-                db.AssetCalibrations.Add(obj);
+                db.tAssetCalibrations.Add(obj);
                 db.SaveChanges();
 
                 result = Json(new

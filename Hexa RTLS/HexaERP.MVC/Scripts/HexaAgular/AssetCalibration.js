@@ -10,8 +10,16 @@ app.controller("AssetCalibrationCtrl", function ($timeout, $scope, $http) {
     initializeComponets();
 
     $scope.CalibCollData = function () {
+        var ddl = $("#mIteamMasterId").data("kendoDropDownList");
+
+        $("#AssetId").val(parseInt(ddl.value()));
         var _formCSV = $("#_formCalibInfo");
-        var _eData = JSON.stringify(_formCSV.serializeObject(), null, 2);
+        var data = _formCSV.serializeObject();
+
+        data.AssetId = parseInt(ddl.value());
+
+        var _eData = JSON.stringify(data);
+        console.log(_eData);
 
         modal = UIkit.modal.blockUI('<div class=\'uk-text-center\'>Wait moment...<br/><img class=\'uk-margin-top\' src=\'../Content/assets/img/spinners/spinner.gif\' alt=\'\'>');
         $http({
@@ -55,7 +63,7 @@ app.controller("AssetCalibrationCtrl", function ($timeout, $scope, $http) {
                 $scope.AssetInfo = response.data._AssetList;
                 $scope.CalibInfo = response.data.CalibData;
                 $scope.AssetMasterId = response.data._AssetList.tAssetTagId;
-                $scope.AssetId = response.data._AssetList.RFID;
+                $scope.AssetId = response.data._AssetList.mIteamMasterId;
                 $scope.AssetName = response.data._AssetList.IteamName;
 
                 setTimeout(function () {
@@ -91,7 +99,7 @@ app.controller("AssetCalibrationCtrl", function ($timeout, $scope, $http) {
                 $scope.AssetInfo = response.data._AssetList;
                 $scope.CalibInfo = response.data.CalibData;
                 $scope.AssetMasterId = response.data._AssetList.tAssetTagId;
-                $scope.AssetId = response.data._AssetList.RFID;
+                $scope.AssetId = response.data._AssetList.mIteamMasterId;
                 $scope.AssetName = response.data._AssetList.IteamName;
             }
             else {
@@ -146,7 +154,17 @@ app.controller("AssetCalibrationCtrl", function ($timeout, $scope, $http) {
                     filter: "contains",
                     dataSource: response.data.AssetList,
                     suggest: true,
-                    index: 2
+
+                    change: function () {
+
+                        var value = this.value();
+
+                        $("#AssetId").val(value);
+
+                        $scope.$applyAsync(function () {
+                            $scope.AssetId = value;
+                        });
+                    }
                 });
 
                 var mIteamMasterId = $("#mIteamMasterId").data("kendoDropDownList");

@@ -83,5 +83,11 @@ namespace HexaERP.MVC.Models
         public Nullable<System.DateTime> PreventiveMaintenanceDate { get; set; }
         public Nullable<System.DateTime> PreventiveMaintenanceDueDate { get; set; }
         public string CurrentLocation { get; set; }
+        public string WorkOrderNumber { get; set; }
+        public string MISNumber { get; set; }
+        public string PartNumber { get; set; }
+        public string PartName { get; set; }
+        public Nullable<System.DateTime> LaunchDate { get; set; }
+        public Nullable<System.DateTime> EndDate { get; set; }
     }
 }

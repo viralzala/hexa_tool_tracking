@@ -973,6 +973,12 @@ warning 6002: The table/view 'HexaRTLSdb.dbo.mEmployeeJobOrderAudit' does not ha
           <Property Name="PreventiveMaintenanceDate" Type="datetime" />
           <Property Name="PreventiveMaintenanceDueDate" Type="datetime" />
           <Property Name="CurrentLocation" Type="varchar" MaxLength="25" />
+          <Property Name="WorkOrderNumber" Type="nvarchar" MaxLength="25" />
+          <Property Name="MISNumber" Type="nvarchar" MaxLength="25" />
+          <Property Name="PartNumber" Type="nvarchar" MaxLength="25" />
+          <Property Name="PartName" Type="nvarchar" MaxLength="25" />
+          <Property Name="LaunchDate" Type="datetime" />
+          <Property Name="EndDate" Type="datetime" />
         </EntityType>
         <EntityType Name="TC_Action">
           <Key>
@@ -3286,6 +3292,12 @@ warning 6002: The table/view 'HexaRTLSdb.dbo.mEmployeeJobOrderAudit' does not ha
           <Property Name="PreventiveMaintenanceDate" Type="DateTime" Precision="3" />
           <Property Name="PreventiveMaintenanceDueDate" Type="DateTime" Precision="3" />
           <Property Name="CurrentLocation" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="WorkOrderNumber" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="MISNumber" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="PartNumber" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="PartName" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="LaunchDate" Type="DateTime" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="TC_Action">
           <Key>
@@ -4848,6 +4860,12 @@ warning 6002: The table/view 'HexaRTLSdb.dbo.mEmployeeJobOrderAudit' does not ha
           <EntitySetMapping Name="tAssetTags">
             <EntityTypeMapping TypeName="ERPModel.tAssetTag">
               <MappingFragment StoreEntitySet="tAssetTag">
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="LaunchDate" ColumnName="LaunchDate" />
+                <ScalarProperty Name="PartName" ColumnName="PartName" />
+                <ScalarProperty Name="PartNumber" ColumnName="PartNumber" />
+                <ScalarProperty Name="MISNumber" ColumnName="MISNumber" />
+                <ScalarProperty Name="WorkOrderNumber" ColumnName="WorkOrderNumber" />
                 <ScalarProperty Name="CurrentLocation" ColumnName="CurrentLocation" />
                 <ScalarProperty Name="PreventiveMaintenanceDueDate" ColumnName="PreventiveMaintenanceDueDate" />
                 <ScalarProperty Name="PreventiveMaintenanceDate" ColumnName="PreventiveMaintenanceDate" />

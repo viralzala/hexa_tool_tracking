@@ -9,8 +9,6 @@ app.filter('jsonDate', ['$filter', function ($filter) {
 app.controller("AssetTagCtrl", function ($scope, $http, $timeout) {
     // Initialize loading state
     $scope.statsLoading = true;
-    
-    initializeComponets();
     $scope.CurrentDate = new Date();
     //
     //
@@ -275,6 +273,9 @@ app.controller("AssetTagCtrl", function ($scope, $http, $timeout) {
     //
     function BindJqueryTable(pData) {
         var table = $('#dt_tableExport').DataTable();
+        console.log("Data :", pData);
+        console.log("Rows :", pData.length);
+
         table.clear().draw();
         $('#dt_tableExport').dataTable({
             "destroy": true,
@@ -650,6 +651,9 @@ app.controller("AssetTagCtrl", function ($scope, $http, $timeout) {
             });
         });
     };
+    
+    // Initialize components after all functions are defined
+    initializeComponets();
 });
 
 function setqty(tAssetTagId, UID) {

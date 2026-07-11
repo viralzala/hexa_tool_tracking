@@ -607,10 +607,18 @@
                                                         <input type="hidden" name="AssetId" ng-model="AssetId" />
                                                         <input type="hidden" name="AssetName" ng-model="AssetName" />
                                                     </div>
-                                                    <div class="uk-width-large-1-4">
+                                                     <div class="uk-width-large-1-4">
                                                         <div class="parsley-row">
-                                                            <label><b>Asset</b></label>
-                                                            <input type="text" class="md-input label-fixed" ng-model="AssetInfo.IteamName" readonly style="background: #f5f7fa;" />
+                                                            <label><b>Asset <span class="req">*</span></b></label>
+
+                                                            <input id="mIteamMasterId"
+                                                                name="mIteamMasterId"
+                                                                style="width:100%;" />
+
+                                                            <input type="hidden"
+                                                                id="AssetId"
+                                                                name="AssetId"
+                                                                ng-model="AssetId" />
                                                         </div>
                                                     </div>
                                                     <div class="uk-width-large-1-4">
@@ -619,7 +627,10 @@
                                                                 <i class="uk-icon-calendar"></i>
                                                             </span>
                                                             <label for="wizard_address"><b>Calibration Date</b> <span class="req">*</span></label>
-                                                            <input type="date" name="CalibrationDate" class="md-input label-fixed" />
+                                                                                                                    <input type="date"
+                                                            name="CalibrationDate"
+                                                            ng-model="CalibrationDate"
+                                                            class="md-input label-fixed" />
                                                         </div>
                                                     </div>
                                                     <div class="uk-width-large-1-4">
@@ -628,7 +639,10 @@
                                                                 <i class="uk-icon-calendar"></i>
                                                             </span>
                                                             <label for="wizard_address"><b>Next Due Date</b></label>
-                                                            <input type="date" name="NextDueDate" class="md-input label-fixed" />
+                                                            <input type="date"
+                                                                name="NextDueDate"
+                                                                ng-model="NextDueDate"
+                                                                class="md-input label-fixed" />
                                                         </div>
                                                     </div>
                                                 </div>

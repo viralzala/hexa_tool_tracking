@@ -668,6 +668,14 @@ namespace HexaERP.MVC.Controllers.RFID
                         EditObj.CalibrationDate = collection.CalibrationDate;
                         EditObj.PreventiveMaintenanceDate = collection.PreventiveMaintenanceDate;
                         EditObj.PreventiveMaintenanceDueDate = collection.PreventiveMaintenanceDueDate;
+                        
+                        // MIS Information fields
+                        EditObj.WorkOrderNumber = collection.WorkOrderNumber;
+                        EditObj.MISNumber = collection.MISNumber;
+                        EditObj.PartNumber = collection.PartNumber;
+                        EditObj.PartName = collection.PartName;
+                        EditObj.LaunchDate = collection.LaunchDate;
+                        EditObj.EndDate = collection.EndDate;
 
                         EditObj.OrgInfoId = orgId; EditObj.ModifiedBy = UserName.ToString();
                         EditObj.ModifiedDate = DateTime.Now;
