@@ -130,13 +130,19 @@ namespace HexaERP.MVC.Controllers.RFID
                 var UserName = Session["AppUserName"];
                 int orgId = Convert.ToInt32(Session["OrgInfoId"]);
 
-                if (string.IsNullOrEmpty(obj.AssetId.ToString()) || string.IsNullOrEmpty(obj.InspectionNo) || string.IsNullOrEmpty(obj.InspectionDate.ToString()))
+                if (obj.AssetId <= 0)
                 {
-                    return Json(new
-                    {
-                        Flag = false,
-                        Message = "Please fill the required parameter"
-                    }, JsonRequestBehavior.AllowGet);
+                    return Json(new { Flag = false, Message = "AssetId Missing" });
+                }
+
+                if (string.IsNullOrWhiteSpace(obj.InspectionNo))
+                {
+                    return Json(new { Flag = false, Message = "InspectionNo Missing" });
+                }
+
+                if (obj.InspectionDate == null)
+                {
+                    return Json(new { Flag = false, Message = "InspectionDate Missing" });
                 }
                 else
                 {
@@ -150,6 +156,12 @@ namespace HexaERP.MVC.Controllers.RFID
                     obj.CreatedDate = DateTime.Now;
 
                     db.tAssetInspections.Add(obj);
+                    System.Diagnostics.Debug.WriteLine("AssetId : " + obj.AssetId);
+                    System.Diagnostics.Debug.WriteLine("----------------");
+                    System.Diagnostics.Debug.WriteLine("AssetId : " + obj.AssetId);
+                    System.Diagnostics.Debug.WriteLine("InspectionNo : " + obj.InspectionNo);
+                    System.Diagnostics.Debug.WriteLine("InspectionDate : " + obj.InspectionDate);
+                    System.Diagnostics.Debug.WriteLine("----------------");
                     db.SaveChanges();
 
                     result = this.Json(new { Message = "Successfully Added!!", Flag = true }, JsonRequestBehavior.AllowGet);

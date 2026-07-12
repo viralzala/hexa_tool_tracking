@@ -11,8 +11,10 @@ app.controller("AssetInspectionCtrl", function ($timeout, $scope, $http) {
     initializeComponents();
 
     $scope.InspectionCollData = function () {
+        console.log($scope.AssetId);
         var _formCSV = $("#_formInspectionInfo");
         var _eData = JSON.stringify(_formCSV.serializeObject(), null, 2);
+        console.log(_eData);
         $scope.loading = true;
         $http({
             method: 'POST',
@@ -45,8 +47,14 @@ app.controller("AssetInspectionCtrl", function ($timeout, $scope, $http) {
         }).then(function successCallback(response) {
             console.log(response.data);
             if (response.data.Flag == true) {
-                $scope.AssetMasterId = response.data._AssetList.tAssetTagId;
-                $scope.AssetInfo = response.data._AssetList;
+                $scope.AssetId = response.data._AssetList.tAssetTagId;                $scope.AssetInfo = response.data._AssetList;
+                var ddl = $("#mIteamMasterId").data("kendoDropDownList");
+
+                if (ddl) {
+
+                    ddl.value(response.data._AssetList.tAssetTagId);
+
+                }
                 $scope.InspInfo = response.data.InspData;
                 toastr.success(response.data.Message);
             }
@@ -71,7 +79,7 @@ app.controller("AssetInspectionCtrl", function ($timeout, $scope, $http) {
 
             if (response.data.Flag == true) {
 
-                $scope.AssetMasterId = response.data._AssetList.tAssetTagId;
+                $scope.AssetId = response.data._AssetList.tAssetTagId;
                 $scope.AssetInfo = response.data._AssetList;
                 $scope.InspInfo = response.data.InspData;
             }
@@ -99,7 +107,7 @@ app.controller("AssetInspectionCtrl", function ($timeout, $scope, $http) {
 
             if (response.data.Flag == true) {
 
-                $scope.AssetMasterId = response.data._AssetList.tAssetTagId;
+                $scope.AssetId = response.data._AssetList.tAssetTagId;
                 $scope.AssetInfo = response.data._AssetList;
                 $scope.InspInfo = response.data.InspData;
             }
@@ -122,13 +130,27 @@ app.controller("AssetInspectionCtrl", function ($timeout, $scope, $http) {
         }).then(function successCallback(response) {
             if (response.data.Flag == true) {
                 $timeout(function() {
-                    $('#mIteamMasterId').kendoDropDownList({
+                   $('#mIteamMasterId').kendoDropDownList({
+
                         dataTextField: "IteamName",
                         dataValueField: "mIteamMasterId",
                         filter: "contains",
                         dataSource: response.data.AssetList,
                         suggest: true,
-                        index: 2
+
+                        change: function () {
+
+                            var value = this.value();
+
+                            $scope.$apply(function () {
+                                $scope.AssetId = value;
+                            });
+
+                            $("input[name='AssetId']").val(value);
+
+                            console.log("AssetId = " + value);
+                        }
+
                     });
 
                     var mIteamMasterId = $("#mIteamMasterId").data("kendoDropDownList");

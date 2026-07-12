@@ -576,8 +576,9 @@
                                                 <div class="uk-grid" data-uk-grid-margin>
                                                     <div class="uk-width-large-1-4">
                                                         <input type="text" name="Id" ng-model="Id" ng-hide="true" />
-                                                        <input type="text" name="AssetMasterId" ng-model="AssetMasterId" ng-hide="true" />
-                                                        <div class="parsley-row">
+                                                        <input type="hidden"
+                                                            name="AssetId"
+                                                            ng-model="AssetId" />                                                        <div class="parsley-row">
                                                             <label for="product_edit_quantity_control"><b>Asset</b> <span class="req">*</span></label>
                                                             <input class="md-btn md-btn-wave waves-effect waves-button" id="mIteamMasterId" name="mIteamMasterId" ng-model="mIteamMasterId" placeholder="Select Asset" />
                                                         </div>
@@ -594,7 +595,10 @@
                                                                 <i class="uk-icon-calendar"></i>
                                                             </span>
                                                             <label for="wizard_address"><b>Inspection Date</b> <span class="req">*</span></label>
-                                                            <input type="date" name="InspectionDate" class="md-input label-fixed" />
+                                                            <input type="date"
+                                                            name="InspectionDate"
+                                                            ng-model="InspectionDate"
+                                                            class="md-input label-fixed" />
                                                         </div>
                                                     </div>
                                                     <div class="uk-width-large-1-4">
