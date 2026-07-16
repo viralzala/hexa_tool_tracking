@@ -79,7 +79,9 @@ namespace HexaERP.MVC.Controllers.RFID
                 if (Session["UniqueId"].ToString() != "" && Session["OrgInfoId"].ToString() != "" && Session["AppUserName"].ToString() != "")
                 {
                     //string Page_Name = Path.GetFileName(Request.Path);
-                    if (Convert.ToString(Session["SortCode"]) != "AD")
+                    string sortCode = Convert.ToString(Session["SortCode"]);
+
+                    if (sortCode != "AD" && sortCode != "SA")
                     {
                         return RedirectToAction("Index", "AppUser");
                     }
@@ -300,10 +302,10 @@ namespace HexaERP.MVC.Controllers.RFID
                 {
                     _Flag = false; Message = "Enter Employee Name";
                 }
-                else if (collection.mAgencyId == null || collection.mDesignationId == null || collection.mSkillCategoryId == null)
-                {
-                    _Flag = false; Message = "Missing master mandatory Data";
-                }
+                //else if (collection.mAgencyId == null || collection.mDesignationId == null || collection.mSkillCategoryId == null)
+                //{
+                //    _Flag = false; Message = "Missing master mandatory Data";
+                //}
 
                 //else if (collection.mSiteMasterId == null || collection.mZoneId == null || collection.mFloorMasterId == null || collection.mRoomMasterId == null)
                 //{

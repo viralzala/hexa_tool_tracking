@@ -75,11 +75,11 @@ app.controller("HexaRTLSCtrl", function ($timeout, $scope, $http, $window) {
             $scope.Shelf = response.data.objText;
             $timeout(function () {
 
-                if (UIkit.Utils) {
-                    UIkit.Utils.checkDisplay(document.getElementById("contact_list"));
-                }
+            UIkit.grid($('#contact_list'), {
+                controls: '#contact_list_filter'
+            });
 
-            }, 500);
+        }, 300);
             $scope.Shelf.map(x => x.mZoneId)
 
             $scope.Location = response.data.IZoneData;
@@ -108,12 +108,15 @@ app.controller("HexaRTLSCtrl", function ($timeout, $scope, $http, $window) {
                     mZoneId: parseInt($scope.SelectedLocation)
                 }
             }).then(function successCallback(response) {
-                // FIXED: Refresh grid after auto-refresh data update
+                // console.log(response);
+                $scope.Shelf = response.data.objText;
                 $timeout(function () {
-                    if (UIkit && UIkit.Utils) {
-                        UIkit.Utils.checkDisplay(document.getElementById("contact_list"));
-                    }
-                }, 300);
+
+                UIkit.grid($('#contact_list'), {
+                    controls: '#contact_list_filter'
+                });
+
+            }, 300);
             }, function errorCallback(response) {
                 console.log("Error : " + response.data.ExceptionMessage);
             });
@@ -133,29 +136,25 @@ app.controller("HexaRTLSCtrl", function ($timeout, $scope, $http, $window) {
         }).then(function (response) {
 
             $scope.Shelf = response.data.objText;
-            
-            // FIXED: Use $timeout to ensure DOM is updated before UIkit refresh
             $timeout(function () {
+
+                UIkit.grid($('#contact_list'), {
+                    controls: '#contact_list_filter'
+                });
+
+            }, 300);
+
+            $timeout(function () {
+
                 console.log("Shelf Loaded :", $scope.Shelf.length);
-                
-                // FIXED: Refresh UIkit filter display after AngularJS renders the grid
-                // This ensures the new CSS grid layout is properly displayed
-                if (UIkit && UIkit.Utils) {
+
+                // UIkit ને ફરી initialize કરાવો
+                if (UIkit.Utils) {
                     UIkit.Utils.checkDisplay(document.getElementById("contact_list"));
                 }
-                
-                // FIXED: Trigger filter refresh for UIkit if available
-                if (UIkit && UIkit.filter) {
-                    var filterElements = document.querySelectorAll('[data-uk-filter]');
-                    if (filterElements.length > 0) {
-                        // UIkit filter will automatically handle the visibility
-                        console.log("UIkit filter elements found:", filterElements.length);
-                    }
-                }
-            }, 100);
 
-        }, function errorCallback(response) {
-            console.log("Error : " + response.data.ExceptionMessage);
+            }, 200);
+
         });
 
     };
