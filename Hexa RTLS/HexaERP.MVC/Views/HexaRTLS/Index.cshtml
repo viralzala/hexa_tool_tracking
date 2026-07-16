@@ -1,7 +1,6 @@
 ﻿@{
     /**/
-
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Tracking Dashboard";
 
     if (Session["SortCode"] != null)
     {
@@ -15,52 +14,135 @@
 
 @section head
 {
-    <!-- htmleditor (codeMirror) -->
     <link href="@Url.Content("~/Content/bower_components/codemirror/lib/codemirror.css")"
           rel="stylesheet" type="text/css" media="all" />
-
-    <!-- kendo UI -->
     <link href="~/Content/bower_components/kendo-ui/styles/kendo.common-material.min.css" rel="stylesheet" />
     <link href="~/Content/bower_components/kendo-ui/styles/kendo.material.min.css" rel="stylesheet" />
-
     <link href="@Url.Content("~/Content/bower_components/datatables/media/css/jquery.dataTables.min.css")"
           rel="stylesheet" type="text/css" media="all" />
-
     <link href="@Url.Content("~/Content/bower_components/datatables/media/css/dataTables.bootstrap.css")"
           rel="stylesheet" type="text/css" media="all" />
     <style>
         /* ==========================================
-         * LEVEL 1: FLOOR CARDS DASHBOARD
-         * Each floor/zone shown as a card with
-         * background image and info overlay.
+         * TRACKING DASHBOARD - 3 STEP UI
+         * STEP 1: Location Filter Buttons
+         * STEP 2: Floor Cards
+         * STEP 3: Assets List
          * ========================================== */
 
-        .floor-dashboard {
+        /* ---- STEP 1: Location Filter Buttons ---- */
+        .location-filter-bar {
             display: flex;
             flex-wrap: wrap;
+            gap: 8px;
+            padding: 4px 0;
+        }
+
+        .location-filter-bar .filter-btn {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid rgba(0,0,0,.12);
+            background: #fff;
+            color: #424242;
+            text-transform: uppercase;
+        }
+
+        .location-filter-bar .filter-btn:hover {
+            background: #e3f2fd;
+            border-color: #2196f3;
+        }
+
+        .location-filter-bar .filter-btn.active {
+            background: #1976d2;
+            color: #fff;
+            border-color: #1976d2;
+        }
+
+        /* ---- STEP 2: Floor Cards ---- */
+        .floor-cards-container {
+            display: none; /* Hidden until a location is selected */
+        }
+
+        .floor-cards-container.active {
+            display: block;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 20px 0 16px;
+            padding: 12px 16px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,.12);
+        }
+
+        .section-header .back-btn {
+            background: #1976d2;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 16px;
+            font-size: 13px;
+            cursor: pointer;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .section-header .back-btn:hover {
+            background: #1565c0;
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .section-header .back-btn .material-icons {
+            font-size: 18px;
+            color: #fff;
+        }
+
+        .section-header .section-title {
+            font-size: 20px;
+            font-weight: 500;
+            margin: 0;
+            flex: 1;
+        }
+
+        .section-header .section-count {
+            font-size: 13px;
+            color: #727272;
+        }
+
+        .floor-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 20px;
-            padding: 20px 0;
-            justify-content: flex-start;
+            margin-bottom: 24px;
         }
 
         .floor-card {
-            width: 320px;
-            height: 220px;
             position: relative;
-            border-radius: 8px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,.2);
+            box-shadow: 0 2px 8px rgba(0,0,0,.15);
             cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
-            flex-shrink: 0;
+            transition: all 0.3s ease;
+            height: 220px;
+            background: #f5f5f5;
         }
 
         .floor-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(0,0,0,.3);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 28px rgba(0,0,0,.25);
         }
 
-        .floor-bg {
+        .floor-card-bg {
             width: 100%;
             height: 100%;
             object-fit: cover;
@@ -68,242 +150,170 @@
             pointer-events: none;
         }
 
-        .floor-overlay {
+        .floor-card-overlay {
             position: absolute;
             bottom: 0;
             left: 0;
             right: 0;
-            background: linear-gradient(transparent, rgba(0,0,0,.7));
+            background: linear-gradient(transparent 30%, rgba(0,0,0,.75));
             color: #fff;
-            padding: 40px 16px 16px;
+            padding: 48px 20px 20px;
         }
 
-        .floor-overlay h4 {
-            margin: 0 0 4px 0;
-            font-size: 18px;
-            font-weight: 500;
+        .floor-card-overlay .floor-name {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 0 0 2px;
             color: #fff;
         }
 
-        .floor-overlay .zone-name {
+        .floor-card-overlay .floor-location {
             font-size: 13px;
             opacity: .85;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             display: block;
         }
 
-        .floor-stats {
+        .floor-card-overlay .floor-stats {
             display: flex;
-            gap: 16px;
+            gap: 20px;
             font-size: 12px;
-            opacity: .9;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
+            align-items: center;
         }
 
-        .floor-stats span {
+        .floor-card-overlay .floor-stats .stat-item {
             display: flex;
             align-items: center;
             gap: 4px;
         }
 
-        .floor-stats .material-icons {
+        .floor-card-overlay .floor-stats .stat-item .material-icons {
             font-size: 16px;
             color: #fff;
         }
 
-        .btn-view-floor {
-            background: rgba(255,255,255,.25);
+        .btn-view-assets {
+            background: rgba(255,255,255,.2);
             color: #fff;
             border: 1px solid rgba(255,255,255,.5);
-            border-radius: 4px;
-            padding: 4px 16px;
+            border-radius: 6px;
+            padding: 6px 20px;
             font-size: 12px;
-            cursor: pointer;
-            transition: background 0.2s;
-            text-transform: uppercase;
             font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
             display: inline-block;
         }
 
-        .btn-view-floor:hover {
-            background: rgba(255,255,255,.4);
+        .btn-view-assets:hover {
+            background: rgba(255,255,255,.35);
             text-decoration: none;
             color: #fff;
         }
 
-        /* Last tracked time */
-        .last-track-time {
+        .floor-card-overlay .last-updated {
             font-size: 11px;
-            opacity: .7;
-            margin-top: 4px;
+            opacity: .65;
+            margin-top: 6px;
         }
 
-        /* ==========================================
-         * LEVEL 2: WAREHOUSE SHELF MAP
-         * Shown after clicking "View" on a floor card.
-         * Uses background image + shelf overlay grid.
-         * ========================================== */
-
-        .shelf-map-view {
-            display: none; /* Hidden by default, shown when a floor is selected */
+        /* ---- STEP 3: Assets List ---- */
+        .assets-view {
+            display: none;
         }
 
-        .shelf-map-view.active {
+        .assets-view.active {
             display: block;
         }
 
-        .map-header {
-            display: flex;
-            align-items: center;
+        .assets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 16px;
-            margin-bottom: 16px;
-            padding: 12px 16px;
-            background: #fff;
-            border-radius: 4px;
-            box-shadow: 0 1px 3px rgba(0,0,0,.12);
+            margin-top: 16px;
         }
 
-        .btn-back {
-            background: #1976d2;
-            color: #fff !important;
-            border: none;
-            border-radius: 4px;
-            padding: 6px 16px;
-            font-size: 13px;
-            cursor: pointer;
-            font-weight: 500;
-            text-transform: uppercase;
-            display: inline-flex;
+        .asset-card {
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 1px 4px rgba(0,0,0,.12);
+            transition: all 0.2s;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .asset-card:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,.18);
+            transform: translateY(-2px);
+        }
+
+        .asset-card.asset-available {
+            border-left-color: #4CAF50;
+        }
+
+        .asset-card.asset-inuse {
+            border-left-color: #2196f3;
+        }
+
+        .asset-card.asset-maintenance {
+            border-left-color: #ff9800;
+        }
+
+        .asset-card.asset-occupied {
+            border-left-color: #e53935;
+        }
+
+        .asset-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0 0 4px;
+            color: #212121;
+        }
+
+        .asset-code {
+            font-size: 12px;
+            color: #727272;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .asset-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .asset-detail-item {
+            display: flex;
             align-items: center;
             gap: 6px;
-        }
-
-        .btn-back:hover {
-            background: #1565c0;
-            text-decoration: none;
-            color: #fff;
-        }
-
-        .btn-back .material-icons {
-            font-size: 18px;
-            color: #fff;
-        }
-
-        .map-title {
-            font-size: 18px;
-            font-weight: 500;
-            margin: 0;
-            flex: 1;
-        }
-
-        .map-subtitle {
-            font-size: 13px;
-            color: #727272;
-        }
-
-        .warehouse-map-container {
-            position: relative;
-            width: 100%;
-            max-width: 1400px;
-            margin: 0 auto;
-            overflow: hidden;
-            border: 1px solid rgba(0,0,0,.12);
-            border-radius: 4px;
+            font-size: 12px;
+            color: #616161;
             background: #f5f5f5;
+            padding: 4px 12px;
+            border-radius: 16px;
         }
 
-        .warehouse-bg {
-            display: block;
-            width: 100%;
-            height: auto;
-            pointer-events: none;
-            user-select: none;
+        .asset-detail-item .material-icons {
+            font-size: 14px;
         }
 
-        .shelf-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            display: grid;
-            grid-template-columns: repeat(10, 1fr);
-            grid-auto-rows: min-content;
-            gap: 8px;
-            padding: 2% 3%;
-            align-content: start;
+        .asset-detail-item .status-badge {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 4px;
         }
 
-        .shelf-marker {
-            background: #4CAF50;
-            color: #fff;
-            text-align: center;
-            padding: 8px 4px;
-            font-size: 11px;
-            font-weight: 500;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 200ms cubic-bezier(.4,0,.2,1);
-            box-shadow: 0 1px 3px rgba(0,0,0,.3);
-            line-height: 1.2;
-            min-height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            border: 2px solid transparent;
-            position: relative;
-            z-index: 2;
-        }
+        .status-badge.available { background: #4CAF50; }
+        .status-badge.inuse { background: #2196f3; }
+        .status-badge.maintenance { background: #ff9800; }
+        .status-badge.occupied { background: #e53935; }
 
-        .shelf-marker:hover {
-            transform: scale(1.15);
-            box-shadow: 0 4px 12px rgba(0,0,0,.4);
-            border-color: #fff;
-            z-index: 10;
-        }
-
-        .shelf-available {
-            background: #4CAF50;
-        }
-
-        .shelf-occupied {
-            background: #e53935;
-        }
-
-        .shelf-warning {
-            background: #ff9800;
-            animation: pulse-warning 2s infinite;
-        }
-
-        @@keyframes pulse-warning {
-            0% { box-shadow: 0 0 0 0 rgba(255, 152, 0, 0.6); }
-            50% { box-shadow: 0 0 0 8px rgba(255, 152, 0, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 152, 0, 0); }
-        }
-
-        .shelf-marker .shelf-tooltip {
-            display: none;
-            position: absolute;
-            bottom: 110%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #333;
-            color: #fff;
-            padding: 4px 10px;
-            border-radius: 3px;
-            font-size: 11px;
-            white-space: nowrap;
-            z-index: 20;
-            pointer-events: none;
-        }
-
-        .shelf-marker:hover .shelf-tooltip {
-            display: block;
-        }
-
+        /* ---- Shared ---- */
         .grid_no_results {
             display: none !important;
         }
@@ -312,49 +322,40 @@
             display: block !important;
         }
 
+        .no-data-message {
+            text-align: center;
+            padding: 60px 20px;
+            color: #727272;
+            font-size: 16px;
+        }
+
         /* Responsive */
         @@media only screen and (max-width: 767px) {
             .floor-card {
-                width: 100%;
                 height: 180px;
             }
-            .floor-dashboard {
-                gap: 12px;
-                padding: 12px 0;
+            .floor-cards-grid {
+                grid-template-columns: 1fr;
+                gap: 14px;
             }
-            .shelf-overlay {
-                grid-template-columns: repeat(5, 1fr);
-                gap: 4px;
-                padding: 1% 2%;
+            .assets-grid {
+                grid-template-columns: 1fr;
             }
-            .shelf-marker {
-                font-size: 9px;
-                padding: 4px 2px;
-                min-height: 24px;
+            .section-header {
+                flex-wrap: wrap;
+            }
+            .location-filter-bar .filter-btn {
+                padding: 6px 14px;
+                font-size: 11px;
             }
         }
 
         @@media only screen and (min-width: 768px) and (max-width: 1219px) {
-            .floor-card {
-                width: calc(50% - 12px);
-                height: 200px;
+            .floor-cards-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
-            .shelf-overlay {
-                grid-template-columns: repeat(8, 1fr);
-                gap: 6px;
-                padding: 1.5% 2.5%;
-            }
-            .shelf-marker {
-                font-size: 10px;
-                min-height: 28px;
-            }
-        }
-
-        @@media only screen and (min-width: 1220px) {
-            .shelf-overlay {
-                grid-template-columns: repeat(10, 1fr);
-                gap: 8px;
-                padding: 2% 3%;
+            .assets-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
@@ -365,131 +366,189 @@
     <div id="page_content">
         <div id="page_content_inner">
 
+            <!-- Note Banner -->
             <div class="scrum_task critical">
-                <p class="scrum_task_description"><b> Note:</b> Click on "View" button to see shelf details, or click shelf marker for employee/asset tracking.</p>
+                <p class="scrum_task_description">
+                    <b>Note:</b> Select a location to view floors, then click "View Assets" to see shelf-level asset details.
+                </p>
             </div>
 
-            <!-- ZONE FILTER TABS (always visible) -->
+            <!-- ============================================ -->
+            <!-- STEP 1: LOCATION FILTER BUTTONS              -->
+            <!-- ============================================ -->
             <div class="md-card uk-margin-medium-bottom">
                 <div class="md-card-content">
-                    <div class="uk-grid" data-uk-grid-margin>
-                        <div class="uk-width-medium-1-1">
-                            <div class="uk-vertical-align">
-                                <div class="uk-vertical-align-middle">
-                                   <ul id="contact_list_filter" class="uk-subnav uk-subnav-pill uk-margin-remove">
-                                        <li class="uk-active" data-uk-filter="">
-                                            <a href="#">All</a>
-                                        </li>
-                                        <li ng-repeat="Iteam in Location"
-                                            data-uk-filter="{{Iteam.mZoneId}}">
-                                            <a ng-click="ShowProduct(Iteam)" href="#">
-                                                {{Iteam.Zone}}
-                                            </a>
-                                        </li>
-                                        <li title="Safety report click here download excel">
-                                            <a href="@Url.Action("SafetyExportExcelAsync","EmployeeTrackSummary")">
-                                                Safety report
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
+                    <div class="location-filter-bar">
+                        <!-- "All" button - shows all floors -->
+                        <button class="filter-btn"
+                                ng-class="{active: selectedLocationId == null}"
+                                ng-click="selectLocation(null)">
+                            All
+                        </button>
+                        <!-- Location buttons from API -->
+                        <button class="filter-btn"
+                                ng-repeat="loc in Location"
+                                ng-class="{active: selectedLocationId == loc.mZoneId}"
+                                ng-click="selectLocation(loc)">
+                            {{loc.Zone}}
+                        </button>
+                        <!-- Safety report download -->
+                        <button class="filter-btn"
+                                title="Safety report click here download excel"
+                                ng-click="downloadSafetyReport()">
+                            Safety report
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================ -->
+            <!-- STEP 2: FLOOR CARDS                          -->
+            <!-- Shows floors filtered by selected location.  -->
+            <!-- Each card shows: background, floor name,     -->
+            <!-- location name, asset count, View button.     -->
+            <!-- ============================================ -->
+            <div id="floorCardsSection" class="floor-cards-container" ng-class="{active: true}">
+
+                <div class="section-header">
+                    <button class="back-btn" ng-click="resetToLocations()" ng-show="showAssetsView">
+                        <i class="material-icons">&#xE5C4;</i> Back
+                    </button>
+                    <h3 class="section-title" ng-if="!showAssetsView">
+                        {{selectedLocationName || 'All Locations'}}
+                    </h3>
+                    <h3 class="section-title" ng-if="showAssetsView">
+                        {{selectedFloorName}}
+                    </h3>
+                    <span class="section-count" ng-if="!showAssetsView">
+                        {{filteredFloors.length}} floors
+                    </span>
+                    <span class="section-count" ng-if="showAssetsView">
+                        {{assetsList.length}} assets
+                    </span>
+                </div>
+
+                <!-- Floor Cards Grid (visible when not in asset view) -->
+                <div class="floor-cards-grid" ng-show="!showAssetsView">
+
+                    <div class="floor-card"
+                         ng-repeat="floor in filteredFloors"
+                         ng-click="selectFloor(floor)">
+
+                        <!-- Background image for floor card -->
+                        <img class="floor-card-bg"
+                             src="~/Content/assets/img/4dc174f0-2c88-48f9-86ff-220d000e2f6a.jpg"
+                             alt="{{floor.FloorName}}"
+                             draggable="false" />
+
+                        <!-- Overlay with floor info -->
+                        <div class="floor-card-overlay">
+                            <h4 class="floor-name">{{floor.FloorName}}</h4>
+                            <span class="floor-location">{{floor.Zone || selectedLocationName || ''}}</span>
+
+                            <div class="floor-stats">
+                                <span class="stat-item">
+                                    <i class="material-icons">&#xE227;</i>
+                                    Assets: {{getFloorAssetCount(floor)}}
+                                </span>
+                                <span class="stat-item">
+                                    <i class="material-icons">&#xE30A;</i>
+                                    Floor {{floor.FloorNo}}
+                                </span>
+                            </div>
+
+                            <!-- View Assets button -->
+                            <a class="btn-view-assets" ng-click="$event.stopPropagation(); selectFloor(floor)">
+                                View Assets
+                            </a>
+
+                            <div class="last-updated">
+                                Updated: {{lastTracked}}
                             </div>
                         </div>
                     </div>
+
+                    <!-- No floors message -->
+                    <div class="no-data-message" ng-if="filteredFloors.length === 0 && !showAssetsView">
+                        <i class="material-icons" style="font-size:48px;color:#bdbdbd;display:block;margin-bottom:12px;">&#xE8B0;</i>
+                        No floors found for this location.
+                    </div>
                 </div>
-            </div>
 
-            <h3 class="heading_b uk-text-center grid_no_results">No Locations found</h3>
+                <!-- ============================================ -->
+                <!-- STEP 3: ASSETS LIST                          -->
+                <!-- Shows assets/shelves for selected floor.     -->
+                <!-- Each item shows: name, code, status, shelf.  -->
+                <!-- ============================================ -->
+                <div class="assets-view" ng-class="{active: showAssetsView}">
 
-            <!-- ======================================== -->
-            <!-- LEVEL 1: FLOOR CARDS DASHBOARD           -->
-            <!-- Shows each floor/zone as a card with     -->
-            <!-- background image and info overlay.        -->
-            <!-- ======================================== -->
-            <div id="floorDashboard" class="floor-dashboard" ng-show="!showShelfMap">
+                    <div class="assets-grid">
+                        <div class="asset-card {{getAssetStatusClass(asset)}}"
+                             ng-repeat="asset in assetsList">
 
-                <div class="floor-card"
-                     ng-repeat="item in Areas"
-                     ng-click="openFloorMap(item)">
+                            <!-- FIXED: Asset Name from database tAssetTag table -->
+                            <h4 class="asset-name">{{asset.IteamName || asset.IteamCode || 'N/A'}}</h4>
 
-                    <!-- Background image for each floor card -->
-                    <img class="floor-bg"
-                         src="~/Content/assets/img/4dc174f0-2c88-48f9-86ff-220d000e2f6a.jpg"
-                         alt="{{item.FloorName}}"
-                         draggable="false" />
-
-                    <!-- Overlay with floor info -->
-                    <div class="floor-overlay">
-                        <h4>{{item.FloorName}}</h4>
-                        <span class="zone-name">{{item.Zone}}</span>
-
-                        <div class="floor-stats">
-                            <span>
-                                <i class="material-icons">&#xE7FB;</i>
-                                Floor {{item.FloorNo}}
+                            <!-- FIXED: Asset Tag/Number from database -->
+                            <span class="asset-code">
+                                Tag: {{asset.AssetID || asset.IteamCode || asset.BarCode || 'N/A'}}
                             </span>
-                        </div>
 
-                        <!-- "View" button to open shelf map -->
-                        <a class="btn-view-floor" ng-click="$event.stopPropagation(); openFloorMap(item)">
-                            View
-                        </a>
+                            <!-- FIXED: Asset Details from database -->
+                            <div class="asset-details">
+                                <!-- FIXED: Status from database IsAction property -->
+                                <span class="asset-detail-item">
+                                    <span class="status-badge {{getStatusClass(asset)}}"></span>
+                                    {{getAssetStatus(asset)}}
+                                </span>
 
-                        <div class="last-track-time">
-                            Last updated: {{lastTracked}}
-                        </div>
-                    </div>
+                                <!-- FIXED: RFID tag from database -->
+                                <span class="asset-detail-item" ng-if="asset.RFID">
+                                    <i class="material-icons">&#xE0DA;</i>
+                                    RFID: {{asset.RFID}}
+                                </span>
 
-                </div>
+                                <!-- FIXED: Serial Number from database -->
+                                <span class="asset-detail-item" ng-if="asset.SerialNo">
+                                    <i class="material-icons">&#xE873;</i>
+                                    SN: {{asset.SerialNo}}
+                                </span>
 
-            </div>
+                                <!-- FIXED: Model No from database -->
+                                <span class="asset-detail-item" ng-if="asset.ModelNo">
+                                    <i class="material-icons">&#xE8B6;</i>
+                                    {{asset.ModelNo}}
+                                </span>
 
-            <!-- ======================================== -->
-            <!-- LEVEL 2: WAREHOUSE SHELF MAP             -->
-            <!-- Shown after clicking "View" on a floor    -->
-            <!-- card. Shows warehouse bg + shelf grid.    -->
-            <!-- ======================================== -->
-            <div id="shelfMapView" class="shelf-map-view" ng-class="{active: showShelfMap}">
+                                <!-- FIXED: Floor Name from database join -->
+                                <span class="asset-detail-item" ng-if="asset.FloorName">
+                                    <i class="material-icons">&#xE30A;</i>
+                                    {{asset.FloorName}}
+                                </span>
 
-                <!-- Map header with back button -->
-                <div class="map-header">
-                    <a class="btn-back" ng-click="goBackToDashboard()">
-                        <i class="material-icons">&#xE5C4;</i> Back
-                    </a>
-                    <h3 class="map-title">{{selectedFloorName}}</h3>
-                    <span class="map-subtitle">{{selectedZoneName}} &middot; {{shelfCount}} shelves</span>
-                </div>
-
-                <!-- Warehouse map container -->
-                <div id="contact_list" class="warehouse-map-container hierarchical_show">
-
-                    <img class="warehouse-bg"
-                         src="~/Content/assets/img/4dc174f0-2c88-48f9-86ff-220d000e2f6a.jpg"
-                         alt="Warehouse Floor Plan"
-                         draggable="false" />
-
-                    <div class="shelf-overlay">
-                        <div ng-repeat="task in Shelf"
-                             class="shelf-marker {{task.IsAction == false ?
-                                 'shelf-available' :
-                                 'shelf-occupied'}}"
-                             data-uk-filter="{{task.mZoneId}}"
-                             ng-click="ShowProduct(task)"
-                             title="{{task.ShelfName}} - {{task.PartNumber || ''}}">
-
-                            {{task.ShelfName}}
-                            <span class="shelf-tooltip">{{task.ShelfName}}<br ng-if="task.PartNumber" />{{task.PartNumber}}</span>
+                                <!-- FIXED: Last Modified from database -->
+                                <span class="asset-detail-item" ng-if="asset.ModifiedDate">
+                                    <i class="material-icons">&#xE192;</i>
+                                    {{asset.ModifiedDate | jsonDate: "dd-MMM HH:mm"}}
+                                </span>
+                            </div>
                         </div>
                     </div>
 
+                    <!-- No assets message -->
+                    <div class="no-data-message" ng-if="assetsList.length === 0">
+                        <i class="material-icons" style="font-size:48px;color:#bdbdbd;display:block;margin-bottom:12px;">&#xE8B0;</i>
+                        No assets found for this floor.
+                    </div>
                 </div>
+
             </div>
 
         </div>
     </div>
 </div>
 
-<!-- Employee Details Modal -->
+<!-- Employee Details Modal (PRESERVED - unchanged) -->
 <div id="modal_overflow" class="uk-modal">
     <div class="uk-modal-dialog uk-modal-dialog-large">
         <button type="button" class="uk-modal-close uk-close"></button>
@@ -571,7 +630,7 @@
     </div>
 </div>
 
-<!-- Asset Details Modal -->
+<!-- Asset Details Modal (PRESERVED - unchanged) -->
 <div id="modal_overflow_Asset" class="uk-modal">
     <div class="uk-modal-dialog uk-modal-dialog-large">
         <button type="button" class="uk-modal-close uk-close"></button>
@@ -591,8 +650,7 @@
                 <div class="md-card">
                     <div class="md-card-content">
                         <div class="uk-margin-bottom uk-text-center uk-position-relative">
-                            @* <img ng-if="AssetDetail.img != null" ng-src="{{AssetDetail.img}}" alt="Asset Image" class="img_medium" /> *@
-                               <p>{{AssetDetail.img}}</p>
+                            <p>{{AssetDetail.img}}</p>
                         </div>
                     </div>
                 </div>
@@ -651,8 +709,6 @@
         </div>
     </div>
 </div>
-</div>
-
 
 @section foot
 {
@@ -662,7 +718,7 @@
     <script src="~/Scripts/HexaAgular/HexaRTLS.js"></script>
     <script>
         $(document).ready(function () {
-            console.log("HexaRTLS Dashboard initialized.");
+            console.log("HexaRTLS Tracking Dashboard initialized.");
         });
     </script>
 }
