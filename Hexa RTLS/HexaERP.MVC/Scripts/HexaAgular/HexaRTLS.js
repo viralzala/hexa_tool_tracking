@@ -9,6 +9,15 @@ app.controller("HexaRTLSCtrl", function ($timeout, $scope, $http, $window) {
     initializeComponets();
 
     $scope.SelectedLocation = null;
+
+    // NEW: Two-level navigation state
+    // showShelfMap = false means we show the floor cards dashboard
+    // showShelfMap = true means we show the warehouse shelf map
+    $scope.showShelfMap = false;
+    $scope.selectedFloorName = '';
+    $scope.selectedZoneName = '';
+    $scope.shelfCount = 0;
+
     //
     function initializeComponets() {
         //$scope.isEdit = true;     
@@ -24,7 +33,6 @@ app.controller("HexaRTLSCtrl", function ($timeout, $scope, $http, $window) {
         InitDataBind();
         myVar = setInterval(function () {
             $scope.$apply(SetControll());
-            // $scope.$apply(InitDataBind());
         }, 10000);
     }
 
@@ -59,44 +67,33 @@ app.controller("HexaRTLSCtrl", function ($timeout, $scope, $http, $window) {
         }).then(function successCallback(response) {
             // this callback will be called asynchronously
             // when the response is available
-            // console.log("Shelf Count:", $scope.Shelf.length);
-            // console.log($scope.Shelf[0]);
-            // console.log(response.data);
             console.log("===== GetTrackData Response =====");
             console.log(response);
 
-            console.log("response.data");
-            console.log(response.data);
-
-            console.log("response.data.objText");
-            console.log("response.data.objText");
-            console.log(response.data.objText);
-
             $scope.Shelf = response.data.objText;
-            $timeout(function () {
-
-                if (UIkit.Utils) {
-                    UIkit.Utils.checkDisplay(document.getElementById("contact_list"));
-                }
-
-            }, 500);
-            $scope.Shelf.map(x => x.mZoneId)
-
             $scope.Location = response.data.IZoneData;
             $scope.Areas = response.data.IsubZoneData;
             $scope.PortColl = response.data.IPortsData;
-            // $scope.Shelf = response.data.objText;
+
+            // NEW: Show floor cards dashboard by default
+            $scope.showShelfMap = false;
+            
+            $timeout(function () {
+                console.log("Shelf Count:", $scope.Shelf.length);
+                
+                if (UIkit && UIkit.Utils) {
+                    UIkit.Utils.checkDisplay(document.getElementById("contact_list"));
+                }
+            }, 300);
+            
         }, function errorCallback(response) {
-            // called asynchronously if an error occurs
-            // or server returns response with an error status.
             console.log("Error : " + response.data.ExceptionMessage);
         });
     };
 
     function SetControll() {
-        // console.log($scope.SelectedLocation);
         var d = new Date();
-        //$scope.lastTracked = d.toLocaleTimeString();
+        $scope.lastTracked = d.toLocaleTimeString();
 
         if ((angular.isUndefined($scope.SelectedLocation) || $scope.SelectedLocation === null) && (angular.isUndefined($scope.SelectedLocation) || $scope.SelectedLocation === null)) {
             return false;
@@ -108,7 +105,6 @@ app.controller("HexaRTLSCtrl", function ($timeout, $scope, $http, $window) {
                     mZoneId: parseInt($scope.SelectedLocation)
                 }
             }).then(function successCallback(response) {
-                // FIXED: Refresh grid after auto-refresh data update
                 $timeout(function () {
                     if (UIkit && UIkit.Utils) {
                         UIkit.Utils.checkDisplay(document.getElementById("contact_list"));
@@ -118,6 +114,60 @@ app.controller("HexaRTLSCtrl", function ($timeout, $scope, $http, $window) {
                 console.log("Error : " + response.data.ExceptionMessage);
             });
         }
+    };
+
+    // NEW: Open floor map - navigates from dashboard to shelf map view
+    // When user clicks "View" on a floor card, it loads shelves for that zone
+    // and switches to the warehouse map view
+    $scope.openFloorMap = function (floorItem) {
+        console.log("Opening floor map for:", floorItem);
+
+        // Store selected floor details for the header
+        $scope.selectedFloorName = floorItem.FloorName || 'Floor';
+        $scope.selectedZoneName = floorItem.Zone || '';
+        $scope.SelectedLocation = floorItem.mZoneId;
+
+        // Load shelf data for this floor/zone
+        $http({
+            method: 'GET',
+            url: '../HexaRTLS/GetTrackData',
+            params: {
+                mZoneId: floorItem.mZoneId
+            }
+        }).then(function (response) {
+            $scope.Shelf = response.data.objText;
+            $scope.shelfCount = $scope.Shelf ? $scope.Shelf.length : 0;
+            
+            // NEW: Switch to shelf map view
+            $scope.showShelfMap = true;
+
+            $timeout(function () {
+                console.log("Shelf Loaded :", $scope.Shelf.length);
+                
+                if (UIkit && UIkit.Utils) {
+                    UIkit.Utils.checkDisplay(document.getElementById("contact_list"));
+                }
+                
+                if (UIkit && UIkit.filter) {
+                    var filterElements = document.querySelectorAll('[data-uk-filter]');
+                    if (filterElements.length > 0) {
+                        console.log("UIkit filter elements found:", filterElements.length);
+                    }
+                }
+            }, 100);
+
+        }, function errorCallback(response) {
+            console.log("Error : " + response.data.ExceptionMessage);
+        });
+    };
+
+    // NEW: Go back to dashboard from shelf map view
+    $scope.goBackToDashboard = function () {
+        $scope.showShelfMap = false;
+        $scope.selectedFloorName = '';
+        $scope.selectedZoneName = '';
+        $scope.shelfCount = 0;
+        console.log("Returned to floor dashboard");
     };
 
     $scope.ShowProduct = function (p) {
@@ -138,17 +188,13 @@ app.controller("HexaRTLSCtrl", function ($timeout, $scope, $http, $window) {
             $timeout(function () {
                 console.log("Shelf Loaded :", $scope.Shelf.length);
                 
-                // FIXED: Refresh UIkit filter display after AngularJS renders the grid
-                // This ensures the new CSS grid layout is properly displayed
                 if (UIkit && UIkit.Utils) {
                     UIkit.Utils.checkDisplay(document.getElementById("contact_list"));
                 }
                 
-                // FIXED: Trigger filter refresh for UIkit if available
                 if (UIkit && UIkit.filter) {
                     var filterElements = document.querySelectorAll('[data-uk-filter]');
                     if (filterElements.length > 0) {
-                        // UIkit filter will automatically handle the visibility
                         console.log("UIkit filter elements found:", filterElements.length);
                     }
                 }
@@ -160,4 +206,3 @@ app.controller("HexaRTLSCtrl", function ($timeout, $scope, $http, $window) {
 
     };
 });
-

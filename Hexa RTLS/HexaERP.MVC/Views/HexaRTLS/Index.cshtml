@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     /**/
 
     ViewBag.Title = "Index";
@@ -30,92 +29,333 @@
     <link href="@Url.Content("~/Content/bower_components/datatables/media/css/dataTables.bootstrap.css")"
           rel="stylesheet" type="text/css" media="all" />
     <style>
-        /* FIXED: Warehouse-style grid layout for shelves */
-        .shelf-grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: 12px;
-            padding: 16px 0;
+        /* ==========================================
+         * LEVEL 1: FLOOR CARDS DASHBOARD
+         * Each floor/zone shown as a card with
+         * background image and info overlay.
+         * ========================================== */
+
+        .floor-dashboard {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 20px 0;
+            justify-content: flex-start;
         }
 
-        .shelf-card {
+        .floor-card {
+            width: 320px;
+            height: 220px;
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,.2);
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            flex-shrink: 0;
+        }
+
+        .floor-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,.3);
+        }
+
+        .floor-bg {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            pointer-events: none;
+        }
+
+        .floor-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,.7));
+            color: #fff;
+            padding: 40px 16px 16px;
+        }
+
+        .floor-overlay h4 {
+            margin: 0 0 4px 0;
+            font-size: 18px;
+            font-weight: 500;
+            color: #fff;
+        }
+
+        .floor-overlay .zone-name {
+            font-size: 13px;
+            opacity: .85;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .floor-stats {
+            display: flex;
+            gap: 16px;
+            font-size: 12px;
+            opacity: .9;
+            margin-bottom: 8px;
+        }
+
+        .floor-stats span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .floor-stats .material-icons {
+            font-size: 16px;
+            color: #fff;
+        }
+
+        .btn-view-floor {
+            background: rgba(255,255,255,.25);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,.5);
+            border-radius: 4px;
+            padding: 4px 16px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+            text-transform: uppercase;
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        .btn-view-floor:hover {
+            background: rgba(255,255,255,.4);
+            text-decoration: none;
+            color: #fff;
+        }
+
+        /* Last tracked time */
+        .last-track-time {
+            font-size: 11px;
+            opacity: .7;
+            margin-top: 4px;
+        }
+
+        /* ==========================================
+         * LEVEL 2: WAREHOUSE SHELF MAP
+         * Shown after clicking "View" on a floor card.
+         * Uses background image + shelf overlay grid.
+         * ========================================== */
+
+        .shelf-map-view {
+            display: none; /* Hidden by default, shown when a floor is selected */
+        }
+
+        .shelf-map-view.active {
+            display: block;
+        }
+
+        .map-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+            padding: 12px 16px;
             background: #fff;
             border-radius: 4px;
-            box-shadow: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.24);
-            padding: 16px 8px;
-            text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,.12);
+        }
+
+        .btn-back {
+            background: #1976d2;
+            color: #fff !important;
+            border: none;
+            border-radius: 4px;
+            padding: 6px 16px;
+            font-size: 13px;
             cursor: pointer;
-            transition: all 280ms cubic-bezier(.4,0,.2,1);
-            min-height: 80px;
+            font-weight: 500;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-back:hover {
+            background: #1565c0;
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .btn-back .material-icons {
+            font-size: 18px;
+            color: #fff;
+        }
+
+        .map-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin: 0;
+            flex: 1;
+        }
+
+        .map-subtitle {
+            font-size: 13px;
+            color: #727272;
+        }
+
+        .warehouse-map-container {
+            position: relative;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,.12);
+            border-radius: 4px;
+            background: #f5f5f5;
+        }
+
+        .warehouse-bg {
+            display: block;
+            width: 100%;
+            height: auto;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .shelf-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            grid-auto-rows: min-content;
+            gap: 8px;
+            padding: 2% 3%;
+            align-content: start;
+        }
+
+        .shelf-marker {
+            background: #4CAF50;
+            color: #fff;
+            text-align: center;
+            padding: 8px 4px;
+            font-size: 11px;
+            font-weight: 500;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 200ms cubic-bezier(.4,0,.2,1);
+            box-shadow: 0 1px 3px rgba(0,0,0,.3);
+            line-height: 1.2;
+            min-height: 32px;
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        .shelf-card:hover {
-            box-shadow: 0 10px 20px rgba(0,0,0,.19), 0 6px 6px rgba(0,0,0,.23);
-            transform: translateY(-2px);
-        }
-
-        .shelf-badge {
-            font-size: 13px;
-            font-weight: 500;
-            padding: 6px 12px;
-            border-radius: 2px;
-            color: #fff;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            max-width: 100%;
+            border: 2px solid transparent;
+            position: relative;
+            z-index: 2;
         }
 
-        .shelf-active {
-            background: #7cb342;
+        .shelf-marker:hover {
+            transform: scale(1.15);
+            box-shadow: 0 4px 12px rgba(0,0,0,.4);
+            border-color: #fff;
+            z-index: 10;
         }
 
-        .shelf-inactive {
+        .shelf-available {
+            background: #4CAF50;
+        }
+
+        .shelf-occupied {
             background: #e53935;
         }
 
-        /* Responsive adjustments */
-        @@media only screen and (max-width: 767px) {
-            .shelf-grid-container {
-                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-                gap: 8px;
-            }
-
-            .shelf-card {
-                padding: 12px 6px;
-                min-height: 60px;
-            }
-
-            .shelf-badge {
-                font-size: 11px;
-                padding: 4px 8px;
-            }
+        .shelf-warning {
+            background: #ff9800;
+            animation: pulse-warning 2s infinite;
         }
 
-        @@media only screen and (min-width: 768px) and (max-width: 1219px) {
-            .shelf-grid-container {
-                grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-                gap: 10px;
-            }
+        @@keyframes pulse-warning {
+            0% { box-shadow: 0 0 0 0 rgba(255, 152, 0, 0.6); }
+            50% { box-shadow: 0 0 0 8px rgba(255, 152, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 152, 0, 0); }
         }
 
-        @@media only screen and (min-width: 1220px) {
-            .shelf-grid-container {
-                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-                gap: 12px;
-            }
+        .shelf-marker .shelf-tooltip {
+            display: none;
+            position: absolute;
+            bottom: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 3px;
+            font-size: 11px;
+            white-space: nowrap;
+            z-index: 20;
+            pointer-events: none;
         }
 
-        /* Hide UIkit grid no results message by default */
+        .shelf-marker:hover .shelf-tooltip {
+            display: block;
+        }
+
         .grid_no_results {
             display: none !important;
         }
 
         .grid_no_results.visible {
             display: block !important;
+        }
+
+        /* Responsive */
+        @@media only screen and (max-width: 767px) {
+            .floor-card {
+                width: 100%;
+                height: 180px;
+            }
+            .floor-dashboard {
+                gap: 12px;
+                padding: 12px 0;
+            }
+            .shelf-overlay {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 4px;
+                padding: 1% 2%;
+            }
+            .shelf-marker {
+                font-size: 9px;
+                padding: 4px 2px;
+                min-height: 24px;
+            }
+        }
+
+        @@media only screen and (min-width: 768px) and (max-width: 1219px) {
+            .floor-card {
+                width: calc(50% - 12px);
+                height: 200px;
+            }
+            .shelf-overlay {
+                grid-template-columns: repeat(8, 1fr);
+                gap: 6px;
+                padding: 1.5% 2.5%;
+            }
+            .shelf-marker {
+                font-size: 10px;
+                min-height: 28px;
+            }
+        }
+
+        @@media only screen and (min-width: 1220px) {
+            .shelf-overlay {
+                grid-template-columns: repeat(10, 1fr);
+                gap: 8px;
+                padding: 2% 3%;
+            }
         }
     </style>
 }
@@ -125,72 +365,131 @@
     <div id="page_content">
         <div id="page_content_inner">
 
-
             <div class="scrum_task critical">
-                <p class="scrum_task_description"><b> Note:</b> click on asset/employee name to get details about it</p>
+                <p class="scrum_task_description"><b> Note:</b> Click on "View" button to see shelf details, or click shelf marker for employee/asset tracking.</p>
             </div>
+
+            <!-- ZONE FILTER TABS (always visible) -->
             <div class="md-card uk-margin-medium-bottom">
                 <div class="md-card-content">
                     <div class="uk-grid" data-uk-grid-margin>
                         <div class="uk-width-medium-1-1">
-
-
                             <div class="uk-vertical-align">
                                 <div class="uk-vertical-align-middle">
                                    <ul id="contact_list_filter" class="uk-subnav uk-subnav-pill uk-margin-remove">
-
-                                <li class="uk-active" data-uk-filter="">
-                                    <a href="#">All</a>
-                                </li>
-
-                                <li ng-repeat="Iteam in Location"
-                                    data-uk-filter="{{Iteam.mZoneId}}">
-                                    <a ng-click="ShowProduct(Iteam)" href="#">
-                                        {{Iteam.Zone}}
-                                    </a>
-                                </li>
-
-                                <li title="Safety report click here download excel">
-                                    <a href="@Url.Action("SafetyExportExcelAsync","EmployeeTrackSummary")">
-                                        Safety report
-                                    </a>
-                                </li>
-
-                            </ul>
+                                        <li class="uk-active" data-uk-filter="">
+                                            <a href="#">All</a>
+                                        </li>
+                                        <li ng-repeat="Iteam in Location"
+                                            data-uk-filter="{{Iteam.mZoneId}}">
+                                            <a ng-click="ShowProduct(Iteam)" href="#">
+                                                {{Iteam.Zone}}
+                                            </a>
+                                        </li>
+                                        <li title="Safety report click here download excel">
+                                            <a href="@Url.Action("SafetyExportExcelAsync","EmployeeTrackSummary")">
+                                                Safety report
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <h3 class="heading_b uk-text-center grid_no_results">No Locations found</h3>
+            <h3 class="heading_b uk-text-center grid_no_results">No Locations found</h3>
 
-        <!-- FIXED: Removed UIkit grid classes that conflict with AngularJS, using custom CSS grid instead -->
-        <div id="contact_list" class="shelf-grid-container hierarchical_show">
+            <!-- ======================================== -->
+            <!-- LEVEL 1: FLOOR CARDS DASHBOARD           -->
+            <!-- Shows each floor/zone as a card with     -->
+            <!-- background image and info overlay.        -->
+            <!-- ======================================== -->
+            <div id="floorDashboard" class="floor-dashboard" ng-show="!showShelfMap">
 
-            <!-- FIXED: Each shelf is now a grid item in warehouse-style layout -->
-            <div class="shelf-card"
-                 ng-repeat="task in Shelf"
-                 data-uk-filter="{{task.mZoneId}}"
-                 ng-click="ShowProduct(task)">
+                <div class="floor-card"
+                     ng-repeat="item in Areas"
+                     ng-click="openFloorMap(item)">
 
-                <!-- FIXED: Badge styling with proper active/inactive states -->
-                <div class="shelf-badge {{task.IsAction == false ?
-                    'shelf-active' :
-                    'shelf-inactive'}}"
-                     title="{{task.PartNumber}}">
+                    <!-- Background image for each floor card -->
+                    <img class="floor-bg"
+                         src="~/Content/assets/img/4dc174f0-2c88-48f9-86ff-220d000e2f6a.jpg"
+                         alt="{{item.FloorName}}"
+                         draggable="false" />
 
-                    {{task.ShelfName}}
+                    <!-- Overlay with floor info -->
+                    <div class="floor-overlay">
+                        <h4>{{item.FloorName}}</h4>
+                        <span class="zone-name">{{item.Zone}}</span>
+
+                        <div class="floor-stats">
+                            <span>
+                                <i class="material-icons">&#xE7FB;</i>
+                                Floor {{item.FloorNo}}
+                            </span>
+                        </div>
+
+                        <!-- "View" button to open shelf map -->
+                        <a class="btn-view-floor" ng-click="$event.stopPropagation(); openFloorMap(item)">
+                            View
+                        </a>
+
+                        <div class="last-track-time">
+                            Last updated: {{lastTracked}}
+                        </div>
+                    </div>
 
                 </div>
 
+            </div>
+
+            <!-- ======================================== -->
+            <!-- LEVEL 2: WAREHOUSE SHELF MAP             -->
+            <!-- Shown after clicking "View" on a floor    -->
+            <!-- card. Shows warehouse bg + shelf grid.    -->
+            <!-- ======================================== -->
+            <div id="shelfMapView" class="shelf-map-view" ng-class="{active: showShelfMap}">
+
+                <!-- Map header with back button -->
+                <div class="map-header">
+                    <a class="btn-back" ng-click="goBackToDashboard()">
+                        <i class="material-icons">&#xE5C4;</i> Back
+                    </a>
+                    <h3 class="map-title">{{selectedFloorName}}</h3>
+                    <span class="map-subtitle">{{selectedZoneName}} &middot; {{shelfCount}} shelves</span>
+                </div>
+
+                <!-- Warehouse map container -->
+                <div id="contact_list" class="warehouse-map-container hierarchical_show">
+
+                    <img class="warehouse-bg"
+                         src="~/Content/assets/img/4dc174f0-2c88-48f9-86ff-220d000e2f6a.jpg"
+                         alt="Warehouse Floor Plan"
+                         draggable="false" />
+
+                    <div class="shelf-overlay">
+                        <div ng-repeat="task in Shelf"
+                             class="shelf-marker {{task.IsAction == false ?
+                                 'shelf-available' :
+                                 'shelf-occupied'}}"
+                             data-uk-filter="{{task.mZoneId}}"
+                             ng-click="ShowProduct(task)"
+                             title="{{task.ShelfName}} - {{task.PartNumber || ''}}">
+
+                            {{task.ShelfName}}
+                            <span class="shelf-tooltip">{{task.ShelfName}}<br ng-if="task.PartNumber" />{{task.PartNumber}}</span>
+                        </div>
+                    </div>
+
+                </div>
             </div>
 
         </div>
     </div>
 </div>
 
+<!-- Employee Details Modal -->
 <div id="modal_overflow" class="uk-modal">
     <div class="uk-modal-dialog uk-modal-dialog-large">
         <button type="button" class="uk-modal-close uk-close"></button>
@@ -203,7 +502,6 @@
                                 <span class="uk-text-truncate">{{EmpDetails.Name}}</span>
                                 <span class="sub-heading">{{EmpDetails.EmployeeId}}</span>
                                 <span class="sub-heading">{{EmpDetails.Epc}}</span>
-
                             </h2>
                         </div>
                     </div>
@@ -263,7 +561,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -274,6 +571,7 @@
     </div>
 </div>
 
+<!-- Asset Details Modal -->
 <div id="modal_overflow_Asset" class="uk-modal">
     <div class="uk-modal-dialog uk-modal-dialog-large">
         <button type="button" class="uk-modal-close uk-close"></button>
@@ -307,7 +605,7 @@
                             <div class="timeline_item">
                                 <div class="timeline_icon timeline_icon_warning"><i class="material-icons">&#xE7FE;</i></div>
                                 <div class="timeline_content">
-                                    Asset  Issued Information
+                                    Asset Issued Information
                                     <div class="md-card">
                                         <div class="user_heading">
                                             <div class="user_heading_content">
@@ -358,55 +656,13 @@
 
 @section foot
 {
-
-    @*<script src="@Url.Content("~/Content/bower_components/dragula.js/dist/dragula.min.js")"
-        type="text/javascript"></script>*@
-
-    <!--  sortable functions -->
-    @*<script src="@Url.Content("~/Content/assets/js/pages/components_sortable.min.js")"
-        type="text/javascript"></script>*@
-
-    <!-- functions -->
-    <script src="@Url.Content("~/Content/assets/js/kendoui_custom.min.js")"
-            type="text/javascript"></script>
-
-    <script src="@Url.Content("~/Content/assets/js/pages/kendoui.min.js")"
-            type="text/javascript"></script>
-
-
-    <!--  mailbox functions -->
-    @*<script src="@Url.Content("~/Content/assets/js/pages/page_mailbox.min.js")"
-        type="text/javascript"></script>*@
-
-    <!-- page specific plugins -->
-    <!--  contact list functions -->
-     @* <script src="@Url.Content("~/Content/assets/js/pages/page_contact_list.min.js")"
-            type="text/javascript"></script>  *@
-
-    <!-- product edit functions -->
-    <script src="@Url.Content("~/Content/assets/js/pages/ecommerce_product_edit.min.js")"
-            type="text/javascript"></script>
-
-
-    <!--  kendoui functions -->
+    <script src="@Url.Content("~/Content/assets/js/kendoui_custom.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/assets/js/pages/kendoui.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/assets/js/pages/ecommerce_product_edit.min.js")" type="text/javascript"></script>
     <script src="~/Scripts/HexaAgular/HexaRTLS.js"></script>
-
     <script>
         $(document).ready(function () {
-            //var numRows = parseInt(prompt("Enter rows"));
-            //var numCols = parseInt(prompt("Enter cols"));
-            //var grideContainer = $("#grideCOntainer");
-            //for (var i = 0; i < numRows; i++) {
-            //    var row =$("<div>").addClass()
-            //}
-
-            var grid = $('.grid1');
-
-            for (var i = 0; i <= 200; i++) {
-                var gridItem = $('<div>').addClass('grid-item').text('Grid Item' + i);
-                //grid.append(gridItem);
-            }
+            console.log("HexaRTLS Dashboard initialized.");
         });
     </script>
-
 }
