@@ -22,7 +22,7 @@
 
 
 <div id="page_content_inner" ng-controller="AssetsReportCtrl">
-    <h3 class="heading_a">SMT Product Report</h3><br />
+    <h3 class="heading_a">Asset Report</h3><br />
     <form id="FormSearchEngin" role="form" enctype="multipart/form-data">
         <div class="uk-grid" data-uk-grid-margin>
             <div class="uk-width-medium-6-10">
@@ -69,27 +69,22 @@
                         <div class="parsley-row">
                             <span class="uk-form-help-block">
                                 <b>
-                                    @*<i class="uk-icon-barcode"></i>*@
-                                    Ble
+                                    Barcode
                                 </b>
                             </span>
                             <div class="md-input-wrapper md-input-filled">
-                                <input type="text" class="md-input label-fixed" ng-model="Ble" name="Ble" id="Ble">
+                                <input type="text" class="md-input label-fixed" ng-model="Barcode" name="Barcode" id="Barcode">
                             </div>
                         </div>
                         <div class="parsley-row">
                             <span class="uk-form-help-block">
                                 <b>
-                                    Status
+                                    Unique ID
                                 </b>
                             </span>
-                            <input id="Status"
-                                   class="md-btn md-btn-wave waves-effect waves-button"
-                                   name="Status"
-                                   ng-model="Status"
-                                   required
-                                   placeholder="Select Status" />
-
+                            <div class="md-input-wrapper md-input-filled">
+                                <input type="text" class="md-input label-fixed" ng-model="UniqueID" name="UniqueID" id="UniqueID">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -102,16 +97,14 @@
                                 <div class="parsley-row">
                                     <span class="uk-form-help-block">
                                         <b>
-                                            SerialNumber
+                                            Asset Category
                                         </b>
                                     </span>
-                                    <div class="md-input-wrapper md-input-filled">
-                                        <input type="text"
-                                               class="md-input label-fixed"
-                                               ng-model="SerialNumber"
-                                               name="SerialNumber"
-                                               id="SerialNumber">
-                                    </div>
+                                    <input id="AssetCategory"
+                                           class="md-btn md-btn-wave waves-effect waves-button"
+                                           name="AssetCategory"
+                                           ng-model="AssetCategory"
+                                           placeholder="Select Category" />
                                 </div>
                             </div>
                         </div>
@@ -120,64 +113,52 @@
                                 <div class="parsley-row">
                                     <span class="uk-form-help-block">
                                         <b>
-                                            PartNumber
+                                            Asset Sub Category
                                         </b>
                                     </span>
-                                    <div class="md-input-wrapper md-input-filled">
-                                        <input type="text"
-                                               class="md-input label-fixed"
-                                               ng-model="PartNumber"
-                                               name="PartNumber"
-                                               id="PartNumber">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="uk-grid">
-                            <div class="uk-width-large-1-1">
-                                <div class="parsley-row">
-                                    <span class="uk-form-help-block">
-                                        <b>
-                                            Lot
-                                        </b>
-                                    </span>
-                                    <div class="md-input-wrapper md-input-filled">
-                                        <input type="text"
-                                               class="md-input label-fixed"
-                                               ng-model="Lot"
-                                               name="Lot"
-                                               id="Lot">
-                                    </div>
+                                    <input id="AssetSubCategory"
+                                           class="md-btn md-btn-wave waves-effect waves-button"
+                                           name="AssetSubCategory"
+                                           ng-model="AssetSubCategory"
+                                           placeholder="Select Sub Category" />
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="uk-width-medium-1-4" style="display:none">
+            <div class="uk-width-medium-1-4">
                 <div class="md-card">
                     <div class="md-card-content">
-                        <div class="uk-form-row">
-                            <div class="uk-grid" data-uk-grid-margin="">
-                                <div class="uk-width-1-1">
-                                    <div class="parsley-row">
-                                        <span class="uk-form-help-block"><b>Location</b></span>
-                                        <input class="md-btn md-btn-wave waves-effect waves-button"
-                                               id="mSiteMasterId"
-                                               name="mSiteMasterId"
-                                               ng-model="Iform.mSiteMasterId"
-                                               placeholder="Select Location" />
-                                    </div>
+                        <div class="uk-grid">
+                            <div class="uk-width-large-1-1">
+                                <div class="parsley-row">
+                                    <span class="uk-form-help-block">
+                                        <b>
+                                            Asset Type
+                                        </b>
+                                    </span>
+                                    <input id="AssetType"
+                                           class="md-btn md-btn-wave waves-effect waves-button"
+                                           name="AssetType"
+                                           ng-model="AssetType"
+                                           placeholder="Select Asset Type" />
                                 </div>
                             </div>
                         </div>
-                        <div class="uk-form-row">
-                            <div class="uk-grid" data-uk-grid-margin="">
-                                <div class="uk-width-medium-1-1 uk-row-first">
-                                    <div class="parsley-row">
-                                        <span class="uk-form-help-block"><b> Zone</b></span>
-                                        <select id="mZoneId" name="mZoneId" ng-model="Iform.mZoneId" class="uk-form-width-medium"></select>
-                                    </div>
+                        <div class="uk-grid">
+                            <div class="uk-width-large-1-1">
+                                <div class="parsley-row">
+                                    <span class="uk-form-help-block">
+                                        <b>
+                                            Vendor
+                                        </b>
+                                    </span>
+                                    <input id="Vendor"
+                                           class="md-btn md-btn-wave waves-effect waves-button"
+                                           name="Vendor"
+                                           ng-model="Vendor"
+                                           placeholder="Select Vendor" />
                                 </div>
                             </div>
                         </div>
@@ -189,14 +170,34 @@
                     <div class="md-card-content">
                         <div class="uk-form-row">
                             <div class="parsley-row">
-
+                                <span class="uk-form-help-block"><b>Location</b></span>
+                                <input class="md-btn md-btn-wave waves-effect waves-button"
+                                       id="mSiteMasterId"
+                                       name="mSiteMasterId"
+                                       placeholder="Select Location" />
+                            </div>
+                        </div>
+                        <div class="uk-form-row">
+                            <div class="parsley-row">
+                                <span class="uk-form-help-block"><b>Zone</b></span>
+                                <select id="mZoneId" name="mZoneId" class="uk-form-width-medium"></select>
+                            </div>
+                        </div>
+                        <div class="uk-form-row">
+                            <div class="parsley-row">
+                                <span class="uk-form-help-block"><b>Floor</b></span>
+                                <select id="mFloorMasterId" name="mFloorMasterId" class="uk-form-width-medium"></select>
+                            </div>
+                        </div>
+                        <div class="uk-form-row">
+                            <div class="parsley-row">
                                 <button type="button" class="md-btn md-btn-primary uk-margin-small-top"
                                         id="formSearchEngineSubmit">
-                                    View
+                                    Refresh
                                 </button>
                                 <span class="uk-form-help-block">
                                     <strong>
-                                        Submit To Get Asset Report
+                                        Click Refresh to load Asset Report
                                     </strong>
                                 </span>
                             </div>
@@ -249,89 +250,23 @@
 
                     <div id="printablediv">
                         <div class="scrum_task success">
-                            <strong> Total Records <h1>{{totalRecords}}</h1></strong>
+                            <strong> Total Assets : <h1>{{totalRecords}}</h1></strong>
                         </div>
                         <div class="uk-overflow-container">
                             <div class="table-responsive">
                                 <table class="uk-table uk-table-hover" cellspacing="0" width="100%">
                                     <thead>
                                         <tr class="uk-text-nowrap">
-                                            <th>
-                                                <strong>
-                                                    Part Number
-                                                </strong>
-                                            </th>
-                                            <th>
-                                                <strong>
-                                                    Lot
-                                                </strong>
-                                            </th>
-
-                                            <th>
-                                                <strong>
-                                                    Serial No
-                                                </strong>
-                                            </th>
-                                            <th>
-                                                <strong>
-                                                    Quantity
-                                                </strong>
-                                            </th>
-                                            <th>
-                                                <strong>
-                                                    Status
-                                                </strong>
-                                            </th>
-                                            <th>
-                                                <strong>
-                                                    Customer Code
-                                                </strong>
-                                            </th>
-                                            <th>
-                                                <strong>
-                                                    Part Id
-                                                </strong>
-                                            </th>
-                                            <th>
-                                                <strong>
-                                                    Ble
-                                                </strong>
-                                            </th>
-                                            <th>
-                                                <strong>
-                                                    Shelf Name
-                                                </strong>
-                                            </th>
-                                            <th>
-                                                <strong>
-                                                    Remark
-                                                </strong>
-                                            </th>
-                                            <th>
-                                                <strong>
-                                                    Comment
-                                                </strong>
-                                            </th>
-                                            <th>
-                                                <strong>
-                                                    Created By
-                                                </strong>
-                                            </th>
-                                            <th>
-                                                <strong>
-                                                    Created Date
-                                                </strong>
-                                            </th>
-                                            <th>
-                                                <strong>
-                                                    Modified By
-                                                </strong>
-                                            </th>
-                                            <th>
-                                                <strong>
-                                                    Modified Date
-                                                </strong>
-                                            </th>
+                                            <th><strong>Asset Name</strong></th>
+                                            <th><strong>Asset Number / Asset Tag</strong></th>
+                                            <th><strong>Category</strong></th>
+                                            <th><strong>Asset Type</strong></th>
+                                            <th><strong>Vendor</strong></th>
+                                            <th><strong>Status</strong></th>
+                                            <th><strong>Zone</strong></th>
+                                            <th><strong>Floor</strong></th>
+                                            <th><strong>Current Location</strong></th>
+                                            <th><strong>Last Updated</strong></th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -339,72 +274,47 @@
                                         <tr ng-repeat="Iteam in AssetReportList | filter : assetFilter track by $index">
                                             <td class="uk-table-nowrap">
                                                 <span class="uk-text-small">
-                                                    <strong>  {{ Iteam.PartNumber}}</strong>
+                                                    <strong>{{ Iteam.IteamName }}</strong>
                                                 </span>
                                             </td>
                                             <td class="uk-table-nowrap">
                                                 <span class="uk-text-small">
-                                                    <strong>  {{ Iteam.Lot}}</strong>
+                                                    {{ Iteam.AssetID }}
                                                 </span>
                                             </td>
                                             <td class="uk-table-nowrap">
                                                 <span class="uk-text-small">
-                                                    {{ Iteam.SerialNumber}}
+                                                    {{ Iteam.Category }}
                                                 </span>
                                             </td>
                                             <td class="uk-table-nowrap">
                                                 <span class="uk-text-small">
-                                                    {{ Iteam.Quantity}}
+                                                    {{ Iteam.AssetType }}
                                                 </span>
                                             </td>
                                             <td class="uk-table-nowrap">
                                                 <span class="uk-text-small">
-                                                    {{ Iteam.Status}}
+                                                    {{ Iteam.Vendor }}
                                                 </span>
                                             </td>
                                             <td class="uk-table-nowrap">
                                                 <span class="uk-text-small">
-                                                    {{ Iteam.CustomerCode}}
+                                                    {{ Iteam.Status }}
                                                 </span>
                                             </td>
                                             <td class="uk-table-nowrap">
                                                 <span class="uk-text-small">
-                                                    {{ Iteam.PartId}}
+                                                    {{ Iteam.Zone }}
                                                 </span>
                                             </td>
                                             <td class="uk-table-nowrap">
                                                 <span class="uk-text-small">
-                                                    {{ Iteam.Ble}}
+                                                    {{ Iteam.Floor }}
                                                 </span>
                                             </td>
                                             <td class="uk-table-nowrap">
                                                 <span class="uk-text-small">
-                                                    {{ Iteam.ShelfName}}
-                                                </span>
-                                            </td>
-                                            <td class="uk-table-nowrap">
-                                                <span class="uk-text-small">
-                                                    {{ Iteam.Remark}}
-                                                </span>
-                                            </td>
-                                            <td class="uk-table-nowrap">
-                                                <span class="uk-text-small">
-                                                    {{ Iteam.Comment}}
-                                                </span>
-                                            </td>
-                                            <td class="uk-table-nowrap">
-                                                <span class="uk-text-small">
-                                                    {{ Iteam.CreatedBy}}
-                                                </span>
-                                            </td>
-                                            <td class="uk-table-nowrap">
-                                                <span class="uk-text-small">
-                                                    {{ Iteam.CreatedDate | jsonDate :'dd-MMM-yy hh:mm a'}}
-                                                </span>
-                                            </td>
-                                            <td class="uk-table-nowrap">
-                                                <span class="uk-text-small">
-                                                    {{ Iteam.ModifiedBy}}
+                                                    {{ Iteam.CurrentLocation }}
                                                 </span>
                                             </td>
                                             <td class="uk-table-nowrap">
@@ -413,7 +323,7 @@
                                                 </span>
                                             </td>
                                             <td class="uk-table-nowrap">
-                                                <a data-uk-tooltip="{cls:'uk-tooltip-small',pos:'bottom'}" title="Click here to view asset history" data-uk-modal="{target:'#Asset_moreDetails'}" ng-click="AssetMoreDetail(Iteam.mSMTProductId)">
+                                                <a data-uk-tooltip="{cls:'uk-tooltip-small',pos:'bottom'}" title="Click here to view asset history" data-uk-modal="{target:'#Asset_moreDetails'}" ng-click="AssetMoreDetail(Iteam.tAssetTagId)">
                                                     View History
                                                 </a>
                                             </td>
@@ -485,7 +395,7 @@
                         <i class="md-icon material-icons md-card-overlay-toggler"></i>
                     </span>
                     <h3 class="md-card-toolbar-heading-text">
-                        <strong> SMT Product Tracking History</strong>
+                        <strong> Asset Tracking History</strong>
                     </h3>
                 </div>
                 <div class="md-card-content">

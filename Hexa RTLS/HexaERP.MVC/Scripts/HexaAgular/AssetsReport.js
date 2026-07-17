@@ -34,7 +34,6 @@ app.controller("AssetsReportCtrl", function ($timeout, $scope, $http) {
 
     function GetAssetReport(pageNo) {
 
-
         var fDate = $("#dateFrom").val();
         var tDate = $("#toDate").val();
         console.log(fDate); console.log(tDate);
@@ -44,16 +43,44 @@ app.controller("AssetsReportCtrl", function ($timeout, $scope, $http) {
         var data = new FormData();
         var form_serialized = JSON.stringify(form.serializeObject(), null, 2);
         var d = JSON.parse(form_serialized);
-        data.append("Ble", d.Ble);
-        data.append("SerialNumber", d.SerialNumber);
-        data.append("PartNumber", d.PartNumber);
+        data.append("Barcode", d.Barcode);
+        data.append("UniqueID", d.UniqueID);
         data.append("PageSize", $scope.itemPerPage);
         data.append("PageIndex", pageNo);
 
         data.append("Status", d.Status);
-        data.append("Lot", d.Lot);
+        data.append("Location", d.mSiteMasterId);
+        data.append("Zone", d.mZoneId);
+        data.append("Floor", d.mFloorMasterId);
+        data.append("AssetCategory", d.AssetCategory);
+        data.append("AssetSubCategory", d.AssetSubCategory);
+        data.append("AssetType", d.AssetType);
+        data.append("Vendor", d.Vendor);
         data.append("dateFrom", $("#dateFrom").val());
         data.append("toDate", $("#toDate").val());
+
+        // Check if zone and floor are passed via URL parameters
+        var urlParams = new URLSearchParams(window.location.search);
+        var zoneId = urlParams.get('zoneId');
+        var floorId = urlParams.get('floorId');
+
+        if (zoneId) {
+            data.append("Zone", zoneId);
+            // Set the dropdown value
+            var zoneDropDown = $("#mZoneId").data("kendoDropDownList");
+            if (zoneDropDown) {
+                zoneDropDown.value(zoneId);
+            }
+        }
+
+        if (floorId) {
+            data.append("Floor", floorId);
+            // Set the dropdown value
+            var floorDropDown = $("#mFloorMasterId").data("kendoDropDownList");
+            if (floorDropDown) {
+                floorDropDown.value(floorId);
+            }
+        }
 
 
         //console.log(d);
@@ -239,7 +266,9 @@ app.controller("AssetsReportCtrl", function ($timeout, $scope, $http) {
             });
 
             var mZoneId = $("#mZoneId").data("kendoDropDownList");
-            mZoneId.value(-1);
+            if (mZoneId) {
+                mZoneId.value(-1);
+            }
 
             function onSelect(e) {
                 if (e.item) {
@@ -270,7 +299,9 @@ app.controller("AssetsReportCtrl", function ($timeout, $scope, $http) {
             });
 
             var mFloorMasterId = $("#mFloorMasterId").data("kendoDropDownList");
-            mFloorMasterId.value(-1);
+            if (mFloorMasterId) {
+                mFloorMasterId.value(-1);
+            }
 
             function onSelect(e) {
                 if (e.item) {
@@ -301,7 +332,9 @@ app.controller("AssetsReportCtrl", function ($timeout, $scope, $http) {
             });
 
             var mRoomMasterId = $("#mRoomMasterId").data("kendoDropDownList");
-            mRoomMasterId.value(-1);
+            if (mRoomMasterId) {
+                mRoomMasterId.value(-1);
+            }
 
         }, function errorCallback(response) {
             console.log("Error : " + response.data.ExceptionMessage);
@@ -309,202 +342,6 @@ app.controller("AssetsReportCtrl", function ($timeout, $scope, $http) {
     };
 
     function SetControlProperty() {
-
-        $('#Ble').selectize({
-            plugins: {
-                'remove_button': {
-                    label: ''
-                }
-            },
-            placeholder: 'Enter',
-            options: [
-
-            ],
-            render: {
-                option: function (data, escape) {
-                    return '<div class="option">' +
-                        '<span>' + escape(data.title) + '</span>' +
-                        '</div>';
-                },
-                item: function (data, escape) {
-                    return '<div class="item">' + escape(data.title) + '</div>';
-                }
-            },
-            maxItems: null,
-            valueField: 'value',
-            labelField: 'title',
-            searchField: 'title',
-            create: true,
-            onDropdownOpen: function ($dropdown) {
-                $dropdown
-                    .hide()
-                    .velocity('slideDown', {
-                        begin: function () {
-                            $dropdown.css({ 'margin-top': '0' })
-                        },
-                        duration: 200,
-                        easing: easing_swiftOut
-                    })
-            },
-            onDropdownClose: function ($dropdown) {
-                $dropdown
-                    .show()
-                    .velocity('slideUp', {
-                        complete: function () {
-                            $dropdown.css({ 'margin-top': '' })
-                        },
-                        duration: 200,
-                        easing: easing_swiftOut
-                    })
-            }
-        });
-
-        $('#SerialNumber').selectize({
-            plugins: {
-                'remove_button': {
-                    label: ''
-                }
-            },
-            placeholder: 'Enter',
-            options: [
-
-            ],
-            render: {
-                option: function (data, escape) {
-                    return '<div class="option">' +
-                        '<span>' + escape(data.title) + '</span>' +
-                        '</div>';
-                },
-                item: function (data, escape) {
-                    return '<div class="item">' + escape(data.title) + '</div>';
-                }
-            },
-            maxItems: null,
-            valueField: 'value',
-            labelField: 'title',
-            searchField: 'title',
-            create: true,
-            onDropdownOpen: function ($dropdown) {
-                $dropdown
-                    .hide()
-                    .velocity('slideDown', {
-                        begin: function () {
-                            $dropdown.css({ 'margin-top': '0' })
-                        },
-                        duration: 200,
-                        easing: easing_swiftOut
-                    })
-            },
-            onDropdownClose: function ($dropdown) {
-                $dropdown
-                    .show()
-                    .velocity('slideUp', {
-                        complete: function () {
-                            $dropdown.css({ 'margin-top': '' })
-                        },
-                        duration: 200,
-                        easing: easing_swiftOut
-                    })
-            }
-        });
-
-        $('#PartNumber').selectize({
-            plugins: {
-                'remove_button': {
-                    label: ''
-                }
-            },
-            placeholder: 'Enter',
-            options: [
-
-            ],
-            render: {
-                option: function (data, escape) {
-                    return '<div class="option">' +
-                        '<span>' + escape(data.title) + '</span>' +
-                        '</div>';
-                },
-                item: function (data, escape) {
-                    return '<div class="item">' + escape(data.title) + '</div>';
-                }
-            },
-            maxItems: null,
-            valueField: 'value',
-            labelField: 'title',
-            searchField: 'title',
-            create: true,
-            onDropdownOpen: function ($dropdown) {
-                $dropdown
-                    .hide()
-                    .velocity('slideDown', {
-                        begin: function () {
-                            $dropdown.css({ 'margin-top': '0' })
-                        },
-                        duration: 200,
-                        easing: easing_swiftOut
-                    })
-            },
-            onDropdownClose: function ($dropdown) {
-                $dropdown
-                    .show()
-                    .velocity('slideUp', {
-                        complete: function () {
-                            $dropdown.css({ 'margin-top': '' })
-                        },
-                        duration: 200,
-                        easing: easing_swiftOut
-                    })
-            }
-        });
-
-        $('#Lot').selectize({
-            plugins: {
-                'remove_button': {
-                    label: ''
-                }
-            },
-            placeholder: 'Enter',
-            options: [
-
-            ],
-            render: {
-                option: function (data, escape) {
-                    return '<div class="option">' +
-                        '<span>' + escape(data.title) + '</span>' +
-                        '</div>';
-                },
-                item: function (data, escape) {
-                    return '<div class="item">' + escape(data.title) + '</div>';
-                }
-            },
-            maxItems: null,
-            valueField: 'value',
-            labelField: 'title',
-            searchField: 'title',
-            create: true,
-            onDropdownOpen: function ($dropdown) {
-                $dropdown
-                    .hide()
-                    .velocity('slideDown', {
-                        begin: function () {
-                            $dropdown.css({ 'margin-top': '0' })
-                        },
-                        duration: 200,
-                        easing: easing_swiftOut
-                    })
-            },
-            onDropdownClose: function ($dropdown) {
-                $dropdown
-                    .show()
-                    .velocity('slideUp', {
-                        complete: function () {
-                            $dropdown.css({ 'margin-top': '' })
-                        },
-                        duration: 200,
-                        easing: easing_swiftOut
-                    })
-            }
-        });
 
         $('#mZoneId').kendoDropDownList({
         });
@@ -518,25 +355,39 @@ app.controller("AssetsReportCtrl", function ($timeout, $scope, $http) {
             url: '../AssetsReport/getMasterData'
         }).then(function successCallback(response) {
             //console.log(response.data);
-            var objNullStatusName = { "StatusName": "ALL", "mStatusMasterId": null };
-            var StatusName = response.data.mststu.concat(objNullStatusName);
-            $('#Status').kendoDropDownList({
+
+            // FIXED: Updated property names to match new JSON structure from getMasterData()
+            // Status dropdown - using StatusId and StatusName
+            var objNullStatus = {
+                StatusId: null,
+                StatusName: "ALL"
+            };
+
+            // FIXED: Handle empty mststu array safely - check if it exists and has data
+            var Status = [];
+            if (response.data.mststu && response.data.mststu.length > 0) {
+                Status = response.data.mststu.concat(objNullStatus);
+            } else {
+                Status = [objNullStatus];
+            }
+
+            $("#Status").kendoDropDownList({
                 dataTextField: "StatusName",
-                dataValueField: "StatusName",
-                filter: "contains",
-                dataSource: StatusName,
-                suggest: true,
-                index: 3
+                dataValueField: "StatusId",
+                dataSource: Status
             });
 
             var mStatusMasterId = $("#Status").data("kendoDropDownList");
-            mStatusMasterId.value(null);
+            if (mStatusMasterId) {
+                mStatusMasterId.value(null);
+            }
 
-            var objNullSite = { "Site": "ALL", "mSiteMasterId": null };
-            var Site = response.data.mSite.concat(objNullSite);
+            // FIXED: Site dropdown - using SiteId and SiteName (new property names)
+            var objNullSite = { SiteId: null, SiteName: "ALL" };
+            var Site = response.data.mSite ? response.data.mSite.concat(objNullSite) : [objNullSite];
             $('#mSiteMasterId').kendoDropDownList({
-                dataTextField: "Site",
-                dataValueField: "mSiteMasterId",
+                dataTextField: "SiteName",
+                dataValueField: "SiteId",
                 filter: "contains",
                 select: onSelect,
                 dataSource: Site,
@@ -544,14 +395,81 @@ app.controller("AssetsReportCtrl", function ($timeout, $scope, $http) {
                 index: 3
             });
             var mSiteMasterId = $("#mSiteMasterId").data("kendoDropDownList");
-            mSiteMasterId.value(null);
+            if (mSiteMasterId) {
+                mSiteMasterId.value(null);
+            }
 
             function onSelect(e) {
                 if (e.item) {
                     var dataItem = this.dataItem(e.item.index());
-                    BindZone(dataItem.mSiteMasterId);
+                    // FIXED: Use SiteId instead of mSiteMasterId
+                    BindZone(dataItem.SiteId);
                 }
             };
+
+            // FIXED: Asset Category dropdown - using GroupId and GroupName (new property names)
+            var objNullGroup = { GroupId: null, GroupName: "ALL" };
+            var Group = response.data.mGroup ? response.data.mGroup.concat(objNullGroup) : [objNullGroup];
+            $('#AssetCategory').kendoDropDownList({
+                dataTextField: "GroupName",
+                dataValueField: "GroupId",
+                filter: "contains",
+                dataSource: Group,
+                suggest: true,
+                index: 3
+            });
+            var AssetCategory = $("#AssetCategory").data("kendoDropDownList");
+            if (AssetCategory) {
+                AssetCategory.value(null);
+            }
+
+            // FIXED: Asset Sub Category dropdown - using ItemId and ItemName (new property names)
+            var objNullIteam = { ItemId: null, ItemName: "ALL" };
+            var Iteam = response.data.mIteam ? response.data.mIteam.concat(objNullIteam) : [objNullIteam];
+            $('#AssetSubCategory').kendoDropDownList({
+                dataTextField: "ItemName",
+                dataValueField: "ItemId",
+                filter: "contains",
+                dataSource: Iteam,
+                suggest: true,
+                index: 3
+            });
+            var AssetSubCategory = $("#AssetSubCategory").data("kendoDropDownList");
+            if (AssetSubCategory) {
+                AssetSubCategory.value(null);
+            }
+
+            // FIXED: Asset Type dropdown - using ItemTypeId and ItemType (new property names)
+            var objNullIteamType = { ItemTypeId: null, ItemType: "ALL" };
+            var IteamType = response.data.mIteamType ? response.data.mIteamType.concat(objNullIteamType) : [objNullIteamType];
+            $('#AssetType').kendoDropDownList({
+                dataTextField: "ItemType",
+                dataValueField: "ItemTypeId",
+                filter: "contains",
+                dataSource: IteamType,
+                suggest: true,
+                index: 3
+            });
+            var AssetType = $("#AssetType").data("kendoDropDownList");
+            if (AssetType) {
+                AssetType.value(null);
+            }
+
+            // FIXED: Vendor dropdown - using VendorId and VendorName (new property names)
+            var objNullVendor = { VendorId: null, VendorName: "ALL" };
+            var Vendor = response.data.mVendor ? response.data.mVendor.concat(objNullVendor) : [objNullVendor];
+            $('#Vendor').kendoDropDownList({
+                dataTextField: "VendorName",
+                dataValueField: "VendorId",
+                filter: "contains",
+                dataSource: Vendor,
+                suggest: true,
+                index: 3
+            });
+            var VendorDD = $("#Vendor").data("kendoDropDownList");
+            if (VendorDD) {
+                VendorDD.value(null);
+            }
 
         }, function errorCallback(response) {
             console.log("Error : " + response.data.ExceptionMessage);
