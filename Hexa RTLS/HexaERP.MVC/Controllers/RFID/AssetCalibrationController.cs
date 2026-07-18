@@ -288,5 +288,106 @@ namespace HexaERP.MVC.Controllers.RFID
                 }, JsonRequestBehavior.AllowGet);
             }
         }
+
+        [HttpGet]
+        public JsonResult GetData()
+        {
+            try
+            {
+                int orgId = Convert.ToInt32(Session["OrgInfoId"]);
+
+                var data = (from cal in db.tAssetCalibrations
+                            join itm in db.mIteamMasters on cal.AssetId equals itm.mIteamMasterId
+                            join ag in db.mAgencies on cal.Agency equals ag.mAgencyId.ToString() into agJoin
+                            from ag in agJoin.DefaultIfEmpty()
+                            where cal.OrgInfoId == orgId && cal.IsAction == true
+                            orderby cal.AssetCalibrationId descending
+                            select new
+                            {
+                                cal.AssetCalibrationId,
+                                AssetName = itm.IteamName,
+                                cal.CertificateNo,
+                                cal.CalibrationDate,
+                                cal.NextDueDate,
+                                cal.Result,
+                                //Agency = ag != null ? ag.AgencyName : cal.Agency,
+                                cal.Remarks,
+                                cal.CreatedBy
+                            }).ToList();
+
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Flag = false, Message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpGet]
+        public JsonResult Edit(int id)
+        {
+            try
+            {
+                int orgId = Convert.ToInt32(Session["OrgInfoId"]);
+
+                var data = (from cal in db.tAssetCalibrations
+                            join itm in db.mIteamMasters on cal.AssetId equals itm.mIteamMasterId
+                            where cal.AssetCalibrationId == id && cal.OrgInfoId == orgId && cal.IsAction == true
+                            select new
+                            {
+                                cal.AssetCalibrationId,
+                                cal.AssetId,
+                                AssetName = itm.IteamName,
+                                cal.CertificateNo,
+                                cal.CalibrationDate,
+                                cal.NextDueDate,
+                                cal.Result,
+                                cal.Agency,
+                                cal.Remarks,
+                                cal.CreatedBy
+                            }).FirstOrDefault();
+
+                if (data != null)
+                {
+                    return Json(new { Flag = true, Idata = data }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { Flag = false, Message = "Record not found" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Flag = false, Message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpGet]
+        public JsonResult DeleteData(int ID)
+        {
+            try
+            {
+                int orgId = Convert.ToInt32(Session["OrgInfoId"]);
+                var rec = db.tAssetCalibrations.FirstOrDefault(x => x.AssetCalibrationId == ID && x.OrgInfoId == orgId);
+
+                if (rec != null)
+                {
+                    rec.IsAction = false;
+                    rec.ModifiedDate = DateTime.Now;
+                    rec.ModifiedBy = Convert.ToString(Session["AppUserName"]);
+                    db.SaveChanges();
+
+                    return Json(new { Flag = true, Message = "Calibration record deleted successfully." }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { Flag = false, Message = "Record not found." }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Flag = false, Message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
     }
 }
