@@ -537,6 +537,114 @@ namespace HexaERP.MVC.Controllers.RFID
             return result;
         }
 
+        [HttpGet]
+        public JsonResult GetData()
+        {
+            try
+            {
+                int orgId = Convert.ToInt32(Session["OrgInfoId"]);
+
+                var data = (from main in db.tMaintenances
+                            join tag in db.tAssetTags on main.tAssetTagId equals tag.tAssetTagId
+                            join mty in db.mMaintenanceTypes on main.mMaintenanceTypeId equals mty.mMaintenanceTypeId
+                            where main.OrgInfoId == orgId && main.IsAction == true
+                            orderby main.tMaintenanceId descending
+                            select new
+                            {
+                                main.tMaintenanceId,
+                                AssetName = tag.IteamName,
+                                main.Title,
+                                MaintenanceName = mty.MaintenanceName,
+                                main.MaintenanPart,
+                                main.Cost,
+                                main.IsWarranty,
+                                main.AdditionalPart,
+                                main.CreatedBy,
+                                main.StartDate,
+                                main.EndDate,
+                                main.Note
+                            }).ToList();
+
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Flag = false, Message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpGet]
+        public JsonResult Edit(int id)
+        {
+            try
+            {
+                int orgId = Convert.ToInt32(Session["OrgInfoId"]);
+
+                var data = (from main in db.tMaintenances
+                            join tag in db.tAssetTags on main.tAssetTagId equals tag.tAssetTagId
+                            join mty in db.mMaintenanceTypes on main.mMaintenanceTypeId equals mty.mMaintenanceTypeId
+                            where main.tMaintenanceId == id && main.OrgInfoId == orgId && main.IsAction == true
+                            select new
+                            {
+                                main.tMaintenanceId,
+                                main.tAssetTagId,
+                                AssetName = tag.IteamName,
+                                main.Title,
+                                main.mMaintenanceTypeId,
+                                MaintenanceName = mty.MaintenanceName,
+                                main.MaintenanPart,
+                                main.Cost,
+                                main.IsWarranty,
+                                main.AdditionalPart,
+                                main.CreatedBy,
+                                main.StartDate,
+                                main.EndDate,
+                                main.Note
+                            }).FirstOrDefault();
+
+                if (data != null)
+                {
+                    return Json(new { Flag = true, Idata = data }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { Flag = false, Message = "Record not found" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Flag = false, Message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpGet]
+        public JsonResult DeleteData(int ID)
+        {
+            try
+            {
+                int orgId = Convert.ToInt32(Session["OrgInfoId"]);
+                var rec = db.tMaintenances.FirstOrDefault(x => x.tMaintenanceId == ID && x.OrgInfoId == orgId);
+
+                if (rec != null)
+                {
+                    rec.IsAction = false;
+                    rec.ModifiedDate = DateTime.Now;
+                    rec.ModifiedBy = Convert.ToString(Session["AppUserName"]);
+                    db.SaveChanges();
+
+                    return Json(new { Flag = true, Message = "Maintenance record deleted successfully." }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { Flag = false, Message = "Record not found." }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Flag = false, Message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         //
         [HttpPost]
         public JsonResult uploadImg(tAssetTag _obj, HttpPostedFileBase file)

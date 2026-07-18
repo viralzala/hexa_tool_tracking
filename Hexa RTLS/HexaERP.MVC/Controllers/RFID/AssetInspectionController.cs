@@ -68,8 +68,12 @@ namespace HexaERP.MVC.Controllers.RFID
 
                     if (_AssetList != null)
                     {
+                        // Get the mIteamMasterId from tAssetTag
+                        var assetTag = db.tAssetTags.Find(_AssetList.tAssetTagId);
+                        int mIteamMasterId = assetTag != null ? assetTag.mIteamMasterId ?? 0 : 0;
+                        
                         var InspData = (from ins in db.tAssetInspections
-                                        where ((ins.OrgInfoId == orgId && ins.IsAction == true) && ins.AssetId == _AssetList.tAssetTagId)
+                                        where ((ins.OrgInfoId == orgId && ins.IsAction == true) && ins.AssetId == mIteamMasterId)
                                         select new
                                         {
                                             ins.AssetInspectionId,
@@ -245,6 +249,109 @@ namespace HexaERP.MVC.Controllers.RFID
             catch (Exception ex)
             {
                 return Json(new { Total = 0, Passed = 0, Pending = 0, Failed = 0 }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpGet]
+        public JsonResult GetData()
+        {
+            try
+            {
+                int orgId = Convert.ToInt32(Session["OrgInfoId"]);
+
+                var data = (from ins in db.tAssetInspections
+                            join itm in db.mIteamMasters on ins.AssetId equals itm.mIteamMasterId
+                            where ins.OrgInfoId == orgId && ins.IsAction == true
+                            orderby ins.AssetInspectionId descending
+                            select new
+                            {
+                                ins.AssetInspectionId,
+                                AssetName = itm.IteamName,
+                                ins.InspectionNo,
+                                ins.InspectionDate,
+                                ins.Inspector,
+                                ins.PhysicalCondition,
+                                ins.SafetyLabels,
+                                ins.FitForUse,
+                                ins.Observation,
+                                ins.Status,
+                                ins.CreatedBy
+                            }).ToList();
+
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Flag = false, Message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpGet]
+        public JsonResult Edit(int id)
+        {
+            try
+            {
+                int orgId = Convert.ToInt32(Session["OrgInfoId"]);
+
+                var data = (from ins in db.tAssetInspections
+                            join itm in db.mIteamMasters on ins.AssetId equals itm.mIteamMasterId
+                            where ins.AssetInspectionId == id && ins.OrgInfoId == orgId && ins.IsAction == true
+                            select new
+                            {
+                                ins.AssetInspectionId,
+                                ins.AssetId,
+                                AssetName = itm.IteamName,
+                                ins.InspectionNo,
+                                ins.InspectionDate,
+                                ins.Inspector,
+                                ins.PhysicalCondition,
+                                ins.SafetyLabels,
+                                ins.FitForUse,
+                                ins.Observation,
+                                ins.Status,
+                                ins.CreatedBy
+                            }).FirstOrDefault();
+
+                if (data != null)
+                {
+                    return Json(new { Flag = true, Idata = data }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { Flag = false, Message = "Record not found" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Flag = false, Message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpGet]
+        public JsonResult DeleteData(int ID)
+        {
+            try
+            {
+                int orgId = Convert.ToInt32(Session["OrgInfoId"]);
+                var rec = db.tAssetInspections.FirstOrDefault(x => x.AssetInspectionId == ID && x.OrgInfoId == orgId);
+
+                if (rec != null)
+                {
+                    rec.IsAction = false;
+                    rec.ModifiedDate = DateTime.Now;
+                    rec.ModifiedBy = Convert.ToString(Session["AppUserName"]);
+                    db.SaveChanges();
+
+                    return Json(new { Flag = true, Message = "Inspection record deleted successfully." }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { Flag = false, Message = "Record not found." }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Flag = false, Message = ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
     }

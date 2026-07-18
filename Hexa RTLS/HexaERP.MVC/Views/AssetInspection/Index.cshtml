@@ -663,11 +663,66 @@
             </div>
         </div>
     </div>
+
+    <!-- Search Inspection Records -->
+    <div class="search-card">
+        <div class="search-title">
+            <i class="material-icons">&#xE8B6;</i>
+            Search Inspection Records
+        </div>
+        <div class="uk-grid" data-uk-grid-margin>
+            <div class="uk-width-medium-1-1">
+                <div class="uk-input-group">
+                    <span class="uk-input-group-addon">
+                        <i class="material-icons">&#xE8B6;</i>
+                    </span>
+                    <div class="md-input-wrapper md-input-filled">
+                        <label for="product_edit_quantity_control">Search by Asset Name, Inspection Type, Inspector...</label>
+                        <input type="text" class="md-input" name="search" id="txtInspectionSearch">
+                        <span class="md-input-bar"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registered Inspections Table -->
+    <div class="premium-table-container">
+        <div class="md-card-toolbar">
+            <h3 class="md-card-toolbar-heading-text">
+                <i class="material-icons">&#xE86C;</i> Registered Inspections
+            </h3>
+        </div>
+        <div class="md-card-content" style="padding: 0;">
+            <div class="table-responsive">
+                <table id="tblAssetInspection" class="premium-table" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th class="uk-text-nowrap">Id</th>
+                            <th class="uk-text-nowrap">Asset Name</th>
+                            <th class="uk-text-nowrap">Inspection No</th>
+                            <th class="uk-text-nowrap">Inspection Date</th>
+                            <th class="uk-text-nowrap">Inspector</th>
+                            <th class="uk-text-nowrap">Physical Condition</th>
+                            <th class="uk-text-nowrap">Safety Labels</th>
+                            <th class="uk-text-nowrap">Fit For Use</th>
+                            <th class="uk-text-nowrap">Observation</th>
+                            <th class="uk-text-nowrap">Status</th>
+                            <th class="uk-text-nowrap">Created By</th>
+                            <th class="uk-text-nowrap">Actions</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 @section foot{
     <script src="@Url.Content("~/Content/assets/js/kendoui_custom.min.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Content/assets/js/pages/kendoui.min.js")" type="text/javascript"></script>
+    <script src="~/Content/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/bower_components/datatables/media/js/dataTables.bootstrap.min.js"></script>
     <script src="~/Content/assets/js/custom/uikit_fileinput.min.js"></script>
     <script src="~/Content/assets/js/pages/page_user_edit.min.js"></script>
     <script src="~/Scripts/HexaAgular/AssetInspection.js"></script>
