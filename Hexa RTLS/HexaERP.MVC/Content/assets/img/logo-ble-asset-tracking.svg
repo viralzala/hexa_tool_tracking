@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="gBlue" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1E6FE0"/>
+      <stop offset="1" stop-color="#0B3C8C"/>
+    </linearGradient>
+    <linearGradient id="gDark" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0B3C8C"/>
+      <stop offset="1" stop-color="#06245A"/>
+    </linearGradient>
+    <radialGradient id="gGlow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#3B8BFF" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#3B8BFF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Emblem -->
+  <g transform="translate(512,400)">
+    <!-- soft glow -->
+    <circle cx="0" cy="-30" r="240" fill="url(#gGlow)"/>
+
+    <!-- BLE / wireless signal arcs -->
+    <g fill="none" stroke="url(#gBlue)" stroke-width="22" stroke-linecap="round">
+      <path d="M -150 -10 A 150 150 0 0 1 150 -10" opacity="0.35"/>
+      <path d="M -110 -10 A 110 110 0 0 1 110 -10" opacity="0.6"/>
+      <path d="M -70 -10 A 70 70 0 0 1 70 -10"/>
+    </g>
+
+    <!-- central hub: rounded square (IoT device) -->
+    <rect x="-58" y="-68" width="116" height="116" rx="26" fill="url(#gDark)"/>
+    <rect x="-58" y="-68" width="116" height="116" rx="26" fill="none" stroke="#5AA0FF" stroke-width="3" opacity="0.6"/>
+    <!-- device dot -->
+    <circle cx="0" cy="-10" r="16" fill="#5AA0FF"/>
+
+    <!-- location pin overlapping the hub -->
+    <g transform="translate(46,52)">
+      <path d="M 0 60 C -42 8 -42 -16 0 -16 C 42 -16 42 8 0 60 Z" fill="url(#gBlue)"/>
+      <path d="M 0 60 C -42 8 -42 -16 0 -16 C 42 -16 42 8 0 60 Z" fill="none" stroke="#9FC6FF" stroke-width="2" opacity="0.5"/>
+      <circle cx="0" cy="6" r="17" fill="#FFFFFF"/>
+    </g>
+  </g>
+
+  <!-- Wordmark -->
+  <g font-family="Segoe UI, Arial, Helvetica, sans-serif" text-anchor="middle">
+    <text x="512" y="720" font-size="92" font-weight="700" fill="#0B3C8C" letter-spacing="2">BLE ASSET</text>
+    <text x="512" y="824" font-size="92" font-weight="700" fill="#1E6FE0" letter-spacing="2">TRACKING SYSTEM</text>
+  </g>
+
+  <!-- accent line -->
+  <rect x="356" y="858" width="312" height="6" rx="3" fill="url(#gBlue)"/>
+</svg>

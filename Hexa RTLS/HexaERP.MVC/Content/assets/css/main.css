@@ -11244,12 +11244,14 @@ div.kineticjs-content {
   }
 }
 .main_logo_top > a {
-  display: inline-block;
+  display: flex;
+  align-items: center;
   line-height: 48px;
 }
 .main_logo_top > a img {
   max-height: 48px;
   width: auto;
+  height: 44px;
 }
 .header_full #sidebar_main {
   top: 48px;

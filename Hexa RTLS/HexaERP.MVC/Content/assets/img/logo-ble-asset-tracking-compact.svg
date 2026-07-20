@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="150" height="48" viewBox="0 0 150 48">
+  <defs>
+    <linearGradient id="gBlue" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1E6FE0"/>
+      <stop offset="1" stop-color="#0B3C8C"/>
+    </linearGradient>
+    <linearGradient id="gDark" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0B3C8C"/>
+      <stop offset="1" stop-color="#06245A"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Icon: ~36px, vertically centered (y = (48-36)/2 = 6) -->
+  <g transform="translate(8,6)">
+    <!-- BLE / wireless signal arcs -->
+    <g fill="none" stroke="url(#gBlue)" stroke-width="4" stroke-linecap="round">
+      <path d="M -15 -4 A 15 15 0 0 1 15 -4" opacity="0.35"/>
+      <path d="M -9 -4 A 9 9 0 0 1 9 -4" opacity="0.6"/>
+      <path d="M -3 -4 A 3 3 0 0 1 3 -4"/>
+    </g>
+    <!-- IoT hub -->
+    <rect x="-12" y="-18" width="24" height="24" rx="6" fill="url(#gDark)"/>
+    <circle cx="0" cy="-6" r="4.5" fill="#5AA0FF"/>
+    <!-- location pin -->
+    <path d="M 14 4 C 7 -3 7 -9 14 -9 C 21 -9 21 -3 14 4 Z" fill="url(#gBlue)"/>
+    <circle cx="14" cy="-6" r="3.5" fill="#FFFFFF"/>
+  </g>
+
+  <!-- Short wordmark: BLE -->
+  <text x="62" y="33" font-family="'Segoe UI', Arial, Helvetica, sans-serif" font-size="26" font-weight="700" fill="#0B3C8C" letter-spacing="1">BLE</text>
+</svg>
