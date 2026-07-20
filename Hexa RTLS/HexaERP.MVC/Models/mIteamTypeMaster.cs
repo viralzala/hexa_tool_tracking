@@ -14,6 +14,12 @@ namespace HexaERP.MVC.Models
     
     public partial class mIteamTypeMaster
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public mIteamTypeMaster()
+        {
+            this.mAssetSubCategory2 = new HashSet<mAssetSubCategory2>();
+        }
+    
         public int mIteamTypeMasterId { get; set; }
         public string IteamType { get; set; }
         public Nullable<bool> IsAction { get; set; }
@@ -22,5 +28,9 @@ namespace HexaERP.MVC.Models
         public string CreatedBy { get; set; }
         public System.DateTime ModifiedDate { get; set; }
         public string ModifiedBy { get; set; }
+        public Nullable<int> mGroupMasterId { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<mAssetSubCategory2> mAssetSubCategory2 { get; set; }
     }
 }

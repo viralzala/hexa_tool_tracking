@@ -98,6 +98,9 @@
         <AssociationConnector Association="ERPModel.FK_tAssetMaintenance_mIteamMaster" />
         <EntityTypeShape EntityType="ERPModel.tAssetInspection" Width="1.5" PointX="15" PointY="42.875" />
         <AssociationConnector Association="ERPModel.FK_tAssetInspection_mIteamMaster" />
+        <EntityTypeShape EntityType="ERPModel.mAssetSubCategory2" Width="1.5" PointX="3" PointY="30.625" />
+        <AssociationConnector Association="ERPModel.FK_mAssetSubCategory2_mIteamTypeMaster" />
+        <AssociationConnector Association="ERPModel.FK_mAssetSubCategory2_mIteamTypeMaster" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

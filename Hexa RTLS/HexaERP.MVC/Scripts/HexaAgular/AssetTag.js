@@ -20,7 +20,38 @@ app.controller("AssetTagCtrl", function ($scope, $http, $timeout) {
             console.log(_readerR);
             GetRFIDs(_readerR);
         }
-        //
+    //
+    function BindSubCategory1(_mGroupMasterId) {
+        $http({
+            method: 'GET',
+            url: '../AssetTag/getSubCategory1',
+            params: { categoryId: _mGroupMasterId }
+        }).then(function successCallback(response) {
+            var mIteamTypeMasterId = $("#mIteamTypeMasterId").data("kendoDropDownList");
+            mIteamTypeMasterId.setDataSource(response.data.DSubCategory1);
+            mIteamTypeMasterId.value(-1);
+            var AssetSubCategory2Id = $("#AssetSubCategory2Id").data("kendoDropDownList");
+            AssetSubCategory2Id.setDataSource([]);
+            AssetSubCategory2Id.value(-1);
+        }, function errorCallback(response) {
+            console.log("Error : " + response.data.ExceptionMessage);
+        });
+    };
+    //
+    function BindSubCategory2(_mIteamTypeMasterId) {
+        $http({
+            method: 'GET',
+            url: '../AssetTag/getSubCategory2',
+            params: { subCategoryId: _mIteamTypeMasterId }
+        }).then(function successCallback(response) {
+            var AssetSubCategory2Id = $("#AssetSubCategory2Id").data("kendoDropDownList");
+            AssetSubCategory2Id.setDataSource(response.data.DSubCategory2);
+            AssetSubCategory2Id.value(-1);
+        }, function errorCallback(response) {
+            console.log("Error : " + response.data.ExceptionMessage);
+        });
+    };
+    //
         $.connection.hub.start();
     }
 
@@ -78,6 +109,7 @@ app.controller("AssetTagCtrl", function ($scope, $http, $timeout) {
                 dataTextField: "GroupName",
                 dataValueField: "mGroupMasterId",
                 filter: "contains",
+                select: onGroupSelect,
                 dataSource: response.data.ObjGroup,
                 suggest: true,
                 index: 2
@@ -86,17 +118,44 @@ app.controller("AssetTagCtrl", function ($scope, $http, $timeout) {
             var mGroupMasterId = $("#mGroupMasterId").data("kendoDropDownList");
             mGroupMasterId.value(-1);
 
+            function onGroupSelect(e) {
+                if (e.item) {
+                    var dataItem = this.dataItem(e.item.index());
+                    BindSubCategory1(dataItem.mGroupMasterId);
+                }
+            }
+
             $('#mIteamTypeMasterId').kendoDropDownList({
                 dataTextField: "IteamType",
                 dataValueField: "mIteamTypeMasterId",
                 filter: "contains",
+                select: onTypeSelect,
                 dataSource: response.data.ObjIteamType,
                 suggest: true,
                 index: 2
             });
 
+            function onTypeSelect(e) {
+                if (e.item) {
+                    var dataItem = this.dataItem(e.item.index());
+                    BindSubCategory2(dataItem.mIteamTypeMasterId);
+                }
+            }
+
             var mIteamTypeMasterId = $("#mIteamTypeMasterId").data("kendoDropDownList");
             mIteamTypeMasterId.value(-1);
+
+            $('#AssetSubCategory2Id').kendoDropDownList({
+                dataTextField: "AssetSubCategory2Name",
+                dataValueField: "AssetSubCategory2Id",
+                filter: "contains",
+                dataSource: [],
+                suggest: true,
+                index: 2
+            });
+
+            var AssetSubCategory2Id = $("#AssetSubCategory2Id").data("kendoDropDownList");
+            AssetSubCategory2Id.value(-1);
 
             $('#mUnitMasterId').kendoDropDownList({
                 dataTextField: "UnitName",
@@ -521,6 +580,12 @@ app.controller("AssetTagCtrl", function ($scope, $http, $timeout) {
 
                 var mIteamTypeMasterId = $("#mIteamTypeMasterId").data("kendoDropDownList");
                 mIteamTypeMasterId.value(response.data.Idata.mIteamTypeMasterId);
+
+                BindSubCategory2(response.data.Idata.mIteamTypeMasterId);
+                var AssetSubCategory2Id = $("#AssetSubCategory2Id").data("kendoDropDownList");
+                if (response.data.Idata.AssetSubCategory2Id != null) {
+                    AssetSubCategory2Id.value(response.data.Idata.AssetSubCategory2Id);
+                }
 
                 var mUnitMasterId = $("#mUnitMasterId").data("kendoDropDownList");
                 mUnitMasterId.value(response.data.Idata.mUnitMasterId);

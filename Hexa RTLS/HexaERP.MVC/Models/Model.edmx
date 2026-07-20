@@ -182,6 +182,20 @@
           <Property Name="ModifiedDate" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="ModifiedBy" Type="nvarchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="mAssetSubCategory2">
+          <Key>
+            <PropertyRef Name="AssetSubCategory2Id" />
+          </Key>
+          <Property Name="AssetSubCategory2Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AssetSubCategoryId" Type="int" Nullable="false" />
+          <Property Name="AssetSubCategory2Name" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="100" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="ModifiedBy" Type="nvarchar" MaxLength="100" />
+          <Property Name="ModifiedDate" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="mDesignation">
           <Key>
             <PropertyRef Name="mDesignationId" />
@@ -315,6 +329,7 @@ warning 6002: The table/view 'HexaRTLSdb.dbo.mEmployeeJobOrderAudit' does not ha
           <Property Name="CreatedBy" Type="nvarchar" MaxLength="50" />
           <Property Name="ModifiedDate" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="ModifiedBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="mGroupMasterId" Type="int" />
         </EntityType>
         <EntityType Name="mLocationMaster">
           <Key>
@@ -979,6 +994,7 @@ warning 6002: The table/view 'HexaRTLSdb.dbo.mEmployeeJobOrderAudit' does not ha
           <Property Name="PartName" Type="nvarchar" MaxLength="25" />
           <Property Name="LaunchDate" Type="datetime" />
           <Property Name="EndDate" Type="datetime" />
+          <Property Name="AssetSubCategory2Id" Type="int" />
         </EntityType>
         <EntityType Name="TC_Action">
           <Key>
@@ -1542,6 +1558,18 @@ warning 6002: The table/view 'HexaRTLSdb.dbo.mEmployeeJobOrderAudit' does not ha
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_mAssetSubCategory2_mIteamTypeMaster">
+          <End Role="mIteamTypeMaster" Type="Self.mIteamTypeMaster" Multiplicity="1" />
+          <End Role="mAssetSubCategory2" Type="Self.mAssetSubCategory2" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="mIteamTypeMaster">
+              <PropertyRef Name="mIteamTypeMasterId" />
+            </Principal>
+            <Dependent Role="mAssetSubCategory2">
+              <PropertyRef Name="AssetSubCategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_mDesignation_OrgInfo_OrgInfoId">
           <End Role="OrgInfo" Type="Self.OrgInfo" Multiplicity="0..1" />
           <End Role="mDesignation" Type="Self.mDesignation" Multiplicity="*" />
@@ -1602,6 +1630,7 @@ warning 6002: The table/view 'HexaRTLSdb.dbo.mEmployeeJobOrderAudit' does not ha
           <EntitySet Name="Icons" EntityType="Self.Icons" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="mActivity" EntityType="Self.mActivity" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="mAgency" EntityType="Self.mAgency" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="mAssetSubCategory2" EntityType="Self.mAssetSubCategory2" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="mDesignation" EntityType="Self.mDesignation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="mEmployeeJobOrder" EntityType="Self.mEmployeeJobOrder" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="mEmployeeZone" EntityType="Self.mEmployeeZone" Schema="dbo" store:Type="Tables" />
@@ -1698,6 +1727,10 @@ warning 6002: The table/view 'HexaRTLSdb.dbo.mEmployeeJobOrderAudit' does not ha
           <AssociationSet Name="FK_DepartMent_OrgInfo_OrgInfoId" Association="Self.FK_DepartMent_OrgInfo_OrgInfoId">
             <End Role="OrgInfo" EntitySet="OrgInfo" />
             <End Role="DepartMent" EntitySet="DepartMent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_mAssetSubCategory2_mIteamTypeMaster" Association="Self.FK_mAssetSubCategory2_mIteamTypeMaster">
+            <End Role="mIteamTypeMaster" EntitySet="mIteamTypeMaster" />
+            <End Role="mAssetSubCategory2" EntitySet="mAssetSubCategory2" />
           </AssociationSet>
           <AssociationSet Name="FK_mDesignation_OrgInfo_OrgInfoId" Association="Self.FK_mDesignation_OrgInfo_OrgInfoId">
             <End Role="OrgInfo" EntitySet="OrgInfo" />
@@ -2096,6 +2129,11 @@ warning 6002: The table/view 'HexaRTLSdb.dbo.mEmployeeJobOrderAudit' does not ha
           <AssociationSet Name="FK_tAssetInspection_mIteamMaster" Association="ERPModel.FK_tAssetInspection_mIteamMaster">
             <End Role="mIteamMaster" EntitySet="mIteamMasters" />
             <End Role="tAssetInspection" EntitySet="tAssetInspections" />
+          </AssociationSet>
+          <EntitySet Name="mAssetSubCategory2" EntityType="ERPModel.mAssetSubCategory2" />
+          <AssociationSet Name="FK_mAssetSubCategory2_mIteamTypeMaster" Association="ERPModel.FK_mAssetSubCategory2_mIteamTypeMaster">
+            <End Role="mIteamTypeMaster" EntitySet="mIteamTypeMasters" />
+            <End Role="mAssetSubCategory2" EntitySet="mAssetSubCategory2" />
           </AssociationSet>
           </EntityContainer>
         <ComplexType Name="proDistance_Result">
@@ -2698,6 +2736,8 @@ warning 6002: The table/view 'HexaRTLSdb.dbo.mEmployeeJobOrderAudit' does not ha
           <Property Name="CreatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ModifiedDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="ModifiedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="mAssetSubCategory2" Relationship="ERPModel.FK_mAssetSubCategory2_mIteamTypeMaster" FromRole="mIteamTypeMaster" ToRole="mAssetSubCategory2" />
+          <Property Name="mGroupMasterId" Type="Int32" />
         </EntityType>
         <EntityType Name="mLocationMaster">
           <Key>
@@ -3298,6 +3338,7 @@ warning 6002: The table/view 'HexaRTLSdb.dbo.mEmployeeJobOrderAudit' does not ha
           <Property Name="PartName" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
           <Property Name="LaunchDate" Type="DateTime" Precision="3" />
           <Property Name="EndDate" Type="DateTime" Precision="3" />
+          <Property Name="AssetSubCategory2Id" Type="Int32" />
         </EntityType>
         <EntityType Name="TC_Action">
           <Key>
@@ -4039,6 +4080,33 @@ warning 6002: The table/view 'HexaRTLSdb.dbo.mEmployeeJobOrderAudit' does not ha
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="mAssetSubCategory2">
+          <Key>
+            <PropertyRef Name="AssetSubCategory2Id" />
+          </Key>
+          <Property Name="AssetSubCategory2Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AssetSubCategoryId" Type="Int32" Nullable="false" />
+          <Property Name="AssetSubCategory2Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifiedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ModifiedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="mIteamTypeMaster" Relationship="ERPModel.FK_mAssetSubCategory2_mIteamTypeMaster" FromRole="mAssetSubCategory2" ToRole="mIteamTypeMaster" />
+        </EntityType>
+        <Association Name="FK_mAssetSubCategory2_mIteamTypeMaster">
+          <End Type="ERPModel.mIteamTypeMaster" Role="mIteamTypeMaster" Multiplicity="1" />
+          <End Type="ERPModel.mAssetSubCategory2" Role="mAssetSubCategory2" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="mIteamTypeMaster">
+              <PropertyRef Name="mIteamTypeMasterId" />
+            </Principal>
+            <Dependent Role="mAssetSubCategory2">
+              <PropertyRef Name="AssetSubCategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4299,6 +4367,7 @@ warning 6002: The table/view 'HexaRTLSdb.dbo.mEmployeeJobOrderAudit' does not ha
           <EntitySetMapping Name="mIteamTypeMasters">
             <EntityTypeMapping TypeName="ERPModel.mIteamTypeMaster">
               <MappingFragment StoreEntitySet="mIteamTypeMaster">
+                <ScalarProperty Name="mGroupMasterId" ColumnName="mGroupMasterId" />
                 <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
                 <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
@@ -4860,6 +4929,7 @@ warning 6002: The table/view 'HexaRTLSdb.dbo.mEmployeeJobOrderAudit' does not ha
           <EntitySetMapping Name="tAssetTags">
             <EntityTypeMapping TypeName="ERPModel.tAssetTag">
               <MappingFragment StoreEntitySet="tAssetTag">
+                <ScalarProperty Name="AssetSubCategory2Id" ColumnName="AssetSubCategory2Id" />
                 <ScalarProperty Name="EndDate" ColumnName="EndDate" />
                 <ScalarProperty Name="LaunchDate" ColumnName="LaunchDate" />
                 <ScalarProperty Name="PartName" ColumnName="PartName" />
@@ -5636,6 +5706,21 @@ warning 6002: The table/view 'HexaRTLSdb.dbo.mEmployeeJobOrderAudit' does not ha
                 <ScalarProperty Name="AssetName" ColumnName="AssetName" />
                 <ScalarProperty Name="AssetId" ColumnName="AssetId" />
                 <ScalarProperty Name="AssetInspectionId" ColumnName="AssetInspectionId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="mAssetSubCategory2">
+            <EntityTypeMapping TypeName="ERPModel.mAssetSubCategory2">
+              <MappingFragment StoreEntitySet="mAssetSubCategory2">
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="AssetSubCategory2Name" ColumnName="AssetSubCategory2Name" />
+                <ScalarProperty Name="AssetSubCategoryId" ColumnName="AssetSubCategoryId" />
+                <ScalarProperty Name="AssetSubCategory2Id" ColumnName="AssetSubCategory2Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

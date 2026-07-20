@@ -121,6 +121,44 @@ namespace HexaERP.MVC.Controllers.RFID
             return Json(new { ObjReaderIP, ObjUnit, ObjIteam, ObjGroup, ObjIteamType, mSite, vendor }, JsonRequestBehavior.AllowGet);
         }
 
+        // GET: AssetTag/getSubCategory2 (cascading by Asset Sub Category)
+        [HttpGet]
+        public JsonResult getSubCategory2(int subCategoryId)
+        {
+            try
+            {
+                int orgId = Convert.ToInt32(Session["OrgInfoId"]);
+                var data = db.mAssetSubCategory2
+                    .Where(x => x.AssetSubCategoryId == subCategoryId && x.IsActive == true)
+                    .Select(c => new { c.AssetSubCategory2Id, c.AssetSubCategory2Name })
+                    .ToList();
+                return Json(new { Flag = true, Message = "Data Loaded Successfully", DSubCategory2 = data }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Flag = false, Message = ex.Message, DSubCategory2 = (object)null }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        // GET: AssetTag/getSubCategory1 (cascading by Asset Category)
+        [HttpGet]
+        public JsonResult getSubCategory1(int categoryId)
+        {
+            try
+            {
+                int orgId = Convert.ToInt32(Session["OrgInfoId"]);
+                var data = db.mIteamTypeMasters
+                    .Where(x => x.mGroupMasterId == categoryId && x.IsAction == true)
+                    .Select(c => new { c.mIteamTypeMasterId, c.IteamType })
+                    .ToList();
+                return Json(new { Flag = true, Message = "Data Loaded Successfully", DSubCategory1 = data }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Flag = false, Message = ex.Message, DSubCategory1 = (object)null }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         // GET: AssetTag/getZones
         [HttpGet]
         public JsonResult getZones(int id)

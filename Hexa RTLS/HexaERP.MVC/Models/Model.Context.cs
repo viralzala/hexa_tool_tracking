@@ -114,6 +114,7 @@ namespace HexaERP.MVC.Models
         public virtual DbSet<tAssetCalibration> tAssetCalibrations { get; set; }
         public virtual DbSet<tAssetMaintenance> tAssetMaintenances { get; set; }
         public virtual DbSet<tAssetInspection> tAssetInspections { get; set; }
+        public virtual DbSet<mAssetSubCategory2> mAssetSubCategory2 { get; set; }
     
         public virtual ObjectResult<proDistance_Result> proDistance(Nullable<int> startPort, Nullable<int> endPort)
         {

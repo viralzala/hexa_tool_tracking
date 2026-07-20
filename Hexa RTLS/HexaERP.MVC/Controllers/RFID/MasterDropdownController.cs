@@ -415,5 +415,47 @@ namespace HexaERP.MVC.Controllers.RFID
                 };
             }
         }
+        //
+        [HttpGet]
+        [Route("api/Master/AssetSubCategory2List")]
+        public HttpResponseMessage AssetSubCategory2List()
+        {
+            try
+            {
+
+                using (var contx = new ERPdbEntities())
+                {
+                    var AssetSubCategory2Data = contx.mAssetSubCategory2
+                        .Where(x => x.IsActive == true)
+                        .ToList();
+                    if (AssetSubCategory2Data != null)
+                    {
+                        var content = new { status = 1, message = "Successfully", content = AssetSubCategory2Data };
+                        return new HttpResponseMessage
+                        {
+                            Content = new StringContent(JsonConvert.SerializeObject(content), System.Text.Encoding.UTF8, "application/json")
+                        };
+                    }
+                    else
+                    {
+                        var content = new { status = 0, message = "Record Not Found" };
+                        return new HttpResponseMessage
+                        {
+                            Content = new StringContent(JsonConvert.SerializeObject(content), System.Text.Encoding.UTF8, "application/json")
+                        };
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                var content = new { status = 0, message = ex.Message };
+                return new HttpResponseMessage
+                {
+                    Content = new StringContent(JsonConvert.SerializeObject(content), System.Text.Encoding.UTF8, "application/json")
+                };
+            }
+        }
+        //
+        }
     }
-}

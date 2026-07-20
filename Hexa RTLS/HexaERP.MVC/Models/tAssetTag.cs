@@ -89,5 +89,6 @@ namespace HexaERP.MVC.Models
         public string PartName { get; set; }
         public Nullable<System.DateTime> LaunchDate { get; set; }
         public Nullable<System.DateTime> EndDate { get; set; }
+        public Nullable<int> AssetSubCategory2Id { get; set; }
     }
 }
