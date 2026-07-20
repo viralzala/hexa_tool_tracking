@@ -695,7 +695,7 @@
                                     <input class="md-btn md-btn-wave waves-effect waves-button premium-input" id="mGroupMasterId" name="mGroupMasterId" ng-model="mGroupMasterId" placeholder="Select Asset Category" />
                                 </div>
                                 <div class="uk-input-group premium-form-group">
-                                    <span class="uk-form-help-block"><b>Asset Sub Category</b> <span class="required">*</span></span>
+                                    <span class="uk-form-help-block"><b>Asset Sub Category 1</b> <span class="required">*</span></span>
                                     <input class="md-btn md-btn-wave waves-effect waves-button premium-input" id="mIteamTypeMasterId" name="mIteamTypeMasterId" ng-model="mIteamTypeMasterId" placeholder="Select Asset Type" />
                                 </div>
                                 <div class="uk-input-group premium-form-group">
@@ -703,26 +703,19 @@
                                     <input class="md-btn md-btn-wave waves-effect waves-button premium-input" id="AssetSubCategory2Id" name="AssetSubCategory2Id" ng-model="AssetSubCategory2Id" placeholder="Select Asset Sub Category 2" />
                                 </div>
                                 <div class="uk-input-group premium-form-group">
-                                    <span class="uk-form-help-block"><b>Asset Type</b> <span class="required">*</span></span>
-                                    <input class="md-btn md-btn-wave waves-effect waves-button premium-input" id="mIteamMasterId" name="mIteamMasterId" ng-model="mIteamMasterId" placeholder="Select Asset" />
+                                    <label for="wizard_address"><b>Tool ID</b></label>
+                                    <input type="text" name="ToolId" id="ToolId" ng-model="ToolId" maxlength="100" class="md-input label-fixed" />
                                 </div>
                                 <div class="uk-input-group premium-form-group">
-                                    <div class="md-input-wrapper md-input-filled">
-                                        <label for="product_edit_quantity_control"><b>Asset Name</b> <span class="required">*</span></label>
-                                        <input type="text" name="IteamName" id="IteamName" ng-model="IteamName" required class="md-input label-fixed" />
-                                        <span class="md-input-bar"></span>
-                                    </div>
-                                </div>
-                                <div class="uk-input-group premium-form-group">
-                                    <label for="wizard_fullname"><b>Model</b> <span class="required">*</span></label>
-                                    <input type="text" name="Model" id="Model" ng-model="Model" required class="md-input label-fixed" />
+                                    <label for="wizard_address"><b>Tool Name</b></label>
+                                    <input type="text" name="ToolName" id="ToolName" ng-model="ToolName" maxlength="200" class="md-input label-fixed" />
                                 </div>
                             </div>
 
                             <div class="uk-grid uk-grid-width-medium-1-1 uk-grid-width-large-1-5" data-uk-grid-margin>
                                 <div class="uk-input-group premium-form-group">
-                                    <label for="wizard_fullname"><b>Model No.</b> <span class="required">*</span></label>
-                                    <input type="text" name="ModelNo" id="ModelNo" ng-model="ModelNo" required class="md-input label-fixed" />
+                                    <label for="wizard_address"><b>Plant Name</b></label>
+                                    <input type="text" name="PlantName" id="PlantName" ng-model="PlantName" maxlength="25" class="md-input label-fixed" />
                                 </div>
                                 <div class="uk-input-group premium-form-group">
                                     <label for="wizard_address"><b>Serial No</b> <span class="required">*</span></label>
@@ -733,30 +726,12 @@
                                     <input type="text" name="Manufacturer" id="Manufacturer" ng-model="Manufacturer" required class="md-input label-fixed" />
                                 </div>
                                 <div class="uk-input-group premium-form-group">
-                                    <div class="md-input-wrapper md-input-filled">
-                                        <label for="product_edit_quantity_control">Bar Code</label>
-                                        <input type="text" class="md-input label-fixed" ng-model="BarCode" name="BarCode" id="BarCode">
-                                        <span class="md-input-bar"></span>
-                                    </div>
+                                    <label for="wizard_address"><b>Assigned Location</b></label>
+                                    <input type="text" name="AssignedLocation" id="AssignedLocation" ng-model="AssignedLocation" maxlength="200" class="md-input label-fixed" />
                                 </div>
                                 <div class="uk-input-group premium-form-group">
-                                    <label for="wizard_address"><b>Purchase Cost</b> <span class="required">*</span></label>
-                                    <input type="number" min="0" name="PurchaseCost" id="PurchaseCost" ng-model="PurchaseCost" required class="md-input label-fixed" />
-                                </div>
-                            </div>
-
-                            <div class="uk-grid uk-grid-width-medium-1-1 uk-grid-width-large-1-5" data-uk-grid-margin>
-                                <div class="uk-input-group premium-form-group">
-                                    <label for="wizard_address"><b>Sl No</b></label>
-                                    <input type="number" name="SlNo" id="SlNo" ng-model="SlNo" class="md-input label-fixed" />
-                                </div>
-                                <div class="uk-input-group premium-form-group">
-                                    <label for="wizard_address"><b>Length</b></label>
-                                    <input type="number" step="0.01" name="Length" id="Length" ng-model="Length" class="md-input label-fixed" />
-                                </div>
-                                <div class="uk-input-group premium-form-group">
-                                    <label for="wizard_address"><b>Width</b></label>
-                                    <input type="number" step="0.01" name="Width" id="Width" ng-model="Width" class="md-input label-fixed" />
+                                    <label for="wizard_address"><b>Current Location</b></label>
+                                    <input type="text" name="CurrentLocation" id="CurrentLocation" ng-model="CurrentLocation" maxlength="25" class="md-input label-fixed" />
                                 </div>
                             </div>
                         </div>
@@ -767,6 +742,24 @@
                                 Physical Specifications
                             </div>
                             <div class="uk-grid uk-grid-width-medium-1-1 uk-grid-width-large-1-5" data-uk-grid-margin>
+                                <div class="uk-input-group premium-form-group">
+                                    <label for="wizard_address"><b>Length</b></label>
+                                    <input type="number" step="0.01" name="Length" id="Length" ng-model="Length" class="md-input label-fixed" />
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <label for="wizard_address"><b>Width</b></label>
+                                    <input type="number" step="0.01" name="Width" id="Width" ng-model="Width" class="md-input label-fixed" />
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <label for="wizard_address"><b>Height</b></label>
+                                    <input type="number" step="0.01" name="Height" id="Height" ng-model="Height" class="md-input label-fixed" />
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <label for="wizard_address"><b>Weight</b></label>
+                                    <input type="number" step="0.01" name="Weight" id="Weight" ng-model="Weight" class="md-input label-fixed" />
+                                </div>
+                            </div>
+                            <div style="display:none;">
                                 <div class="uk-input-group premium-form-group">
                                     <label for="wizard_address"><b>Height</b></label>
                                     <input type="number" step="0.01" name="Height" id="Height" ng-model="Height" class="md-input label-fixed" />
@@ -928,61 +921,61 @@
 
                              <div class="uk-grid uk-grid-width-medium-1-1 uk-grid-width-large-1-3" data-uk-grid-margin>
                                  <div class="uk-input-group premium-form-group">
-                                     <label for="wizard_address"><b>Part Name</b></label>
-                                     <input type="text" name="PartName" id="PartName" ng-model="PartName" maxlength="25" class="md-input label-fixed" />
+                                      <label for="wizard_address"><b>BLE TAG No</b></label>
+                                     <input type="number" name="BLETAGNo" id="BLETAGNo" ng-model="BLETAGNo" class="md-input label-fixed" />
                                  </div>
                                  <div class="uk-input-group premium-form-group">
-                                     <label for="wizard_address"><b>Program</b></label>
-                                     <input type="text" name="Program" id="Program" ng-model="Program" maxlength="25" class="md-input label-fixed" />
+                                      <label for="wizard_address"><b>Battery Level</b></label>
+                                     <input type="number" name="BatteryLevel" id="BatteryLevel" ng-model="BatteryLevel" class="md-input label-fixed" />
                                  </div>
-                                 <div class="uk-input-group premium-form-group">
+                                 @* <div class="uk-input-group premium-form-group">
                                      <label for="wizard_address"><b>Module</b></label>
                                      <input type="text" name="Module" id="Module" ng-model="Module" maxlength="25" class="md-input label-fixed" />
-                                 </div>
+                                 </div> *@
                              </div>
 
                              <div class="uk-grid uk-grid-width-medium-1-1 uk-grid-width-large-1-3" data-uk-grid-margin>
-                                 <div class="uk-input-group premium-form-group">
+                                 @* <div class="uk-input-group premium-form-group">
                                      <label for="wizard_address"><b>Plant Name</b></label>
                                      <input type="text" name="PlantName" id="PlantName" ng-model="PlantName" maxlength="25" class="md-input label-fixed" />
-                                 </div>
-                                 <div class="uk-input-group premium-form-group">
+                                 </div> *@
+                                 @* <div class="uk-input-group premium-form-group">
                                      <label for="wizard_address"><b>Building Name</b></label>
                                      <input type="text" name="BuildingName" id="BuildingName" ng-model="BuildingName" maxlength="25" class="md-input label-fixed" />
                                  </div>
                                  <div class="uk-input-group premium-form-group">
                                      <label for="wizard_address"><b>Current Location</b></label>
                                      <input type="text" name="CurrentLocation" id="CurrentLocation" ng-model="CurrentLocation" maxlength="25" class="md-input label-fixed" />
-                                 </div>
+                                 </div> *@
                              </div>
 
                              <div class="uk-grid uk-grid-width-medium-1-1 uk-grid-width-large-1-3" data-uk-grid-margin>
-                                 <div class="uk-input-group premium-form-group">
+                                 @* <div class="uk-input-group premium-form-group">
                                      <span class="uk-input-group-addon">
                                          <i class="material-icons">&#xE873;</i>
                                      </span>
                                      <label for="LaunchDate"><b>Launch Date</b></label>
                                      <input type="date" name="LaunchDate" id="LaunchDate" ng-model="LaunchDate" class="md-input label-fixed" />
-                                 </div>
-                                 <div class="uk-input-group premium-form-group">
+                                 </div> *@
+                                 @* <div class="uk-input-group premium-form-group">
                                      <span class="uk-input-group-addon">
                                          <i class="material-icons">&#xE872;</i>
                                      </span>
                                      <label for="EndDate"><b>End Date</b></label>
                                      <input type="date" name="EndDate" id="EndDate" ng-model="EndDate" class="md-input label-fixed" />
-                                 </div>
-                                 <div class="uk-input-group premium-form-group">
+                                 </div> *@
+                                 @* <div class="uk-input-group premium-form-group">
                                      <label for="wizard_address"><b>BLE TAG No</b></label>
                                      <input type="number" name="BLETAGNo" id="BLETAGNo" ng-model="BLETAGNo" class="md-input label-fixed" />
-                                 </div>
+                                 </div> *@
                              </div>
 
-                             <div class="uk-grid uk-grid-width-medium-1-1 uk-grid-width-large-1-3" data-uk-grid-margin>
+                             @* <div class="uk-grid uk-grid-width-medium-1-1 uk-grid-width-large-1-3" data-uk-grid-margin>
                                  <div class="uk-input-group premium-form-group">
                                      <label for="wizard_address"><b>Battery Level</b></label>
                                      <input type="number" name="BatteryLevel" id="BatteryLevel" ng-model="BatteryLevel" class="md-input label-fixed" />
                                  </div>
-                             </div>
+                             </div> *@
                          </div>
                      </section>
 

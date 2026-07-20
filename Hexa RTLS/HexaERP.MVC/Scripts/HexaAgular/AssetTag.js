@@ -94,16 +94,19 @@ app.controller("AssetTagCtrl", function ($scope, $http, $timeout) {
         }).then(function successCallback(response) {
             //console.log(response.data);
 
-            $('#mIteamMasterId').kendoDropDownList({
-                dataTextField: "IteamName",
-                dataValueField: "mIteamMasterId",
-                filter: "contains",
-                dataSource: response.data.ObjIteam,
-                suggest: true,
-                index: 2
-            });
-            var mIteamMasterId = $("#mIteamMasterId").data("kendoDropDownList");
-            mIteamMasterId.value(-1);
+            var mIteamMasterIdEl = $("#mIteamMasterId");
+            if (mIteamMasterIdEl.length > 0) {
+                mIteamMasterIdEl.kendoDropDownList({
+                    dataTextField: "IteamName",
+                    dataValueField: "mIteamMasterId",
+                    filter: "contains",
+                    dataSource: response.data.ObjIteam,
+                    suggest: true,
+                    index: 2
+                });
+                var mIteamMasterId = mIteamMasterIdEl.data("kendoDropDownList");
+                mIteamMasterId.value(-1);
+            }
 
             $('#mGroupMasterId').kendoDropDownList({
                 dataTextField: "GroupName",
@@ -331,11 +334,10 @@ app.controller("AssetTagCtrl", function ($scope, $http, $timeout) {
 
     //
     function BindJqueryTable(pData) {
-        var table = $('#dt_tableExport').DataTable();
+        if ($('#dt_tableExport').length === 0) { return; }
         console.log("Data :", pData);
         console.log("Rows :", pData.length);
 
-        table.clear().draw();
         $('#dt_tableExport').dataTable({
             "destroy": true,
             "bDestroy": true,
@@ -572,8 +574,11 @@ app.controller("AssetTagCtrl", function ($scope, $http, $timeout) {
             //console.log(response.data);
             if (response.data.Flag == true) {
 
-                var mIteamMasterId = $("#mIteamMasterId").data("kendoDropDownList");
-                mIteamMasterId.value(response.data.Idata.mIteamMasterId);
+                var mIteamMasterIdEl = $("#mIteamMasterId");
+                if (mIteamMasterIdEl.length > 0) {
+                    var mIteamMasterId = mIteamMasterIdEl.data("kendoDropDownList");
+                    mIteamMasterId.value(response.data.Idata.mIteamMasterId);
+                }
 
                 var mGroupMasterId = $("#mGroupMasterId").data("kendoDropDownList");
                 mGroupMasterId.value(response.data.Idata.mGroupMasterId);
