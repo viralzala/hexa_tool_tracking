@@ -449,6 +449,7 @@
     <Compile Include="Controllers\RFID\AssetIssueInvoiceController.cs" />
     <Compile Include="Controllers\RFID\AssetInspectionController.cs" />
     <Compile Include="Controllers\RFID\AssetMasterController.cs" />
+    <Compile Include="Controllers\RFID\AssetSubCategory2Controller.cs" />
     <Compile Include="Controllers\Report\AssetsReportController.cs" />
     <Compile Include="Controllers\RFID\AssetTagController.cs" />
     <Compile Include="Controllers\RFID\AssetTaggingController.cs" />
