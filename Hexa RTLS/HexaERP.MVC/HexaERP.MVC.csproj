@@ -941,6 +941,7 @@
     <Content Include="AppJs\RFID\AssetIssue.js" />
     <Content Include="AppJs\RFID\AssetIssueInvoice.js" />
     <Content Include="AppJs\RFID\AssetMaster.js" />
+    <Content Include="AppJs\RFID\AssetSubCategory2.js" />
     <Content Include="AppJs\RFID\AssetTag.js" />
     <Content Include="AppJs\RFID\AssetType.js" />
     <Content Include="AppJs\RFID\EmployeeForm.js" />

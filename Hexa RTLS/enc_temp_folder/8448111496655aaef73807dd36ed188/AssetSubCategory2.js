@@ -187,30 +187,6 @@ $(document).on('click', '#Editbtn', function (e) {
     else {
     }
 });
-function onCategoryChange(e) {
-
-    var categoryId = this.value();
-
-    console.log("Selected Category:", categoryId);
-
-    var subCategory1 = $("#AssetSubCategoryId").data("kendoDropDownList");
-
-    $.getJSON("../AssetSubCategory2/getSubCategory1ByCategory",
-        { categoryId: categoryId },
-        function (data) {
-
-            console.log("Controller Response:", data);
-
-            if (subCategory1) {
-                subCategory1.setDataSource(data.DSubCategory1 || []);
-                subCategory1.value("");
-            }
-
-        })
-        .fail(function (xhr) {
-            console.log(xhr.responseText);
-        });
-}
 //Delete
 $(document).on('click', '#Deletebtn', function (e) {
     var Ids = $(this).closest("tr").find('td:eq(0)').text();

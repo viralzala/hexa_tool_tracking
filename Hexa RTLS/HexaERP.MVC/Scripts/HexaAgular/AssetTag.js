@@ -1,4 +1,4 @@
-﻿// ** Mudassar I **
+// ** Mudassar I **
 //
 app.filter('jsonDate', ['$filter', function ($filter) {
     return function (input, format) {
@@ -25,7 +25,7 @@ app.controller("AssetTagCtrl", function ($scope, $http, $timeout) {
     }
 
     function BindSubCategory1(_mGroupMasterId) {
-        $http({
+        return $http({
             method: 'GET',
             url: '../AssetTag/getSubCategory1',
             params: { categoryId: _mGroupMasterId }
@@ -42,7 +42,7 @@ app.controller("AssetTagCtrl", function ($scope, $http, $timeout) {
     }
 
     function BindSubCategory2(_mIteamTypeMasterId) {
-        $http({
+        return $http({
             method: 'GET',
             url: '../AssetTag/getSubCategory2',
             params: { subCategoryId: _mIteamTypeMasterId }
@@ -581,14 +581,19 @@ app.controller("AssetTagCtrl", function ($scope, $http, $timeout) {
                 var mGroupMasterId = $("#mGroupMasterId").data("kendoDropDownList");
                 mGroupMasterId.value(response.data.Idata.mGroupMasterId);
 
-                var mIteamTypeMasterId = $("#mIteamTypeMasterId").data("kendoDropDownList");
-                mIteamTypeMasterId.value(response.data.Idata.mIteamTypeMasterId);
+                // Load Sub Category 1 filtered by the selected category, then set its value
+                BindSubCategory1(response.data.Idata.mGroupMasterId).then(function () {
+                    var mIteamTypeMasterId = $("#mIteamTypeMasterId").data("kendoDropDownList");
+                    mIteamTypeMasterId.value(response.data.Idata.mIteamTypeMasterId);
 
-                BindSubCategory2(response.data.Idata.mIteamTypeMasterId);
-                var AssetSubCategory2Id = $("#AssetSubCategory2Id").data("kendoDropDownList");
-                if (response.data.Idata.AssetSubCategory2Id != null) {
-                    AssetSubCategory2Id.value(response.data.Idata.AssetSubCategory2Id);
-                }
+                    // Load Sub Category 2 filtered by the selected Sub Category 1, then set its value
+                    return BindSubCategory2(response.data.Idata.mIteamTypeMasterId);
+                }).then(function () {
+                    var AssetSubCategory2Id = $("#AssetSubCategory2Id").data("kendoDropDownList");
+                    if (response.data.Idata.AssetSubCategory2Id != null) {
+                        AssetSubCategory2Id.value(response.data.Idata.AssetSubCategory2Id);
+                    }
+                });
 
                 var mUnitMasterId = $("#mUnitMasterId").data("kendoDropDownList");
                 mUnitMasterId.value(response.data.Idata.mUnitMasterId);

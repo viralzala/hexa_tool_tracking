@@ -1,4 +1,4 @@
-﻿using HexaERP.MVC.EmailConfig;
+using HexaERP.MVC.EmailConfig;
 using HexaERP.MVC.Hubs;
 using HexaERP.MVC.Models;
 
@@ -112,9 +112,15 @@ namespace HexaERP.MVC.Controllers.RFID
                                 where (Dis.OrgInfoId == orgId && Dis.IsAction == true)
                                 select new { Dis.mIteamTypeMasterId, Dis.IteamType }).ToList();
 
-            var mSite = db.mSiteMasters.Where(x => x.IsAction == true && x.OrgInfoId == orgId).ToList();
+            var mSite = db.mSiteMasters
+                .Where(x => x.IsAction == true && x.OrgInfoId == orgId)
+                .Select(x => new { x.mSiteMasterId, x.Site })
+                .ToList();
 
-            var vendor = db.mVendors.Where(x => x.IsAction == true && x.OrgInfoId == orgId).ToList();
+            var vendor = db.mVendors
+                .Where(x => x.IsAction == true && x.OrgInfoId == orgId)
+                .Select(x => new { x.mVendorId, x.VendorName })
+                .ToList();
 
             //Convert List Data to The Json Array       
             //Convert List Data to The Json Array          
