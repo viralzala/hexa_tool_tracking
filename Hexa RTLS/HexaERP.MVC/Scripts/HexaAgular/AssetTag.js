@@ -20,7 +20,10 @@ app.controller("AssetTagCtrl", function ($scope, $http, $timeout) {
             console.log(_readerR);
             GetRFIDs(_readerR);
         }
-    //
+
+        $.connection.hub.start();
+    }
+
     function BindSubCategory1(_mGroupMasterId) {
         $http({
             method: 'GET',
@@ -36,8 +39,8 @@ app.controller("AssetTagCtrl", function ($scope, $http, $timeout) {
         }, function errorCallback(response) {
             console.log("Error : " + response.data.ExceptionMessage);
         });
-    };
-    //
+    }
+
     function BindSubCategory2(_mIteamTypeMasterId) {
         $http({
             method: 'GET',
@@ -50,9 +53,6 @@ app.controller("AssetTagCtrl", function ($scope, $http, $timeout) {
         }, function errorCallback(response) {
             console.log("Error : " + response.data.ExceptionMessage);
         });
-    };
-    //
-        $.connection.hub.start();
     }
 
     $scope.initNotifications();
@@ -335,12 +335,19 @@ app.controller("AssetTagCtrl", function ($scope, $http, $timeout) {
     //
     function BindJqueryTable(pData) {
         if ($('#dt_tableExport').length === 0) { return; }
+        if (!Array.isArray(pData) || pData.length === 0) { return; }
         console.log("Data :", pData);
         console.log("Rows :", pData.length);
 
+        if ($.fn.DataTable && $.fn.DataTable.isDataTable('#dt_tableExport')) {
+            $('#dt_tableExport').DataTable().destroy();
+        }
+
+        if ($('#dt_tableExport tbody').length === 0) {
+            $('#dt_tableExport').append('<tbody></tbody>');
+        }
+
         $('#dt_tableExport').dataTable({
-            "destroy": true,
-            "bDestroy": true,
             "bProcessing": true,
             "aaData": pData,
             "aoColumns": [
@@ -394,23 +401,17 @@ app.controller("AssetTagCtrl", function ($scope, $http, $timeout) {
                 },
                 {
                     'mRender': function (aaData, type, row, meta) {
-                        return '<a href="/AssetTag/CarryParam/' + row.UID + '" data-uk-tooltip="{cls:"uk-tooltip-small",pos:"left"}" title="More Detail"><i data-uk-tooltip="{cls:"uk-tooltip-small",pos:"left"}" title="Delete" class="md-icon material-icons">&#xE89C;</i></a>';
-                    }
-                },
-                {
-                    'mRender': function (aaData, type, row, meta) {
-                        return '<a id="EditIdata" data-uk-tooltip="{cls:"uk-tooltip-small",pos:"left"}" title="Edit"> <i id="Editbtn" class="md-icon material-icons">&#xE254;</i></a>';
-                    }
-                },
-                {
-                    'mRender': function (aaData, type, row, meta) {
-                        return '<a id="Deletebtn" data-uk-tooltip="{cls:"uk-tooltip-small",pos:"left"}" title="Delete"><i data-uk-tooltip="{cls:"uk-tooltip-small",pos:"left"}" title="Delete" class="md-icon material-icons">&#xE872;</i></a>';
+                        var html = '';
+                        html += '<a href="/AssetTag/CarryParam/' + row.UID + '" data-uk-tooltip="{cls:"uk-tooltip-small",pos:"left"}" title="More Detail"><i class="md-icon material-icons">&#xE89C;</i></a>';
+                        html += '<a id="EditIdata" data-uk-tooltip="{cls:"uk-tooltip-small",pos:"left"}" title="Edit"> <i id="Editbtn" class="md-icon material-icons">&#xE254;</i></a>';
+                        html += '<a id="Deletebtn" data-uk-tooltip="{cls:"uk-tooltip-small",pos:"left"}" title="Delete"><i class="md-icon material-icons">&#xE872;</i></a>';
+                        return html;
                     }
                 }
 
             ]
         });
-    };
+    }
     //
     function BindZone(_mSiteMasterId) {
         $http({
@@ -556,10 +557,7 @@ app.controller("AssetTagCtrl", function ($scope, $http, $timeout) {
     };
     //
     $('body').on('click', '#EditIdata', function () {
-        var table;
-        $(document).ready(function () {
-            table = $('#dt_tableExport').DataTable();
-        });
+        var table = $('#dt_tableExport').DataTable();
         //to get currently clicked row object
         var row = $(this).parents('tr')[0];
         //for row data
@@ -647,10 +645,7 @@ app.controller("AssetTagCtrl", function ($scope, $http, $timeout) {
     $('body').on('click', '#Deletebtn', function () {
         var answer = confirm('Do you want to delete this Record?');
         if (answer) {
-            var table;
-            $(document).ready(function () {
-                table = $('#dt_tableExport').DataTable();
-            });
+            var table = $('#dt_tableExport').DataTable();
             //to get currently clicked row object
             var row = $(this).parents('tr')[0];
             //for row data

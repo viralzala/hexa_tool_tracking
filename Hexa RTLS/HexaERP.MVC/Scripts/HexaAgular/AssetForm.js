@@ -1,4 +1,4 @@
-﻿$(function () {
+$(function () {
 
     altair_wizard.advanced_wizard(),
         altair_wizard.vertical_wizard()
@@ -263,17 +263,11 @@ function BindJqueryTable() {
                 },
                 {
                     'mRender': function (aaData, type, row, meta) {
-                        return '<a href="/AssetTag/CarryParam/' + row.UID + '" data-uk-tooltip="{cls:"uk-tooltip-small",pos:"left"}" title="More Detail"><i data-uk-tooltip="{cls:"uk-tooltip-small",pos:"left"}" title="Delete" class="md-icon material-icons">&#xE89C;</i></a>';
-                    }
-                },
-                {
-                    'mRender': function (aaData, type, row, meta) {
-                        return '<a id="EditIdata" data-uk-tooltip="{cls:"uk-tooltip-small",pos:"left"}" title="Edit"> <i id="Editbtn" class="md-icon material-icons">&#xE254;</i></a>';
-                    }
-                },
-                {
-                    'mRender': function (aaData, type, row, meta) {
-                        return '<a id="Deletebtn" data-uk-tooltip="{cls:"uk-tooltip-small",pos:"left"}" title="Delete"><i data-uk-tooltip="{cls:"uk-tooltip-small",pos:"left"}" title="Delete" class="md-icon material-icons">&#xE872;</i></a>';
+                        var html = '';
+                        html += '<a href="/AssetTag/CarryParam/' + row.UID + '" data-uk-tooltip="{cls:"uk-tooltip-small",pos:"left"}" title="More Detail"><i class="md-icon material-icons">&#xE89C;</i></a>';
+                        html += '<a id="EditIdata" data-uk-tooltip="{cls:"uk-tooltip-small",pos:"left"}" title="Edit"> <i id="Editbtn" class="md-icon material-icons">&#xE254;</i></a>';
+                        html += '<a id="Deletebtn" data-uk-tooltip="{cls:"uk-tooltip-small",pos:"left"}" title="Delete"><i class="md-icon material-icons">&#xE872;</i></a>';
+                        return html;
                     }
                 }
 

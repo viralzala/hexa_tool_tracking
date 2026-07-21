@@ -1,4 +1,4 @@
-﻿using HexaERP.MVC.Models;
+using HexaERP.MVC.Models;
 using System;
 using System.Linq;
 using System.Web;
@@ -58,9 +58,23 @@ namespace HexaERP.MVC.Controllers.RFID
             //Get Organization Id From Session Variable
             int orgId = Convert.ToInt32(Session["OrgInfoId"]);
             //Get Selected Data Accourding to Org Id
-            var ObjData = db.mIteamTypeMasters.Where(o => o.OrgInfoId == orgId && o.IsAction == true).ToList();
-            //Convert List Data to The Json Array          
-            return Json(ObjData, JsonRequestBehavior.AllowGet);
+            try
+            {
+                var ObjData = db.mIteamTypeMasters
+                    .Where(o => o.OrgInfoId == orgId && o.IsAction == true)
+                    .Select(o => new
+                    {
+                        mIteamTypeMasterId = o.mIteamTypeMasterId,
+                        IteamType = o.IteamType
+                    })
+                    .ToList();
+                //Convert List Data to The Json Array          
+                return Json(ObjData, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { error = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
         }
         //Save New Departmnt
         [HttpPost]
@@ -95,7 +109,14 @@ namespace HexaERP.MVC.Controllers.RFID
         public JsonResult getDataWithId(int ID)
         {
             int orgId = Convert.ToInt32(Session["OrgInfoId"]);
-            var datas = db.mIteamTypeMasters.Where(o => o.mIteamTypeMasterId == ID && o.OrgInfoId == orgId).ToList();
+            var datas = db.mIteamTypeMasters
+                .Where(o => o.mIteamTypeMasterId == ID && o.OrgInfoId == orgId)
+                .Select(o => new
+                {
+                    mIteamTypeMasterId = o.mIteamTypeMasterId,
+                    IteamType = o.IteamType
+                })
+                .ToList();
             return Json(datas, JsonRequestBehavior.AllowGet);
         }
         //Update Department
