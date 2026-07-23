@@ -22,6 +22,73 @@ app.controller("IndoorMapCtrl", function ($timeout, $scope, $http, $window) {
         $scope.customParams.res = res;
         $scope.sampletext = "input text: " + data;
     };
+    
+    // NEW: Asset Search Variables
+    $scope.assetSearch = '';
+    $scope.assetMarker = null;
+    $scope.showAssetMarker = false;
+    $scope.assetNotFound = false;
+    
+    // NEW: Search Asset Function
+    $scope.searchAsset = function () {
+        if (!$scope.assetSearch || $scope.assetSearch.trim() === '') {
+            return;
+        }
+
+        $scope.assetMarker = null;
+        $scope.showAssetMarker = false;
+        $scope.assetNotFound = false;
+
+        $http.get("../IndoorMap/getGetToTrackData").then(function (response) {
+            console.log("API RESPONSE:", response.data);
+            var data = response.data;
+            if (data && data.tAsset) {
+                var searchTerm = $scope.assetSearch.trim().toLowerCase();
+                var foundAsset = null;
+                var latestDate = null;
+                console.log("SEARCHING EPC/Asset:", searchTerm);
+
+                for (var i = 0; i < data.tAsset.length; i++) {
+                    var asset = data.tAsset[i];
+                    if ((asset.Asset && asset.Asset.toString().toLowerCase().indexOf(searchTerm) !== -1) ||
+                        (asset.IteamName && asset.IteamName.toLowerCase().indexOf(searchTerm) !== -1) ||
+                        (asset.Epc && asset.Epc.toString().toLowerCase().indexOf(searchTerm) !== -1)) {
+
+                        if (!latestDate || asset.tDate > latestDate) {
+                            latestDate = asset.tDate;
+                            foundAsset = asset;
+                        }
+                    }
+                }
+
+                if (foundAsset) {
+                    console.log("SEARCH FOUND ASSET:", foundAsset);
+                    console.log("Calling ShowTracks:", foundAsset.mReaderSettupId, foundAsset.mIndooMapsId, foundAsset.Xaxis, foundAsset.Yaxis);
+                    $scope.assetMarker = foundAsset;
+                    $scope.showAssetMarker = true;
+                    $scope.assetNotFound = false;
+                    ShowTracks(foundAsset.Xaxis, foundAsset.Yaxis);
+                    console.log("assetMarker:", $scope.assetMarker);
+                    console.log("MARKER DISPLAY TRUE");
+                    console.log("IndoorMaps:", $scope.IndoorMaps);
+                } else {
+                    console.log("ASSET NOT FOUND");
+                    $scope.assetMarker = null;
+                    $scope.showAssetMarker = false;
+                }
+            }
+        }, function (error) {
+            console.log("API ERROR:", error);
+        });
+    };
+    
+    // NEW: Clear Search Function
+    $scope.clearSearch = function () {
+        $scope.assetSearch = '';
+        $scope.assetMarker = null;
+        $scope.showAssetMarker = false;
+        $scope.assetNotFound = false;
+    };
     //
     function InitDataBind() {
         $http({

@@ -21,6 +21,32 @@
 
     <div id="page_content_inner">
 
+        <!-- Asset Search Bar -->
+        <div class="md-card uk-margin-medium-bottom" ng-show="!showAssetMarker && !assetNotFound">
+            <div class="md-card-content">
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <input type="text" 
+                           ng-model="assetSearch" 
+                           placeholder="Search Asset by ID, RFID, or Name..."
+                           class="md-input"
+                           style="flex: 1;"
+                           ng-keypress="($event.which === 13) && searchAsset()" />
+                    <button class="md-btn md-btn-primary" ng-click="searchAsset()">
+                        <i class="material-icons">&#xE8B6;</i> Search
+                    </button>
+                    <button class="md-btn md-btn-default" ng-click="clearSearch()" ng-show="assetSearch">
+                        Clear
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Asset Not Found Message -->
+        <div class="no-data-message" ng-show="assetNotFound" style="margin-bottom: 20px;">
+            <i class="material-icons" style="font-size: 48px; color: #f44336; display: block; margin-bottom: 12px;">&#xE8B0;</i>
+            Asset is available on another floor.
+        </div>
+
         <div class="uk-grid uk-grid-medium" data-uk-grid-margin>
             <div class="uk-width-xLarge-2-10 uk-width-large-3-10">
                 <div class="md-card">
@@ -80,6 +106,14 @@
                         </div>
                         <div class="md-card-content mydiv" id="{{Iteam.mIndooMapsId}}" name="{{Iteam.ImgPath}}">
                             <img src="{{Iteam.ImgPath}}" ng-click="setImgPara(Iteam)" class="mydiv" />
+                            <div class="asset-marker"
+                                 ng-if="assetMarker && Iteam.mIndooMapsId == assetMarker.mIndooMapsId"
+                                 ng-style="{
+                                    left: assetMarker.Xaxis + 'px',
+                                    top: assetMarker.Yaxis + 'px'
+                                 }">
+                                <span>🔴</span>
+                            </div>
                         </div>
                     </div>
                     <div class="uk-modal" id="gmap_route_modal">
@@ -187,9 +221,12 @@
         /*#pointer_div {
             position: relative;
         }*/
-        .mydiv {
-            position: relative;
-        }
+        .asset-marker {
+    position: absolute !important;
+    z-index: 99999 !important;
+    display: block !important;
+    font-size: 40px;
+}
     </style>
 
 

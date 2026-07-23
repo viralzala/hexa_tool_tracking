@@ -323,7 +323,7 @@
             animation: fadeIn 0.3s ease-in;
         }
 
-        @keyframes fadeIn {
+        @@keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
@@ -350,7 +350,7 @@
         }
 
         /* Asset Marker Animation */
-        @keyframes pulse {
+        @@keyframes pulse {
             0% {
                 box-shadow: 0 2px 8px rgba(0,0,0,.4);
             }
@@ -367,7 +367,7 @@
             cursor: pointer;
         }
 
-        @keyframes markerAppear {
+        @@keyframes markerAppear {
             0% {
                 transform: translate(-50%, -50%) scale(0);
                 opacity: 0;
@@ -391,7 +391,7 @@
             box-shadow: 0 0 0 4px rgba(33, 150, 243, 0.5);
         }
 
-        @keyframes highlightPulse {
+        @@keyframes highlightPulse {
             0% {
                 box-shadow: 0 0 0 4px rgba(33, 150, 243, 0.8);
             }
@@ -502,14 +502,14 @@
             </div>
 
             <!-- ============================================ -->
-            <!-- ASSET SEARCH BAR                              -->
+            <!-- Multi Floor Search                            -->
             <!-- Search assets by ID, RFID, Barcode, or Name  -->
             <!-- ============================================ -->
-            <div class="md-card uk-margin-medium-bottom" ng-show="!showMultiFloorView">
+            <div class="md-card uk-margin-medium-bottom" ng-show="!multiFloorMode">
                 <div class="md-card-content">
                     <div style="display: flex; gap: 10px; align-items: center;">
                         <input type="text" 
-                               ng-model="searchQuery" 
+                               ng-model="assetSearch" 
                                placeholder="Search Asset by ID, RFID, Barcode, or Name..."
                                class="md-input"
                                style="flex: 1;"
@@ -517,35 +517,32 @@
                         <button class="md-btn md-btn-primary" ng-click="searchAsset()">
                             <i class="material-icons">&#xE8B6;</i> Search
                         </button>
-                        <button class="md-btn md-btn-default" ng-click="clearSearch()" ng-show="showSearchResults">
+                        <button class="md-btn md-btn-default" ng-click="clearSearch()" ng-show="assetSearch">
                             Clear
                         </button>
                     </div>
 
-                    <!-- Search Results Dropdown -->
-                    <div class="search-results-panel" ng-show="showSearchResults && searchResults.length > 0" style="margin-top: 15px; max-height: 400px; overflow-y: auto;">
-                        <div class="search-result-item" 
-                             ng-repeat="asset in searchResults" 
-                             style="padding: 12px; border-bottom: 1px solid #e0e0e0; cursor: pointer; transition: background 0.2s;"
-                             ng-mouseenter="this.style.background='#f5f5f5'" 
-                             ng-mouseleave="this.style.background='white'"
-                             ng-click="locateAsset(asset)">
-                            <div style="font-weight: 600; color: #212121;">{{asset.IteamName || asset.IteamCode || 'N/A'}}</div>
+                    <!-- Search Result Display -->
+                    <div class="search-results-panel" ng-show="selectedAsset" style="margin-top: 15px; padding: 15px; background: #f5f5f5; border-radius: 8px;">
+                        <div style="font-weight: 600; color: #1976d2; margin-bottom: 10px;">Search Result:</div>
+                        <div style="padding: 10px; background: #fff; border-radius: 6px; cursor: pointer;"
+                             ng-click="locateAsset(selectedAsset)">
+                            <div style="font-weight: 600; color: #212121;">{{selectedAsset.IteamName || selectedAsset.IteamCode || 'N/A'}}</div>
                             <div style="font-size: 12px; color: #727272; margin-top: 4px;">
-                                <span ng-if="asset.AssetID">ID: {{asset.AssetID}} | </span>
-                                <span ng-if="asset.RFID">RFID: {{asset.RFID}} | </span>
-                                <span ng-if="asset.BarCode">Barcode: {{asset.BarCode}}</span>
+                                <span ng-if="selectedAsset.AssetID">ID: {{selectedAsset.AssetID}} | </span>
+                                <span ng-if="selectedAsset.RFID">RFID: {{selectedAsset.RFID}} | </span>
+                                <span ng-if="selectedAsset.BarCode">Barcode: {{selectedAsset.BarCode}}</span>
                             </div>
                             <div style="font-size: 11px; color: #9e9e9e; margin-top: 4px;">
-                                {{asset.FloorName}} | {{asset.ZoneName}} | {{asset.RoomName}}
+                                Click to locate asset on floor map
                             </div>
                         </div>
                     </div>
 
-                    <!-- No Search Results Message -->
-                    <div class="no-data-message" ng-show="showSearchResults && searchResults.length === 0" style="margin-top: 15px;">
+                    <!-- No Asset Message -->
+                    <div class="no-data-message" ng-show="assetSearch && !selectedAsset" style="margin-top: 15px;">
                         <i class="material-icons" style="font-size: 48px; color: #bdbdbd; display: block; margin-bottom: 12px;">&#xE8B0;</i>
-                        No assets found matching your search.
+                        Asset not found. Please try different search terms.
                     </div>
                 </div>
             </div>
@@ -714,14 +711,14 @@
             <!-- MULTI-FLOOR MAPS VIEW                         -->
             <!-- Displays multiple floor maps simultaneously  -->
             <!-- ============================================ -->
-            <div class="multi-floor-view" ng-show="showMultiFloorView" style="margin-top: 20px;">
+            <div class="multi-floor-view" ng-show="multiFloorMode" style="margin-top: 20px;">
                 
                 <div class="section-header">
-                    <button class="back-btn" ng-click="closeMultiFloorView()">
+                    <button class="back-btn" ng-click="closeMultiFloorMaps()">
                         <i class="material-icons">&#xE5C4;</i> Back to Floors
                     </button>
                     <h3 class="section-title">
-                        Multi-Floor View ({{multiFloorData.floorMaps.length}} floors)
+                        Multi-Floor View ({{selectedFloors.length}} floors)
                     </h3>
                 </div>
 
@@ -730,48 +727,49 @@
                     
                     <div class="floor-map-container" 
                          id="floor-map-{{floor.mFloorMasterId}}"
-                         ng-repeat="floor in multiFloorData.floorMaps"
+                         ng-repeat="floor in filteredFloors"
+                         ng-if="selectedFloors.indexOf(floor.mFloorMasterId) > -1"
                          style="position: relative; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,.15); background: #f5f5f5;">
                         
                         <!-- Floor Map Header -->
                         <div style="background: #1976d2; color: #fff; padding: 12px 16px; font-weight: 600; font-size: 16px;">
                             <i class="material-icons" style="vertical-align: middle; margin-right: 8px;">&#xE30A;</i>
                             {{floor.FloorName}} ({{floor.FloorNo}})
-                            <span style="font-size: 12px; opacity: 0.9; margin-left: 8px;">- {{floor.ZoneName}}</span>
+                            <span style="font-size: 12px; opacity: 0.9; margin-left: 8px;">- {{floor.Zone}}</span>
                         </div>
 
                         <!-- Floor Map Image -->
                         <div class="floor-map-wrapper" style="position: relative; width: 100%; padding-top: 75%; background: #e0e0e0;">
-                            <img ng-if="floor.MapPath" 
-                                 src="{{floor.MapPath}}" 
+                            <img src="~/Content/assets/img/4dc174f0-2c88-48f9-86ff-220d000e2f6a.jpg" 
                                  alt="{{floor.FloorName}}"
                                  style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain;" />
-                            <div ng-if="!floor.MapPath" 
-                                 style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: #9e9e9e;">
-                                <i class="material-icons" style="font-size: 64px; display: block; margin-bottom: 12px;">&#xE8B0;</i>
-                                No map image available
-                            </div>
 
                             <!-- Asset Marker (RED) - Positioned at X/Y coordinates -->
-                            <div ng-if="highlightedAsset && highlightedAsset.location.mFloorMasterId === floor.mFloorMasterId"
+                            <div ng-if="assetLocation && assetLocation.mFloorMasterId === floor.mFloorMasterId"
                                  class="asset-marker"
-                                 style="position: absolute; left: {{highlightedAsset.location.Xaxis}}%; top: {{highlightedAsset.location.Yaxis}}%; transform: translate(-50%, -50%); z-index: 1000;">
+                                 style="position: absolute; left: {{assetLocation.Xaxis}}px; top: {{assetLocation.Yaxis}}px; transform: translate(-50%, -50%); z-index: 1000;">
                                 <div style="background: #f44336; color: #fff; width: 32px; height: 32px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); box-shadow: 0 2px 8px rgba(0,0,0,.4); display: flex; align-items: center; justify-content: center; animation: pulse 2s infinite;">
                                     <i class="material-icons" style="transform: rotate(45deg); font-size: 18px;">&#xE8B6;</i>
                                 </div>
                                 <div style="position: absolute; top: -40px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,.8); color: #fff; padding: 4px 12px; border-radius: 4px; font-size: 11px; white-space: nowrap; font-weight: 600;">
-                                    {{highlightedAsset.asset.IteamName || highlightedAsset.asset.AssetID}}
+                                    {{selectedAsset.IteamName || selectedAsset.AssetID}}
                                 </div>
                             </div>
                         </div>
 
                         <!-- Floor Map Footer -->
                         <div style="padding: 12px 16px; background: #fff; border-top: 1px solid #e0e0e0; font-size: 12px; color: #616161;">
-                            <strong>Map ID:</strong> {{floor.MapId || 'N/A'}} | 
-                            <strong>Floor ID:</strong> {{floor.mFloorMasterId}}
+                            <strong>Floor:</strong> {{floor.FloorName}} | 
+                            <strong>Zone:</strong> {{floor.Zone}}
                         </div>
                     </div>
 
+                </div>
+
+                <!-- No Asset Message -->
+                <div class="no-data-message" ng-show="selectedAsset && assetLocation && selectedFloors.indexOf(assetLocation.mFloorMasterId) === -1" style="margin-top: 20px;">
+                    <i class="material-icons" style="font-size: 48px; color: #f44336; display: block; margin-bottom: 12px;">&#xE8B0;</i>
+                    Asset is not present on the selected floor(s).
                 </div>
             </div>
 
@@ -780,10 +778,11 @@
 </div>
 
 <!-- Asset Location Popup Modal (NEW) -->
+<!-- Asset Popup -->
 <div id="modal_asset_location" class="uk-modal">
     <div class="uk-modal-dialog uk-modal-dialog-small">
         <button type="button" class="uk-modal-close uk-close" ng-click="closeAssetPopup()"></button>
-        <div class="md-card" ng-if="assetPopupData">
+        <div class="md-card" ng-if="selectedAsset && assetLocation">
             <div class="md-card-content" style="padding: 24px;">
                 <h3 class="heading_c uk-margin-small-bottom" style="color: #1976d2; margin-bottom: 20px;">
                     <i class="material-icons" style="vertical-align: middle; margin-right: 8px;">&#xE8B6;</i>
@@ -793,37 +792,42 @@
                 <div class="asset-info-grid" style="display: grid; gap: 12px;">
                     <div class="asset-info-item" style="display: flex; justify-content: space-between; padding: 10px; background: #f5f5f5; border-radius: 6px;">
                         <span style="font-weight: 600; color: #616161;">Asset Name:</span>
-                        <span style="color: #212121; font-weight: 500;">{{assetPopupData.IteamName || 'N/A'}}</span>
+                        <span style="color: #212121; font-weight: 500;">{{selectedAsset.IteamName || 'N/A'}}</span>
                     </div>
                     
                     <div class="asset-info-item" style="display: flex; justify-content: space-between; padding: 10px; background: #f5f5f5; border-radius: 6px;">
                         <span style="font-weight: 600; color: #616161;">Asset ID:</span>
-                        <span style="color: #212121; font-weight: 500;">{{assetPopupData.AssetID || 'N/A'}}</span>
+                        <span style="color: #212121; font-weight: 500;">{{selectedAsset.AssetID || 'N/A'}}</span>
                     </div>
                     
                     <div class="asset-info-item" style="display: flex; justify-content: space-between; padding: 10px; background: #f5f5f5; border-radius: 6px;">
                         <span style="font-weight: 600; color: #616161;">RFID:</span>
-                        <span style="color: #212121; font-weight: 500;">{{assetPopupData.RFID || 'N/A'}}</span>
+                        <span style="color: #212121; font-weight: 500;">{{selectedAsset.RFID || 'N/A'}}</span>
                     </div>
                     
                     <div class="asset-info-item" style="display: flex; justify-content: space-between; padding: 10px; background: #f5f5f5; border-radius: 6px;">
                         <span style="font-weight: 600; color: #616161;">Location:</span>
-                        <span style="color: #212121; font-weight: 500;">{{assetPopupData.ZoneName || 'N/A'}}</span>
+                        <span style="color: #212121; font-weight: 500;">{{assetLocation.ZoneName || 'N/A'}}</span>
                     </div>
                     
                     <div class="asset-info-item" style="display: flex; justify-content: space-between; padding: 10px; background: #f5f5f5; border-radius: 6px;">
                         <span style="font-weight: 600; color: #616161;">Floor:</span>
-                        <span style="color: #212121; font-weight: 500;">{{assetPopupData.FloorName || 'N/A'}}</span>
+                        <span style="color: #212121; font-weight: 500;">{{assetLocation.FloorName || 'N/A'}}</span>
                     </div>
                     
                     <div class="asset-info-item" style="display: flex; justify-content: space-between; padding: 10px; background: #f5f5f5; border-radius: 6px;">
                         <span style="font-weight: 600; color: #616161;">Room:</span>
-                        <span style="color: #212121; font-weight: 500;">{{assetPopupData.RoomName || 'N/A'}}</span>
+                        <span style="color: #212121; font-weight: 500;">{{assetLocation.RoomName || 'N/A'}}</span>
                     </div>
                     
                     <div class="asset-info-item" style="display: flex; justify-content: space-between; padding: 10px; background: #f5f5f5; border-radius: 6px;">
-                        <span style="font-weight: 600; color: #616161;">Last Updated:</span>
-                        <span style="color: #212121; font-weight: 500;">{{assetPopupData.tDate | jsonDate: "dd-MMM-yyyy HH:mm:ss"}}</span>
+                        <span style="font-weight: 600; color: #616161;">Reader:</span>
+                        <span style="color: #212121; font-weight: 500;">{{assetLocation.ReaderNo || 'N/A'}}</span>
+                    </div>
+                    
+                    <div class="asset-info-item" style="display: flex; justify-content: space-between; padding: 10px; background: #f5f5f5; border-radius: 6px;">
+                        <span style="font-weight: 600; color: #616161;">Tracking Time:</span>
+                        <span style="color: #212121; font-weight: 500;">{{assetLocation.tDate | jsonDate: "dd-MMM-yyyy HH:mm:ss"}}</span>
                     </div>
                 </div>
 

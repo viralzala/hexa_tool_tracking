@@ -233,11 +233,11 @@ namespace HexaERP.MVC.Controllers.RFID
                               from fl in flJoin.DefaultIfEmpty()
                               join rm in db.mRoomMasters on ast.mRoomMasterId equals rm.mRoomMasterId into rmJoin
                               from rm in rmJoin.DefaultIfEmpty()
-                              where (ast.IsAction == true || ast.IsAction == null)
-                                  && (ast.AssetID.ToLower().Contains(searchLower)
-                                      || ast.RFID.ToLower().Contains(searchLower)
-                                      || ast.BarCode.ToLower().Contains(searchLower)
-                                      || ast.IteamName.ToLower().Contains(searchLower))
+                             where (ast.IsAction == true || ast.IsAction == null)
+                                 && ((ast.AssetID ?? "").ToLower().Contains(searchLower)
+                                     || (ast.RFID ?? "").ToLower().Contains(searchLower)
+                                     || (ast.BarCode ?? "").ToLower().Contains(searchLower)
+                                     || (ast.IteamName ?? "").ToLower().Contains(searchLower))
                               select new
                               {
                                   ast.tAssetTagId,
@@ -262,6 +262,113 @@ namespace HexaERP.MVC.Controllers.RFID
                               }).ToList();
 
                 return Json(new { assets }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        // HEXARTLS: NEW - Search Asset and Get Latest Location
+        // Searches asset by ID, RFID, Barcode, or Name and returns latest location with coordinates
+        // Data Flow: Asset (tAssetTag) -> toMonitor (latest RFID scan) -> mReaderSettups (coordinates)
+        // Returns: Asset details, FloorId, RoomId, ReaderId, X/Y coordinates
+        [HttpGet]
+        public JsonResult SearchAssetAndGetLocation(string searchTerm)
+        {
+            using (var db = new ERPdbEntities())
+            {
+                var searchLower = searchTerm.ToLower();
+                
+                // Step 1: Find the asset
+                var asset = (from ast in db.tAssetTags
+                             join zn in db.mZones on ast.mZoneId equals zn.mZoneId into znJoin
+                             from zn in znJoin.DefaultIfEmpty()
+                             join fl in db.mFloorMasters on ast.mFloorMasterId equals fl.mFloorMasterId into flJoin
+                             from fl in flJoin.DefaultIfEmpty()
+                             join rm in db.mRoomMasters on ast.mRoomMasterId equals rm.mRoomMasterId into rmJoin
+                             from rm in rmJoin.DefaultIfEmpty()
+                             where (ast.IsAction == true || ast.IsAction == null)
+                                 && ((ast.AssetID ?? "").ToLower().Contains(searchLower)
+                                     || (ast.RFID ?? "").ToLower().Contains(searchLower)
+                                     || (ast.BarCode ?? "").ToLower().Contains(searchLower)
+                                     || (ast.IteamName ?? "").ToLower().Contains(searchLower))
+                             select new
+                             {
+                                 ast.tAssetTagId,
+                                 ast.IteamName,
+                                 ast.IteamCode,
+                                 ast.AssetID,
+                                 ast.RFID,
+                                 ast.BarCode,
+                                 ast.SerialNo,
+                                 ast.Model,
+                                 ast.ModelNo,
+                                 ast.mZoneId,
+                                 ast.mFloorMasterId,
+                                 ast.mRoomMasterId,
+                                 ZoneName = zn.Zone ?? "",
+                                 FloorName = fl.FloorName ?? "",
+                                 RoomName = rm.RoomName ?? "",
+                                 ast.IsAction,
+                                 ast.mStatusMasterId,
+                                 ast.ModifiedDate,
+                                 ast.IteamDescription
+                             }).FirstOrDefault();
+
+                if (asset == null)
+                {
+                    return Json(new { 
+                        success = false, 
+                        message = "Asset not found" 
+                    }, JsonRequestBehavior.AllowGet);
+                }
+
+                // Step 2: Get latest tracking from toMonitor (live tracking table)
+                // Join toMonitor with mReaderSettups to get coordinates (Xaxis, Yaxis)
+                var latestTrack = (from tm in db.toMonitors
+                                   join rst in db.mReaderSettups on tm.Name equals rst.ReaderNo
+                                   where tm.Epc == asset.RFID
+                                   orderby tm.tDate descending
+                                   select new
+                                   {
+                                       tm.Epc,
+                                       tm.tDate,
+                                       rst.mReaderSettupId,
+                                       rst.mFloorMasterId,
+                                       rst.mRoomMasterId,
+                                       rst.mIndooMapsId,
+                                       rst.Xaxis,
+                                       rst.Yaxis,
+                                       rst.ReaderNo,
+                                       rst.AttPortId,
+                                       FloorName = db.mFloorMasters
+                                           .Where(f => f.mFloorMasterId == rst.mFloorMasterId)
+                                           .Select(f => f.FloorName)
+                                           .FirstOrDefault() ?? "",
+                                       RoomName = db.mRoomMasters
+                                           .Where(r => r.mRoomMasterId == rst.mRoomMasterId)
+                                           .Select(r => r.RoomName)
+                                           .FirstOrDefault() ?? "",
+                                       ZoneName = db.mZones
+                                           .Where(z => z.mZoneId == rst.mZoneId)
+                                           .Select(z => z.Zone)
+                                           .FirstOrDefault() ?? ""
+                                   }).FirstOrDefault();
+
+                if (latestTrack != null)
+                {
+                    return Json(new { 
+                        success = true, 
+                        asset = asset,
+                        location = latestTrack
+                    }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { 
+                        success = true, 
+                        asset = asset,
+                        location = (object)null,
+                        message = "Asset found but no tracking data available"
+                    }, JsonRequestBehavior.AllowGet);
+                }
             }
         }
 
@@ -321,7 +428,9 @@ namespace HexaERP.MVC.Controllers.RFID
             using (var db = new ERPdbEntities())
             {
                 var floorMaps = (from flr in db.mFloorMasters
-                                 join ind in db.mIndooMaps on flr.mFloorMasterId equals ind.mFloorMasterId into indJoin
+                                 join rst in db.mReaderSettups on flr.mFloorMasterId equals rst.mFloorMasterId into rstJoin
+                                 from rst in rstJoin.DefaultIfEmpty()
+                                 join ind in db.mIndooMaps on rst.mIndooMapsId equals ind.mIndooMapsId into indJoin
                                  from ind in indJoin.DefaultIfEmpty()
                                  where floorIds.Contains(flr.mFloorMasterId) && flr.IsAction == true
                                  select new

@@ -46,6 +46,14 @@ app.controller("HexaRTLSCtrl", function ($timeout, $scope, $http, $window) {
     $scope.highlightedAsset = null;          // Currently highlighted asset
     $scope.assetPopupVisible = false;        // Show asset info popup
 
+    // ---- NEW: Multi-Floor Asset Tracking State ----
+    $scope.multiFloorMode = false;           // Multi-floor mode active
+    $scope.assetSearch = '';                 // Asset search text
+    $scope.selectedAsset = null;             // Selected asset from search
+    $scope.assetLocation = null;             // Asset location with coordinates
+    $scope.assetMarker = null;               // Asset marker data for display
+    $scope.showAssetPopup = false;           // Show asset information popup
+
     //
     function initializeComponets() {
         var d = new Date();
@@ -369,13 +377,20 @@ app.controller("HexaRTLSCtrl", function ($timeout, $scope, $http, $window) {
 
     // NEW: Toggle Floor Selection for Multi-Floor View
     // Toggles a floor in/out of the selected floors array
+    // Maximum 3 floors can be selected
     $scope.toggleFloorSelection = function (floor) {
         var index = $scope.selectedFloors.indexOf(floor.mFloorMasterId);
+        
         if (index > -1) {
             // Floor already selected, remove it
             $scope.selectedFloors.splice(index, 1);
         } else {
-            // Floor not selected, add it
+            // Floor not selected, check limit
+            if ($scope.selectedFloors.length >= 3) {
+                alert('Maximum 3 floors can be selected.');
+                return;
+            }
+            // Add floor to selection
             $scope.selectedFloors.push(floor.mFloorMasterId);
         }
         console.log("Selected floors:", $scope.selectedFloors);
@@ -388,38 +403,27 @@ app.controller("HexaRTLSCtrl", function ($timeout, $scope, $http, $window) {
     };
 
     // NEW: Show Multi-Floor Maps
-    // Loads and displays multiple floor maps simultaneously
+    // Activates multi-floor mode
     $scope.showMultiFloorMaps = function () {
         if ($scope.selectedFloors.length === 0) {
             alert('Please select at least one floor to display.');
             return;
         }
-
-        $http({
-            method: 'GET',
-            url: '../HexaRTLS/GetMultiFloorMaps',
-            params: {
-                floorIds: $scope.selectedFloors
-            }
-        }).then(function (response) {
-            $scope.multiFloorData = response.data;
-            $scope.showMultiFloorView = true;
-            $scope.showAssetsView = false;
-            console.log("Multi-floor maps loaded:", $scope.multiFloorData);
-        }, function errorCallback(response) {
-            console.log("Error loading multi-floor maps:", response.data);
-            alert('Error loading floor maps. Please try again.');
-        });
+        
+        $scope.multiFloorMode = true;
+        console.log("Multi-floor mode activated. Selected floors:", $scope.selectedFloors);
     };
 
-    // NEW: Close Multi-Floor View
-    // Returns to the floor cards view
-    $scope.closeMultiFloorView = function () {
-        $scope.showMultiFloorView = false;
-        $scope.multiFloorData = null;
+    // NEW: Close Multi-Floor Maps
+    // Clears selections and returns to normal view
+    $scope.closeMultiFloorMaps = function () {
         $scope.selectedFloors = [];
-        $scope.highlightedAsset = null;
-        $scope.assetPopupVisible = false;
+        $scope.multiFloorMode = false;
+        $scope.assetMarker = null;
+        $scope.showAssetPopup = false;
+        $scope.selectedAsset = null;
+        $scope.assetLocation = null;
+        console.log("Multi-floor mode closed. Selections cleared.");
     };
 
     // ============================================
@@ -427,111 +431,71 @@ app.controller("HexaRTLSCtrl", function ($timeout, $scope, $http, $window) {
     // ============================================
 
     // NEW: Search Asset
-    // Searches for assets by ID, RFID, Barcode, or Name
+    // Searches asset by ID, RFID, Barcode, or Name
+    // Calls SearchAssetAndGetLocation API
     $scope.searchAsset = function () {
-        if (!$scope.searchQuery || $scope.searchQuery.trim() === '') {
-            $scope.searchResults = [];
-            $scope.showSearchResults = false;
+        if (!$scope.assetSearch || $scope.assetSearch.trim() === '') {
             return;
         }
 
         $http({
             method: 'GET',
-            url: '../HexaRTLS/SearchAsset',
+            url: '../HexaRTLS/SearchAssetAndGetLocation',
             params: {
-                searchTerm: $scope.searchQuery.trim()
-            }
-        }).then(function (response) {
-            $scope.searchResults = response.data.assets || [];
-            $scope.showSearchResults = true;
-            console.log("Search results:", $scope.searchResults.length, "assets found");
-        }, function errorCallback(response) {
-            console.log("Error searching asset:", response.data);
-            $scope.searchResults = [];
-            $scope.showSearchResults = true;
-        });
-    };
-
-    // NEW: Locate Asset on Floor Map
-    // Finds the asset's latest location and highlights it on the correct floor
-    $scope.locateAsset = function (asset) {
-        if (!asset.RFID) {
-            alert('Asset does not have RFID tag information.');
-            return;
-        }
-
-        $http({
-            method: 'GET',
-            url: '../HexaRTLS/GetAssetLatestLocation',
-            params: {
-                rfid: asset.RFID
+                searchTerm: $scope.assetSearch.trim()
             }
         }).then(function (response) {
             if (response.data.success) {
-                var location = response.data.location;
-                
-                // Check if the asset's floor is in the currently displayed multi-floor view
-                var floorInView = $scope.selectedFloors.indexOf(location.mFloorMasterId);
-                
-                if (floorInView === -1) {
-                    // Asset is not on any displayed floor
-                    alert('Asset is not present on the selected floor(s).');
-                    return;
-                }
-
-                // Highlight the asset on the correct floor
-                $scope.highlightedAsset = {
-                    asset: asset,
-                    location: location
-                };
-
-                // Show popup with asset information
-                $scope.assetPopupVisible = true;
-                $scope.assetPopupData = {
-                    IteamName: asset.IteamName,
-                    AssetID: asset.AssetID,
-                    RFID: asset.RFID,
-                    ZoneName: location.ZoneName,
-                    FloorName: location.FloorName,
-                    RoomName: asset.RoomName || '',
-                    tDate: location.tDate
-                };
-
-                // Scroll to the floor containing the asset
-                $timeout(function () {
-                    var floorElement = document.getElementById('floor-map-' + location.mFloorMasterId);
-                    if (floorElement) {
-                        floorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        // Add highlight effect
-                        floorElement.classList.add('floor-highlight');
-                        setTimeout(function () {
-                            floorElement.classList.remove('floor-highlight');
-                        }, 2000);
-                    }
-                }, 100);
-
-                console.log("Asset located on floor:", location.FloorName, "at coordinates:", location.Xaxis, location.Yaxis);
+                $scope.selectedAsset = response.data.asset;
+                $scope.assetLocation = response.data.location;
+                console.log("Asset found:", $scope.selectedAsset);
+                console.log("Location:", $scope.assetLocation);
             } else {
-                alert('Asset is not present on the selected floor(s).');
+                $scope.selectedAsset = null;
+                $scope.assetLocation = null;
+                console.log("Asset not found:", response.data.message);
             }
         }, function errorCallback(response) {
-            console.log("Error locating asset:", response.data);
-            alert('Error locating asset. Please try again.');
+            console.log("Error searching asset:", response.data);
+            $scope.selectedAsset = null;
+            $scope.assetLocation = null;
         });
     };
 
-    // NEW: Close Asset Popup
-    // Hides the asset information popup
-    $scope.closeAssetPopup = function () {
-        $scope.assetPopupVisible = false;
-        $scope.assetPopupData = null;
+    // NEW: Locate Asset
+    // Stores selected asset and location
+    // Does NOT draw marker or manipulate DOM
+    $scope.locateAsset = function (asset) {
+        $scope.selectedAsset = asset;
+        $scope.assetLocation = null;
+        
+        // Call API to get location
+        if (asset.RFID) {
+            $http({
+                method: 'GET',
+                url: '../HexaRTLS/SearchAssetAndGetLocation',
+                params: {
+                    searchTerm: asset.RFID
+                }
+            }).then(function (response) {
+                if (response.data.success) {
+                    $scope.assetLocation = response.data.location;
+                    console.log("Asset located:", $scope.selectedAsset.IteamName, "at floor:", $scope.assetLocation.FloorName);
+                }
+            }, function errorCallback(response) {
+                console.log("Error locating asset:", response.data);
+            });
+        }
     };
 
     // NEW: Clear Search
-    // Clears the search query and results
+    // Clears search box, results, and popup
     $scope.clearSearch = function () {
-        $scope.searchQuery = '';
-        $scope.searchResults = [];
-        $scope.showSearchResults = false;
+        $scope.assetSearch = '';
+        $scope.selectedAsset = null;
+        $scope.assetLocation = null;
+        $scope.assetMarker = null;
+        $scope.showAssetPopup = false;
+        console.log("Search cleared.");
     };
 });
