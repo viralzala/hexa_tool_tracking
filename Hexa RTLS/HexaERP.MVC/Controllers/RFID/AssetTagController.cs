@@ -69,9 +69,10 @@ namespace HexaERP.MVC.Controllers.RFID
                 }
                 else { return RedirectToAction("Index", "AppUser"); }
 
-                if (Session["UniqueId"].ToString() != "" && Session["OrgInfoId"].ToString() != "" && Session["AppUserName"].ToString() != "")
-                {
-                    //string Page_Name = Path.GetFileName(Request.Path);
+                if (Session["UniqueId"] != null &&
+                     Session["OrgInfoId"] != null &&
+                     Session["AppUserName"] != null)
+                                {
                     if (!new string[] { "AD", "SA" }.Contains(Convert.ToString(Session["SortCode"])))
                     {
                         return RedirectToAction("Index", "AppUser");
@@ -525,10 +526,10 @@ namespace HexaERP.MVC.Controllers.RFID
                 {
                     _Flag = false; Message = "RFID Should Not be Empty";
                 }
-                else if (string.IsNullOrEmpty(collection.IteamName))
-                {
-                    _Flag = false; Message = "Enter Asset Name";
-                }
+                // else if (string.IsNullOrEmpty(collection.IteamName))
+                // {
+                //     _Flag = false; Message = "Enter Asset Name";
+                // }
                 else if (collection.mIteamMasterId == null || collection.mGroupMasterId == null || collection.mIteamTypeMasterId == null)
                 {
                     _Flag = false; Message = "Missing master mandatory Data /Asset Information";
@@ -626,10 +627,10 @@ namespace HexaERP.MVC.Controllers.RFID
                 {
                     _Flag = false; Message = "RFID Should Not be Empty";
                 }
-                else if (string.IsNullOrEmpty(collection.IteamName))
-                {
-                    _Flag = false; Message = "Enter Asset Name";
-                }
+                // else if (string.IsNullOrEmpty(collection.IteamName))
+                // {
+                //     _Flag = false; Message = "Enter Asset Name";
+                // }
                 else if (collection.mIteamMasterId == null || collection.mGroupMasterId == null || collection.mIteamTypeMasterId == null)
                 {
                     _Flag = false; Message = "Missing master mandatory Data /Asset Information";

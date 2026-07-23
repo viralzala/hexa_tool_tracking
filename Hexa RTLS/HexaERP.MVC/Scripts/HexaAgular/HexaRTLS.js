@@ -36,6 +36,16 @@ app.controller("HexaRTLSCtrl", function ($timeout, $scope, $http, $window) {
     $scope.AsRrack = '';
     $scope._trackWork = '';
 
+    // ---- NEW: Multi-Floor Display State ----
+    $scope.selectedFloors = [];              // Array of selected floor IDs for multi-floor view
+    $scope.showMultiFloorView = false;       // true = show multiple floor maps
+    $scope.multiFloorData = null;            // Data for multiple floor maps
+    $scope.searchQuery = '';                 // Asset search query
+    $scope.searchResults = [];               // Asset search results
+    $scope.showSearchResults = false;        // Show search results panel
+    $scope.highlightedAsset = null;          // Currently highlighted asset
+    $scope.assetPopupVisible = false;        // Show asset info popup
+
     //
     function initializeComponets() {
         var d = new Date();
@@ -351,5 +361,177 @@ app.controller("HexaRTLSCtrl", function ($timeout, $scope, $http, $window) {
         }, function errorCallback(response) {
             console.log("Error : " + response.data.ExceptionMessage);
         });
+    };
+
+    // ============================================
+    // NEW: Multi-Floor Display Functions
+    // ============================================
+
+    // NEW: Toggle Floor Selection for Multi-Floor View
+    // Toggles a floor in/out of the selected floors array
+    $scope.toggleFloorSelection = function (floor) {
+        var index = $scope.selectedFloors.indexOf(floor.mFloorMasterId);
+        if (index > -1) {
+            // Floor already selected, remove it
+            $scope.selectedFloors.splice(index, 1);
+        } else {
+            // Floor not selected, add it
+            $scope.selectedFloors.push(floor.mFloorMasterId);
+        }
+        console.log("Selected floors:", $scope.selectedFloors);
+    };
+
+    // NEW: Check if Floor is Selected
+    // Returns true if the floor is in the selected floors array
+    $scope.isFloorSelected = function (floorId) {
+        return $scope.selectedFloors.indexOf(floorId) > -1;
+    };
+
+    // NEW: Show Multi-Floor Maps
+    // Loads and displays multiple floor maps simultaneously
+    $scope.showMultiFloorMaps = function () {
+        if ($scope.selectedFloors.length === 0) {
+            alert('Please select at least one floor to display.');
+            return;
+        }
+
+        $http({
+            method: 'GET',
+            url: '../HexaRTLS/GetMultiFloorMaps',
+            params: {
+                floorIds: $scope.selectedFloors
+            }
+        }).then(function (response) {
+            $scope.multiFloorData = response.data;
+            $scope.showMultiFloorView = true;
+            $scope.showAssetsView = false;
+            console.log("Multi-floor maps loaded:", $scope.multiFloorData);
+        }, function errorCallback(response) {
+            console.log("Error loading multi-floor maps:", response.data);
+            alert('Error loading floor maps. Please try again.');
+        });
+    };
+
+    // NEW: Close Multi-Floor View
+    // Returns to the floor cards view
+    $scope.closeMultiFloorView = function () {
+        $scope.showMultiFloorView = false;
+        $scope.multiFloorData = null;
+        $scope.selectedFloors = [];
+        $scope.highlightedAsset = null;
+        $scope.assetPopupVisible = false;
+    };
+
+    // ============================================
+    // NEW: Asset Search Functions
+    // ============================================
+
+    // NEW: Search Asset
+    // Searches for assets by ID, RFID, Barcode, or Name
+    $scope.searchAsset = function () {
+        if (!$scope.searchQuery || $scope.searchQuery.trim() === '') {
+            $scope.searchResults = [];
+            $scope.showSearchResults = false;
+            return;
+        }
+
+        $http({
+            method: 'GET',
+            url: '../HexaRTLS/SearchAsset',
+            params: {
+                searchTerm: $scope.searchQuery.trim()
+            }
+        }).then(function (response) {
+            $scope.searchResults = response.data.assets || [];
+            $scope.showSearchResults = true;
+            console.log("Search results:", $scope.searchResults.length, "assets found");
+        }, function errorCallback(response) {
+            console.log("Error searching asset:", response.data);
+            $scope.searchResults = [];
+            $scope.showSearchResults = true;
+        });
+    };
+
+    // NEW: Locate Asset on Floor Map
+    // Finds the asset's latest location and highlights it on the correct floor
+    $scope.locateAsset = function (asset) {
+        if (!asset.RFID) {
+            alert('Asset does not have RFID tag information.');
+            return;
+        }
+
+        $http({
+            method: 'GET',
+            url: '../HexaRTLS/GetAssetLatestLocation',
+            params: {
+                rfid: asset.RFID
+            }
+        }).then(function (response) {
+            if (response.data.success) {
+                var location = response.data.location;
+                
+                // Check if the asset's floor is in the currently displayed multi-floor view
+                var floorInView = $scope.selectedFloors.indexOf(location.mFloorMasterId);
+                
+                if (floorInView === -1) {
+                    // Asset is not on any displayed floor
+                    alert('Asset is not present on the selected floor(s).');
+                    return;
+                }
+
+                // Highlight the asset on the correct floor
+                $scope.highlightedAsset = {
+                    asset: asset,
+                    location: location
+                };
+
+                // Show popup with asset information
+                $scope.assetPopupVisible = true;
+                $scope.assetPopupData = {
+                    IteamName: asset.IteamName,
+                    AssetID: asset.AssetID,
+                    RFID: asset.RFID,
+                    ZoneName: location.ZoneName,
+                    FloorName: location.FloorName,
+                    RoomName: asset.RoomName || '',
+                    tDate: location.tDate
+                };
+
+                // Scroll to the floor containing the asset
+                $timeout(function () {
+                    var floorElement = document.getElementById('floor-map-' + location.mFloorMasterId);
+                    if (floorElement) {
+                        floorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        // Add highlight effect
+                        floorElement.classList.add('floor-highlight');
+                        setTimeout(function () {
+                            floorElement.classList.remove('floor-highlight');
+                        }, 2000);
+                    }
+                }, 100);
+
+                console.log("Asset located on floor:", location.FloorName, "at coordinates:", location.Xaxis, location.Yaxis);
+            } else {
+                alert('Asset is not present on the selected floor(s).');
+            }
+        }, function errorCallback(response) {
+            console.log("Error locating asset:", response.data);
+            alert('Error locating asset. Please try again.');
+        });
+    };
+
+    // NEW: Close Asset Popup
+    // Hides the asset information popup
+    $scope.closeAssetPopup = function () {
+        $scope.assetPopupVisible = false;
+        $scope.assetPopupData = null;
+    };
+
+    // NEW: Clear Search
+    // Clears the search query and results
+    $scope.clearSearch = function () {
+        $scope.searchQuery = '';
+        $scope.searchResults = [];
+        $scope.showSearchResults = false;
     };
 });

@@ -217,7 +217,150 @@ namespace HexaERP.MVC.Controllers.RFID
             }
         }
 
-        //HexaRTLS/getGetToTrackData
+        // HEXARTLS: NEW - Search Asset by ID, RFID, Barcode, or Name
+        // Returns matching assets with their latest location information
+        [HttpGet]
+        public JsonResult SearchAsset(string searchTerm)
+        {
+            using (var db = new ERPdbEntities())
+            {
+                var searchLower = searchTerm.ToLower();
+                
+                var assets = (from ast in db.tAssetTags
+                              join zn in db.mZones on ast.mZoneId equals zn.mZoneId into znJoin
+                              from zn in znJoin.DefaultIfEmpty()
+                              join fl in db.mFloorMasters on ast.mFloorMasterId equals fl.mFloorMasterId into flJoin
+                              from fl in flJoin.DefaultIfEmpty()
+                              join rm in db.mRoomMasters on ast.mRoomMasterId equals rm.mRoomMasterId into rmJoin
+                              from rm in rmJoin.DefaultIfEmpty()
+                              where (ast.IsAction == true || ast.IsAction == null)
+                                  && (ast.AssetID.ToLower().Contains(searchLower)
+                                      || ast.RFID.ToLower().Contains(searchLower)
+                                      || ast.BarCode.ToLower().Contains(searchLower)
+                                      || ast.IteamName.ToLower().Contains(searchLower))
+                              select new
+                              {
+                                  ast.tAssetTagId,
+                                  ast.IteamName,
+                                  ast.IteamCode,
+                                  ast.AssetID,
+                                  ast.RFID,
+                                  ast.BarCode,
+                                  ast.SerialNo,
+                                  ast.Model,
+                                  ast.ModelNo,
+                                  ast.mZoneId,
+                                  ast.mFloorMasterId,
+                                  ast.mRoomMasterId,
+                                  ZoneName = zn.Zone ?? "",
+                                  FloorName = fl.FloorName ?? "",
+                                  RoomName = rm.RoomName ?? "",
+                                  ast.IsAction,
+                                  ast.mStatusMasterId,
+                                  ast.ModifiedDate,
+                                  ast.IteamDescription
+                              }).ToList();
+
+                return Json(new { assets }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        // HEXARTLS: NEW - Get Asset Latest Location with Coordinates
+        // Returns the latest tracked position (X/Y) for an asset from toTrackInfo
+        [HttpGet]
+        public JsonResult GetAssetLatestLocation(string rfid)
+        {
+            using (var db = new ERPdbEntities())
+            {
+                // Get the latest tracking record for this RFID from toTrackInfo
+                var latestTrack = (from track in db.toTrackInfoes
+                                   join rst in db.mReaderSettups on track.mAttPortId equals rst.AttPortId
+                                   where track.RFID == rfid
+                                   orderby track.tDate descending
+                                   select new
+                                   {
+                                       track.RFID,
+                                       track.tDate,
+                                       rst.mFloorMasterId,
+                                       rst.mIndooMapsId,
+                                       rst.Xaxis,
+                                       rst.Yaxis,
+                                       rst.ReaderNo,
+                                       FloorName = db.mFloorMasters
+                                           .Where(f => f.mFloorMasterId == rst.mFloorMasterId)
+                                           .Select(f => f.FloorName)
+                                           .FirstOrDefault() ?? "",
+                                       ZoneName = db.mZones
+                                           .Where(z => z.mZoneId == rst.mZoneId)
+                                           .Select(z => z.Zone)
+                                           .FirstOrDefault() ?? ""
+                                   }).FirstOrDefault();
+
+                if (latestTrack != null)
+                {
+                    return Json(new { 
+                        success = true, 
+                        location = latestTrack 
+                    }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { 
+                        success = false, 
+                        message = "No tracking data found for this asset" 
+                    }, JsonRequestBehavior.AllowGet);
+                }
+            }
+        }
+
+        // HEXARTLS: NEW - Get Multiple Floor Maps Data
+        // Returns map data for multiple selected floors
+        [HttpGet]
+        public JsonResult GetMultiFloorMaps(List<int> floorIds)
+        {
+            using (var db = new ERPdbEntities())
+            {
+                var floorMaps = (from flr in db.mFloorMasters
+                                 join ind in db.mIndooMaps on flr.mFloorMasterId equals ind.mFloorMasterId into indJoin
+                                 from ind in indJoin.DefaultIfEmpty()
+                                 where floorIds.Contains(flr.mFloorMasterId) && flr.IsAction == true
+                                 select new
+                                 {
+                                     flr.mFloorMasterId,
+                                     flr.FloorName,
+                                     flr.FloorNo,
+                                     flr.mZoneId,
+                                     ZoneName = db.mZones
+                                         .Where(z => z.mZoneId == flr.mZoneId)
+                                         .Select(z => z.Zone)
+                                         .FirstOrDefault() ?? "",
+                                     MapId = ind != null ? ind.mIndooMapsId : (int?)null,
+                                     MapPath = ind != null ? ind.ImgPath : "",
+                                     MapUID = ind != null ? ind.UID : ""
+                                 }).ToList();
+
+                // Get reader positions for these floors
+                var readerPositions = (from rst in db.mReaderSettups
+                                       where floorIds.Contains(rst.mFloorMasterId ?? 0) && rst.IsAction == true
+                                       select new
+                                       {
+                                           rst.mReaderSettupId,
+                                           rst.mFloorMasterId,
+                                           rst.mIndooMapsId,
+                                           rst.Xaxis,
+                                           rst.Yaxis,
+                                           rst.ReaderNo,
+                                           rst.AttPortId
+                                       }).ToList();
+
+                return Json(new { 
+                    floorMaps = floorMaps,
+                    readerPositions = readerPositions
+                }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        //HexaRTLS/getGetToTrackData  
         [HttpGet]
         public async Task<ActionResult> GetTrackData(int mZoneId)
         {

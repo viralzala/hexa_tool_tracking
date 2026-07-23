@@ -33,14 +33,14 @@ namespace HexaERP.MVC.Controllers.RFID
                                 Content = new StringContent(JsonConvert.SerializeObject(content), System.Text.Encoding.UTF8, "application/json")
                             };
                         }
-                        else if (string.IsNullOrEmpty(collection.IteamName))
-                        {
-                            var content = new { status = 0, message = "Enter Asset Name" };
-                            return new HttpResponseMessage
-                            {
-                                Content = new StringContent(JsonConvert.SerializeObject(content), System.Text.Encoding.UTF8, "application/json")
-                            };
-                        }
+                        // else if (string.IsNullOrEmpty(collection.IteamName))
+                        // {
+                        //     var content = new { status = 0, message = "Enter Asset Name" };
+                        //     return new HttpResponseMessage
+                        //     {
+                        //         Content = new StringContent(JsonConvert.SerializeObject(content), System.Text.Encoding.UTF8, "application/json")
+                        //     };
+                        // }
 
                         else if (collection.mIteamMasterId == null || collection.mGroupMasterId == null || collection.mIteamTypeMasterId == null)
                         {
@@ -194,15 +194,15 @@ namespace HexaERP.MVC.Controllers.RFID
                                 Content = new StringContent(JsonConvert.SerializeObject(content), System.Text.Encoding.UTF8, "application/json")
                             };
                         }
-                        else if (string.IsNullOrEmpty(collection.IteamName))
-                        {
-                            var content = new { status = 0, message = "Enter Asset Name" };
-                            return new HttpResponseMessage
-                            {
-                                Content = new StringContent(JsonConvert.SerializeObject(content), System.Text.Encoding.UTF8, "application/json")
-                            };
+                        // else if (string.IsNullOrEmpty(collection.IteamName))
+                        // {
+                        //     var content = new { status = 0, message = "Enter Asset Name" };
+                        //     return new HttpResponseMessage
+                        //     {
+                        //         Content = new StringContent(JsonConvert.SerializeObject(content), System.Text.Encoding.UTF8, "application/json")
+                        //     };
 
-                        }
+                        // }
                         else if (collection.mIteamMasterId == null || collection.mGroupMasterId == null || collection.mIteamTypeMasterId == null)
                         {
                             var content = new { status = 0, message = "Missing master mandatory Data /Asset Information" };
