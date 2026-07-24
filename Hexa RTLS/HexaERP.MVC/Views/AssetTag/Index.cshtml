@@ -704,11 +704,11 @@
                                 </div>
                                 <div class="uk-input-group premium-form-group">
                                     <label for="wizard_address"><b>Tool ID</b></label>
-                                    <input type="text" name="mIteamMasterId" id="ToolId" ng-model="ToolId" maxlength="100" class="md-input label-fixed" />
+                                    <input type="text" name="ToolId" id="ToolId" ng-model="Asset.ToolId" maxlength="100" class="form-control" placeholder="Enter Tool ID" />
                                 </div>
                                 <div class="uk-input-group premium-form-group">
                                     <label for="wizard_address"><b>Tool Name</b></label>
-                                    <input type="text" name="IteamName" id="ToolName" ng-model="ToolName" maxlength="200" class="md-input label-fixed" />
+                                    <input type="text" name="IteamName" id="IteamName" ng-model="Asset.ToolName" maxlength="200" class="md-input label-fixed" readonly />
                                 </div>
                             </div>
 
@@ -783,7 +783,7 @@
                             </div>
                         </div>
 
-                        <div class="form-section-card">
+                        @* <div class="form-section-card">
                             <div class="section-title">
                                 <i class="material-icons">&#xE8B0;</i>
                                 Important Dates
@@ -832,9 +832,9 @@
                                     <input type="date" name="PreventiveMaintenanceDueDate" id="PreventiveMaintenanceDueDate" ng-model="PreventiveMaintenanceDueDate" class="md-input label-fixed" />
                                 </div>
                             </div>
-                        </div>
+                        </div> *@
 
-                        <div class="form-section-card">
+                        @* <div class="form-section-card">
                             <div class="section-title">
                                 <i class="material-icons">&#xE8B6;</i>
                                 Purchase Information
@@ -864,9 +864,9 @@
                                     <input type="text" name="Receivedby" id="Receivedby" ng-model="Receivedby" class="md-input label-fixed" />
                                 </div>
                             </div>
-                        </div>
+                        </div> *@
 
-                        <div class="form-section-card">
+                        @* <div class="form-section-card">
                             <div class="section-title">
                                 <i class="material-icons">&#xE887;</i>
                                 Additional Information
@@ -893,7 +893,7 @@
                                     <input type="text" name="StorageLocation" id="StorageLocation" ng-model="StorageLocation" maxlength="25" class="md-input label-fixed" />
                                 </div>
                             </div>
-                        </div>
+                        </div> *@
                     </section>
 
                      <!-- Section 2: MIS Information -->
@@ -983,6 +983,56 @@
                      <h3>Other Information</h3>
                      <section>
                          <div class="form-section-card">
+                            <div class="section-title">
+                                <i class="material-icons">&#xE8B0;</i>
+                                Important Dates
+                            </div>
+                            <div class="uk-grid uk-grid-width-medium-1-2 uk-grid-width-large-1-3" data-uk-grid-margin>
+                                <div class="uk-input-group premium-form-group">
+                                    <span class="uk-input-group-addon">
+                                        <i class="material-icons">&#xE873;</i>
+                                    </span>
+                                    <label for="PhaseInDate"><b>Phase In Date</b></label>
+                                    <input type="date" name="PhaseInDate" id="PhaseInDate" ng-model="PhaseInDate" class="md-input label-fixed" />
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <span class="uk-input-group-addon">
+                                        <i class="material-icons">&#xE872;</i>
+                                    </span>
+                                    <label for="PhaseOutDate"><b>Phase Out Date</b></label>
+                                    <input type="date" name="PhaseOutDate" id="PhaseOutDate" ng-model="PhaseOutDate" class="md-input label-fixed" />
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <span class="uk-input-group-addon">
+                                        <i class="material-icons">&#xE8B0;</i>
+                                    </span>
+                                    <label for="CalibrationDate"><b>Calibration Date</b></label>
+                                    <input type="date" name="CalibrationDate" id="CalibrationDate" ng-model="CalibrationDate" class="md-input label-fixed" />
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <span class="uk-input-group-addon">
+                                        <i class="material-icons">&#xE645;</i>
+                                    </span>
+                                    <label for="CalibrationDueDate"><b>Calibration Due Date</b></label>
+                                    <input type="date" name="CalibrationDueDate" id="CalibrationDueDate" ng-model="CalibrationDueDate" class="md-input label-fixed" />
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <span class="uk-input-group-addon">
+                                        <i class="material-icons">&#xE86E;</i>
+                                    </span>
+                                    <label for="PreventiveMaintenanceDate"><b>Preventive Maintenance Date</b></label>
+                                    <input type="date" name="PreventiveMaintenanceDate" id="PreventiveMaintenanceDate" ng-model="PreventiveMaintenanceDate" class="md-input label-fixed" />
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <span class="uk-input-group-addon">
+                                        <i class="material-icons">&#xE665;</i>
+                                    </span>
+                                    <label for="PreventiveMaintenanceDueDate"><b>Preventive Maintenance Due Date</b></label>
+                                    <input type="date" name="PreventiveMaintenanceDueDate" id="PreventiveMaintenanceDueDate" ng-model="PreventiveMaintenanceDueDate" class="md-input label-fixed" />
+                                </div>
+                            </div>
+                        </div>
+                         @* <div class="form-section-card">
                              <div class="section-title">
                                  <i class="material-icons">&#xE8C8;</i>
                                  Asset Details
@@ -1024,7 +1074,7 @@
                                      <span class="uk-form-help-block"><b>Asset Description</b> <span class="required">*</span></span>
                                  </div>
                              </div>
-                         </div>
+                         </div> *@
                      </section>
 
                     <!-- Section 4: Location Information -->
@@ -1083,12 +1133,12 @@
                     </section>
 
                     <!-- Section 5: RFID Tagging -->
-                    <h3>RFID Tagging</h3>
+                    <h3>BLE Tagging</h3>
                     <section>
                         <div class="form-section-card">
                             <div class="section-title">
                                 <i class="material-icons">&#xE2C7;</i>
-                                RFID Tag Assignment
+                                BLE Tag Assignment
                             </div>
 
                             <div class="premium-alert premium-alert-info">
@@ -1101,7 +1151,7 @@
 <span class="uk-input-group-addon">
                                         <i class="material-icons">&#xE2C7;</i>
                                     </span>
-                                    <label for="product_edit_sku_control"><b>RFID</b> <span class="required">*</span></label>
+                                    <label for="product_edit_sku_control"><b>BLE ID:</b> <span class="required">*</span></label>
                                     <input type="text" id="RFID" name="RFID" ng-model="RFID" required class="md-input label-fixed" />
                                 </div>
                                 <div class="uk-input-group premium-form-group">
@@ -1110,7 +1160,7 @@
                                 </div>
                             </div>
 
-                            <div class="uk-grid uk-grid-width-medium-1-1 uk-grid-width-large-1-2" data-uk-grid-margin>
+                            @* <div class="uk-grid uk-grid-width-medium-1-1 uk-grid-width-large-1-2" data-uk-grid-margin>
                                 <div class="uk-input-group premium-form-group">
                                     <div class="md-card" title="Reader Port">
                                         <div class="md-card-toolbar">
@@ -1188,7 +1238,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> *@
                         </div>
                     </section>
                 </div>

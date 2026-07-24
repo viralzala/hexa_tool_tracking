@@ -10,6 +10,7 @@ app.controller("AssetTagCtrl", function ($scope, $http, $timeout) {
     // Initialize loading state
     $scope.statsLoading = true;
     $scope.CurrentDate = new Date();
+    $scope.Asset = {};
     //
     //
     $scope.hub = $.connection.getTags;
@@ -31,11 +32,15 @@ app.controller("AssetTagCtrl", function ($scope, $http, $timeout) {
             params: { categoryId: _mGroupMasterId }
         }).then(function successCallback(response) {
             var mIteamTypeMasterId = $("#mIteamTypeMasterId").data("kendoDropDownList");
-            mIteamTypeMasterId.setDataSource(response.data.DSubCategory1);
-            mIteamTypeMasterId.value(-1);
+            if (mIteamTypeMasterId) {
+                mIteamTypeMasterId.setDataSource(response.data.DSubCategory1);
+                mIteamTypeMasterId.value(-1);
+            }
             var AssetSubCategory2Id = $("#AssetSubCategory2Id").data("kendoDropDownList");
-            AssetSubCategory2Id.setDataSource([]);
-            AssetSubCategory2Id.value(-1);
+            if (AssetSubCategory2Id) {
+                AssetSubCategory2Id.setDataSource([]);
+                AssetSubCategory2Id.value(-1);
+            }
         }, function errorCallback(response) {
             console.log("Error : " + response.data.ExceptionMessage);
         });
@@ -48,8 +53,10 @@ app.controller("AssetTagCtrl", function ($scope, $http, $timeout) {
             params: { subCategoryId: _mIteamTypeMasterId }
         }).then(function successCallback(response) {
             var AssetSubCategory2Id = $("#AssetSubCategory2Id").data("kendoDropDownList");
-            AssetSubCategory2Id.setDataSource(response.data.DSubCategory2);
-            AssetSubCategory2Id.value(-1);
+            if (AssetSubCategory2Id) {
+                AssetSubCategory2Id.setDataSource(response.data.DSubCategory2);
+                AssetSubCategory2Id.value(-1);
+            }
         }, function errorCallback(response) {
             console.log("Error : " + response.data.ExceptionMessage);
         });
@@ -94,20 +101,6 @@ app.controller("AssetTagCtrl", function ($scope, $http, $timeout) {
         }).then(function successCallback(response) {
             //console.log(response.data);
 
-            var mIteamMasterIdEl = $("#mIteamMasterId");
-            if (mIteamMasterIdEl.length > 0) {
-                mIteamMasterIdEl.kendoDropDownList({
-                    dataTextField: "IteamName",
-                    dataValueField: "mIteamMasterId",
-                    filter: "contains",
-                    dataSource: response.data.ObjIteam,
-                    suggest: true,
-                    index: 2
-                });
-                var mIteamMasterId = mIteamMasterIdEl.data("kendoDropDownList");
-                mIteamMasterId.value(-1);
-            }
-
             $('#mGroupMasterId').kendoDropDownList({
                 dataTextField: "GroupName",
                 dataValueField: "mGroupMasterId",
@@ -119,7 +112,7 @@ app.controller("AssetTagCtrl", function ($scope, $http, $timeout) {
             });
 
             var mGroupMasterId = $("#mGroupMasterId").data("kendoDropDownList");
-            mGroupMasterId.value(-1);
+            if (mGroupMasterId) { mGroupMasterId.value(-1); }
 
             function onGroupSelect(e) {
                 if (e.item) {
@@ -146,7 +139,7 @@ app.controller("AssetTagCtrl", function ($scope, $http, $timeout) {
             }
 
             var mIteamTypeMasterId = $("#mIteamTypeMasterId").data("kendoDropDownList");
-            mIteamTypeMasterId.value(-1);
+            if (mIteamTypeMasterId) { mIteamTypeMasterId.value(-1); }
 
             $('#AssetSubCategory2Id').kendoDropDownList({
                 dataTextField: "AssetSubCategory2Name",
@@ -158,7 +151,7 @@ app.controller("AssetTagCtrl", function ($scope, $http, $timeout) {
             });
 
             var AssetSubCategory2Id = $("#AssetSubCategory2Id").data("kendoDropDownList");
-            AssetSubCategory2Id.value(-1);
+            if (AssetSubCategory2Id) { AssetSubCategory2Id.value(-1); }
 
             $('#mUnitMasterId').kendoDropDownList({
                 dataTextField: "UnitName",
@@ -170,7 +163,7 @@ app.controller("AssetTagCtrl", function ($scope, $http, $timeout) {
             });
 
             var mUnitMasterId = $("#mUnitMasterId").data("kendoDropDownList");
-            mUnitMasterId.value(-1);
+            if (mUnitMasterId) { mUnitMasterId.value(-1); }
 
 
             $('#mSiteMasterId').kendoDropDownList({
@@ -184,7 +177,7 @@ app.controller("AssetTagCtrl", function ($scope, $http, $timeout) {
             });
 
             var mSiteMasterId = $("#mSiteMasterId").data("kendoDropDownList");
-            mSiteMasterId.value(-1);
+            if (mSiteMasterId) { mSiteMasterId.value(-1); }
 
 
             $('#mVendorId').kendoDropDownList({
@@ -197,7 +190,7 @@ app.controller("AssetTagCtrl", function ($scope, $http, $timeout) {
             });
 
             var mVendorId = $("#mVendorId").data("kendoDropDownList");
-            mVendorId.value(-1);
+            if (mVendorId) { mVendorId.value(-1); }
 
             function onSelect(e) {
                 if (e.item) {
@@ -572,34 +565,39 @@ app.controller("AssetTagCtrl", function ($scope, $http, $timeout) {
             //console.log(response.data);
             if (response.data.Flag == true) {
 
-                var mIteamMasterIdEl = $("#mIteamMasterId");
-                if (mIteamMasterIdEl.length > 0) {
-                    var mIteamMasterId = mIteamMasterIdEl.data("kendoDropDownList");
-                    mIteamMasterId.value(response.data.Idata.mIteamMasterId);
+                var ToolIdEl = $("#ToolId");
+                if (ToolIdEl.length > 0) {
+                    ToolIdEl.val(response.data.Idata.UID);
+                    $scope.Asset.ToolId = response.data.Idata.UID;
                 }
 
+                var ToolNameEl = $("#IteamName");
+                if (ToolNameEl.length > 0) {
+                    ToolNameEl.val(response.data.Idata.IteamName);
+                    $scope.Asset.ToolName = response.data.Idata.IteamName;
+                }
                 var mGroupMasterId = $("#mGroupMasterId").data("kendoDropDownList");
-                mGroupMasterId.value(response.data.Idata.mGroupMasterId);
+                if (mGroupMasterId) { mGroupMasterId.value(response.data.Idata.mGroupMasterId); }
 
                 // Load Sub Category 1 filtered by the selected category, then set its value
                 BindSubCategory1(response.data.Idata.mGroupMasterId).then(function () {
                     var mIteamTypeMasterId = $("#mIteamTypeMasterId").data("kendoDropDownList");
-                    mIteamTypeMasterId.value(response.data.Idata.mIteamTypeMasterId);
+                    if (mIteamTypeMasterId) { mIteamTypeMasterId.value(response.data.Idata.mIteamTypeMasterId); }
 
                     // Load Sub Category 2 filtered by the selected Sub Category 1, then set its value
                     return BindSubCategory2(response.data.Idata.mIteamTypeMasterId);
                 }).then(function () {
                     var AssetSubCategory2Id = $("#AssetSubCategory2Id").data("kendoDropDownList");
-                    if (response.data.Idata.AssetSubCategory2Id != null) {
+                    if (response.data.Idata.AssetSubCategory2Id != null && AssetSubCategory2Id) {
                         AssetSubCategory2Id.value(response.data.Idata.AssetSubCategory2Id);
                     }
                 });
 
                 var mUnitMasterId = $("#mUnitMasterId").data("kendoDropDownList");
-                mUnitMasterId.value(response.data.Idata.mUnitMasterId);
+                if (mUnitMasterId) { mUnitMasterId.value(response.data.Idata.mUnitMasterId); }
 
                 var mVendorId = $("#mVendorId").data("kendoDropDownList");
-                mVendorId.value(response.data.Idata.mVendorId);
+                if (mVendorId) { mVendorId.value(response.data.Idata.mVendorId); }
 
 
                 $("#Model").val(response.data.Idata.Model);
@@ -617,6 +615,7 @@ app.controller("AssetTagCtrl", function ($scope, $http, $timeout) {
                 $("#DefaultWarranty").val(response.data.Idata.DefaultWarranty);
 
 
+
                 $("#IteamName").val(response.data.Idata.IteamName);
                 $("#IteamCode").val(response.data.Idata.IteamCode);
                 $("#IteamDescription").val(response.data.Idata.IteamDescription);
@@ -627,18 +626,18 @@ app.controller("AssetTagCtrl", function ($scope, $http, $timeout) {
 
 
                 var mSiteMasterId = $("#mSiteMasterId").data("kendoDropDownList");
-                mSiteMasterId.value(response.data.Idata.mSiteMasterId);
+                if (mSiteMasterId) { mSiteMasterId.value(response.data.Idata.mSiteMasterId); }
 
                 BindZone(response.data.Idata.mSiteMasterId);
                 BindSubZone(response.data.Idata.mZoneId);
                 BindArea(response.data.Idata.mFloorMasterId);
 
                 var mZoneId = $("#mZoneId").data("kendoDropDownList");
-                mZoneId.value(response.data.Idata.mZoneId);
+                if (mZoneId) { mZoneId.value(response.data.Idata.mZoneId); }
                 var mFloorMasterId = $("#mFloorMasterId").data("kendoDropDownList");
-                mFloorMasterId.value(response.data.Idata.mFloorMasterId);
+                if (mFloorMasterId) { mFloorMasterId.value(response.data.Idata.mFloorMasterId); }
                 var mRoomMasterId = $("#mRoomMasterId").data("kendoDropDownList");
-                mRoomMasterId.value(response.data.Idata.mRoomMasterId);
+                if (mRoomMasterId) { mRoomMasterId.value(response.data.Idata.mRoomMasterId); }
 
             }
             else { toastr.error(response.data.Message); }
