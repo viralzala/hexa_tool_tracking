@@ -90,5 +90,6 @@ namespace HexaERP.MVC.Models
         public Nullable<System.DateTime> LaunchDate { get; set; }
         public Nullable<System.DateTime> EndDate { get; set; }
         public Nullable<int> AssetSubCategory2Id { get; set; }
+        public string BLETagSerialNumber { get; set; }
     }
 }

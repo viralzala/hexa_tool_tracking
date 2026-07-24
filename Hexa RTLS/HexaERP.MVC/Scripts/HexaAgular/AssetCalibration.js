@@ -301,7 +301,7 @@ app.controller("AssetCalibrationCtrl", function ($timeout, $scope, $http) {
                             }
                         }
                     },
-                    { "mData": "Agency" },
+                     { "mData": "Agency", "defaultContent": "" },
                     { "mData": "Remarks" },
                     { "mData": "CreatedBy" },
                     {
@@ -352,7 +352,7 @@ app.controller("AssetCalibrationCtrl", function ($timeout, $scope, $http) {
                             }
                         }
                     },
-                    { "mData": "Agency" },
+                     { "mData": "Agency", "defaultContent": "" },
                     { "mData": "Remarks" },
                     { "mData": "CreatedBy" },
                     {

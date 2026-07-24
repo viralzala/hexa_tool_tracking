@@ -526,23 +526,23 @@ namespace HexaERP.MVC.Controllers.RFID
                 {
                     _Flag = false; Message = "RFID Should Not be Empty";
                 }
-                // else if (string.IsNullOrEmpty(collection.IteamName))
+                else if (string.IsNullOrEmpty(collection.IteamName))
+                {
+                    _Flag = false; Message = "Enter Asset Name";
+                }
+                // else if (collection.mIteamMasterId == null || collection.mGroupMasterId == null || collection.mIteamTypeMasterId == null)
                 // {
-                //     _Flag = false; Message = "Enter Asset Name";
+                //     _Flag = false; Message = "Missing master mandatory Data /Asset Information";
                 // }
-                else if (collection.mIteamMasterId == null || collection.mGroupMasterId == null || collection.mIteamTypeMasterId == null)
-                {
-                    _Flag = false; Message = "Missing master mandatory Data /Asset Information";
-                }
-                else if (string.IsNullOrEmpty(Convert.ToString(collection.Stock)) || string.IsNullOrEmpty(Convert.ToString(collection.mUnitMasterId)))
-                {
-                    _Flag = false; Message = "Missing Stock Information";
-                }
+                // else if (string.IsNullOrEmpty(Convert.ToString(collection.Stock)) || string.IsNullOrEmpty(Convert.ToString(collection.mUnitMasterId)))
+                // {
+                //     _Flag = false; Message = "Missing Stock Information";
+                // }
 
-                else if (string.IsNullOrEmpty(Convert.ToString(collection.PurchaseDate)))
-                {
-                    _Flag = false; Message = "Missing Purchase Date";
-                }
+                // else if (string.IsNullOrEmpty(Convert.ToString(collection.PurchaseDate)))
+                // {
+                //     _Flag = false; Message = "Missing Purchase Date";
+                // }
                 else
                 {
                     if (db.tAssetTags.Any(o => o.RFID == collection.RFID && o.OrgInfoId == orgId && o.IsAction == true))
@@ -627,19 +627,19 @@ namespace HexaERP.MVC.Controllers.RFID
                 {
                     _Flag = false; Message = "RFID Should Not be Empty";
                 }
-                // else if (string.IsNullOrEmpty(collection.IteamName))
+                else if (string.IsNullOrEmpty(collection.IteamName))
+                {
+                    _Flag = false; Message = "Enter Asset Name";
+                }
+                // else if (collection.mIteamMasterId == null || collection.mGroupMasterId == null || collection.mIteamTypeMasterId == null)
                 // {
-                //     _Flag = false; Message = "Enter Asset Name";
+                //     _Flag = false; Message = "Missing master mandatory Data /Asset Information";
                 // }
-                else if (collection.mIteamMasterId == null || collection.mGroupMasterId == null || collection.mIteamTypeMasterId == null)
-                {
-                    _Flag = false; Message = "Missing master mandatory Data /Asset Information";
-                }
 
-                else if (string.IsNullOrEmpty(collection.PurchaseDate.ToString()))
-                {
-                    _Flag = false; Message = "Missing Purchase Date";
-                }
+                // else if (string.IsNullOrEmpty(collection.PurchaseDate.ToString()))
+                // {
+                //     _Flag = false; Message = "Missing Purchase Date";
+                // }
 
                 //else if (string.IsNullOrEmpty(Convert.ToString(collection.Stock)) || string.IsNullOrEmpty(Convert.ToString(collection.mUnitMasterId)))
                 //{
@@ -691,6 +691,7 @@ namespace HexaERP.MVC.Controllers.RFID
                         EditObj.SlNo = collection.SlNo;
                         EditObj.BLETAGNo = collection.BLETAGNo;
                         EditObj.BatteryLevel = collection.BatteryLevel;
+                        EditObj.BLETagSerialNumber = collection.BLETagSerialNumber;
                         EditObj.Length = collection.Length;
                         EditObj.Width = collection.Width;
                         EditObj.Height = collection.Height;

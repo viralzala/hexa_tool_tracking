@@ -188,8 +188,8 @@
           </Key>
           <Property Name="AssetSubCategory2Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="AssetSubCategoryId" Type="int" Nullable="false" />
-          <Property Name="AssetSubCategory2Name" Type="nvarchar" MaxLength="200" Nullable="false" />
-          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+          <Property Name="AssetSubCategory2Name" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="CreatedBy" Type="nvarchar" MaxLength="100" />
           <Property Name="CreatedDate" Type="datetime" Nullable="false" />
@@ -995,6 +995,7 @@ warning 6002: The table/view 'HexaRTLSdb.dbo.mEmployeeJobOrderAudit' does not ha
           <Property Name="LaunchDate" Type="datetime" />
           <Property Name="EndDate" Type="datetime" />
           <Property Name="AssetSubCategory2Id" Type="int" />
+          <Property Name="BLETagSerialNumber" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="TC_Action">
           <Key>
@@ -1558,18 +1559,6 @@ warning 6002: The table/view 'HexaRTLSdb.dbo.mEmployeeJobOrderAudit' does not ha
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_mAssetSubCategory2_mIteamTypeMaster">
-          <End Role="mIteamTypeMaster" Type="Self.mIteamTypeMaster" Multiplicity="1" />
-          <End Role="mAssetSubCategory2" Type="Self.mAssetSubCategory2" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="mIteamTypeMaster">
-              <PropertyRef Name="mIteamTypeMasterId" />
-            </Principal>
-            <Dependent Role="mAssetSubCategory2">
-              <PropertyRef Name="AssetSubCategoryId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_mDesignation_OrgInfo_OrgInfoId">
           <End Role="OrgInfo" Type="Self.OrgInfo" Multiplicity="0..1" />
           <End Role="mDesignation" Type="Self.mDesignation" Multiplicity="*" />
@@ -1727,10 +1716,6 @@ warning 6002: The table/view 'HexaRTLSdb.dbo.mEmployeeJobOrderAudit' does not ha
           <AssociationSet Name="FK_DepartMent_OrgInfo_OrgInfoId" Association="Self.FK_DepartMent_OrgInfo_OrgInfoId">
             <End Role="OrgInfo" EntitySet="OrgInfo" />
             <End Role="DepartMent" EntitySet="DepartMent" />
-          </AssociationSet>
-          <AssociationSet Name="FK_mAssetSubCategory2_mIteamTypeMaster" Association="Self.FK_mAssetSubCategory2_mIteamTypeMaster">
-            <End Role="mIteamTypeMaster" EntitySet="mIteamTypeMaster" />
-            <End Role="mAssetSubCategory2" EntitySet="mAssetSubCategory2" />
           </AssociationSet>
           <AssociationSet Name="FK_mDesignation_OrgInfo_OrgInfoId" Association="Self.FK_mDesignation_OrgInfo_OrgInfoId">
             <End Role="OrgInfo" EntitySet="OrgInfo" />
@@ -3339,6 +3324,7 @@ warning 6002: The table/view 'HexaRTLSdb.dbo.mEmployeeJobOrderAudit' does not ha
           <Property Name="LaunchDate" Type="DateTime" Precision="3" />
           <Property Name="EndDate" Type="DateTime" Precision="3" />
           <Property Name="AssetSubCategory2Id" Type="Int32" />
+          <Property Name="BLETagSerialNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="TC_Action">
           <Key>
@@ -4086,8 +4072,8 @@ warning 6002: The table/view 'HexaRTLSdb.dbo.mEmployeeJobOrderAudit' does not ha
           </Key>
           <Property Name="AssetSubCategory2Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="AssetSubCategoryId" Type="Int32" Nullable="false" />
-          <Property Name="AssetSubCategory2Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="AssetSubCategory2Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="CreatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
@@ -4929,6 +4915,7 @@ warning 6002: The table/view 'HexaRTLSdb.dbo.mEmployeeJobOrderAudit' does not ha
           <EntitySetMapping Name="tAssetTags">
             <EntityTypeMapping TypeName="ERPModel.tAssetTag">
               <MappingFragment StoreEntitySet="tAssetTag">
+                <ScalarProperty Name="BLETagSerialNumber" ColumnName="BLETagSerialNumber" />
                 <ScalarProperty Name="AssetSubCategory2Id" ColumnName="AssetSubCategory2Id" />
                 <ScalarProperty Name="EndDate" ColumnName="EndDate" />
                 <ScalarProperty Name="LaunchDate" ColumnName="LaunchDate" />

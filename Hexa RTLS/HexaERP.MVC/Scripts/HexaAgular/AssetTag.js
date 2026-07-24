@@ -620,6 +620,7 @@ app.controller("AssetTagCtrl", function ($scope, $http, $timeout) {
                 $("#IteamCode").val(response.data.Idata.IteamCode);
                 $("#IteamDescription").val(response.data.Idata.IteamDescription);
                 $("#RFID").val(response.data.Idata.RFID);
+                $("#BLETagSerialNumber").val(response.data.Idata.BLETagSerialNumber);
                 $("#tAssetTagId").val(response.data.Idata.tAssetTagId);
 
                 if (response.data.Idata.PurchaseDate != null) { $("#PurchaseDate").val(ConvertJsonDatetoanyformat(response.data.Idata.PurchaseDate, 'dd-mm-yyyy')); }

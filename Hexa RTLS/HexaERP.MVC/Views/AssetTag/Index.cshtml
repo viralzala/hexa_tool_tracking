@@ -703,16 +703,26 @@
                                     <input class="md-btn md-btn-wave waves-effect waves-button premium-input" id="AssetSubCategory2Id" name="AssetSubCategory2Id" ng-model="AssetSubCategory2Id" placeholder="Select Asset Sub Category 2" />
                                 </div>
                                 <div class="uk-input-group premium-form-group">
-                                    <label for="wizard_address"><b>Tool ID</b></label>
-                                    <input type="text" name="ToolId" id="ToolId" ng-model="Asset.ToolId" maxlength="100" class="form-control" placeholder="Enter Tool ID" />
+                                     <span class="uk-form-help-block"><b>Tool Id</b></span></span>
+                                    <input type="text" name="ToolId" id="ToolId" ng-model="Asset.ToolId" maxlength="100" class="md-input label-fixed" />
                                 </div>
                                 <div class="uk-input-group premium-form-group">
-                                    <label for="wizard_address"><b>Tool Name</b></label>
-                                    <input type="text" name="IteamName" id="IteamName" ng-model="Asset.ToolName" maxlength="200" class="md-input label-fixed" readonly />
+                                     <span class="uk-form-help-block"><b>Tool Name</b></span></span>
+                                    @* <label for="wizard_address"><b>Tool Name</b></label> *@
+                                    <input type="text" name="IteamName" id="IteamName" ng-model="Asset.ToolName" maxlength="200" class="md-input label-fixed"/>
                                 </div>
                             </div>
 
                             <div class="uk-grid uk-grid-width-medium-1-1 uk-grid-width-large-1-5" data-uk-grid-margin>
+                                 @* <div class="uk-input-group premium-form-group">
+                                    <label for="wizard_address"><b>Tool ID</b></label>
+                                    <input type="text" name="ToolId" id="ToolId" ng-model="Asset.ToolId" maxlength="100" class="md-input label-fixed" />
+                                </div>
+                                <div class="uk-input-group premium-form-group">
+                                    <label for="wizard_address"><b>Tool Name</b></label>
+                                    <input type="text" name="IteamName" id="IteamName" ng-model="Asset.ToolName" maxlength="200" class="md-input label-fixed"/>
+                                </div> *@
+                                
                                 <div class="uk-input-group premium-form-group">
                                     <label for="wizard_address"><b>Plant Name</b></label>
                                     <input type="text" name="PlantName" id="PlantName" ng-model="PlantName" maxlength="25" class="md-input label-fixed" />
@@ -1143,7 +1153,7 @@
 
                             <div class="premium-alert premium-alert-info">
                                 <i class="material-icons">&#xE8B6;</i>
-                                <span>Assign RFID Tag through Desktop Reader</span>
+                                <span>Input BLE Tag Id here</span>
                             </div>
 
                             <div class="uk-grid uk-grid-width-medium-1-1 uk-grid-width-large-1-2" data-uk-grid-margin>
@@ -1155,8 +1165,8 @@
                                     <input type="text" id="RFID" name="RFID" ng-model="RFID" required class="md-input label-fixed" />
                                 </div>
                                 <div class="uk-input-group premium-form-group">
-                                    <label for="product_edit_sku_control"><b>PORT ID</b></label>
-                                    <input type="text" id="PORTID" ng-model="PORTID" disabled class="md-input label-fixed" />
+                                    <label for="product_edit_sku_control"><b>BLE Tag Serial Number</b></label>
+                                     <input type="text" id="BLETagSerialNumber" name="BLETagSerialNumber" ng-model="BLETagSerialNumber"  class="md-input label-fixed" />
                                 </div>
                             </div>
 
