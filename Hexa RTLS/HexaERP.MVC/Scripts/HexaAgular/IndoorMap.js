@@ -63,6 +63,23 @@ app.controller("IndoorMapCtrl", function ($timeout, $scope, $http, $window) {
 
                 if (foundAsset) {
                     console.log("SEARCH FOUND ASSET:", foundAsset);
+
+                    var readerData = null;
+                    if (data.objAsset) {
+                        for (var k = 0; k < data.objAsset.length; k++) {
+                            if (data.objAsset[k].mIndooMapsId == foundAsset.mIndooMapsId &&
+                                data.objAsset[k].Xaxis == foundAsset.Xaxis &&
+                                data.objAsset[k].Yaxis == foundAsset.Yaxis) {
+                                readerData = data.objAsset[k];
+                                break;
+                            }
+                        }
+                    }
+
+                    if (readerData) {
+                        foundAsset.mReaderSettupId = readerData.mReaderSettupId;
+                    }
+
                     console.log("Calling ShowTracks:", foundAsset.mReaderSettupId, foundAsset.mIndooMapsId, foundAsset.Xaxis, foundAsset.Yaxis);
                     $scope.assetMarker = foundAsset;
                     $scope.showAssetMarker = true;
@@ -164,7 +181,7 @@ function ShowTracks(_Xaxis, _Yaxis) {
         document.getElementById("tAsTot").innerHTML = tAssebuket.length;
         $.each(tAssebuket, function (index, obj) {
             aL += ' <li><div class="md-list-addon-element">\
-                                ' + '<img class="img_thumb" src=' + obj.img + ' alt="" />\
+                                ' + '<img class="img_thumb" src="' + (obj.img || '/Content/images/no-image.png') + '" alt="" />\
                                 '+ '</div>\
                                 '+ '<div class="md-list-content">\
                                  ' + '<span class="md-list-heading">' + obj.Asset + ', ' + obj.Model + '</span>\
