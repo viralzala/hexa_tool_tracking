@@ -1023,8 +1023,9 @@ namespace HexaERP.MVC.Controllers.RFID
                 
                 var totalAssets = db.tAssetTags.Count(x => x.OrgInfoId == orgId && x.IsAction == true);
                 var activeAssets = db.tAssetTags.Count(x => x.OrgInfoId == orgId && x.IsAction == true);
-                var pendingAssets = db.tAssetTags.Count(x => x.OrgInfoId == orgId && x.IsAction == true);
-                var underMaintenance = db.tAssetTags.Count(x => x.OrgInfoId == orgId && x.IsAction == true);
+                // var pendingAssets =  totalAssets - assetsIssued;
+                var underMaintenance =db.tAssetTags.Count(x => x.OrgInfoId == orgId && x.IsAction == true && x.tEmployeeTagId != null);
+                var pendingAssets =  totalAssets - underMaintenance;
 
                 return Json(new { Total = totalAssets, Active = activeAssets, Pending = pendingAssets, UnderMaintenance = underMaintenance }, JsonRequestBehavior.AllowGet);
             }
