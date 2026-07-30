@@ -1,11 +1,12 @@
 ﻿/// <summary>
 ///Author: Mr. Mudassar A. Inamdar
 ///Created Date:24-02-2017
-///Description:
+///Description: Asset Sub Category 1 Master
 /// </summary>
 $(document).ready(function () {
     $("#btnupdate").hide();
     GetData();
+    LoadCategoryDropdown();
 });
 
 //
@@ -13,17 +14,21 @@ $(function () {
     //Save Data
     $("#btnsave").click(function () {
         var IteamType = $("#IteamType").val();
-        if (IteamType == "") {
+        var GroupMasterId = $("#GroupMasterId").val();
+        if (IteamType == "" || GroupMasterId == "") {
+            alert("Please select Asset Category and enter Asset Sub Category 1");
         }
         else {
             i = $("#page_settings");
             var _formData = JSON.stringify(i.serializeObject(), null, 2);
             console.log(_formData);
 
-            $.post("../AssetType/SaveData", { _IteamType: IteamType }, function (data) {
+            $.post("../AssetType/SaveData", { _IteamType: IteamType, _GroupMasterId: GroupMasterId }, function (data) {
                 console.log(data);
                 document.getElementById("page_settings").reset();
                 GetData();
+                LoadCategoryDropdown();
+                alert(data);
             });
         }
     });
@@ -31,19 +36,24 @@ $(function () {
         $("#btnupdate").hide();
         $("#btnsave").show();
         $("#lbltext").text("Create New");
+        LoadCategoryDropdown();
     });
     //Update Data
     $("#btnupdate").click(function () {
         var IteamType = $("#IteamType").val();
-        if (IteamType == "") {
+        var GroupMasterId = $("#GroupMasterId").val();
+        if (IteamType == "" || GroupMasterId == "") {
+            alert("Please select Asset Category and enter Asset Sub Category 1");
         }
         else {
-            $.get("../AssetType/UpdateData", { _IteamType: IteamType, ID: $("#mIteamTypeMasterId").val() }, function (data) {
+            $.get("../AssetType/UpdateData", { _IteamType: IteamType, _GroupMasterId: GroupMasterId, ID: $("#mIteamTypeMasterId").val() }, function (data) {
                 console.log(data);
                 document.getElementById("page_settings").reset();
                 $("#btnupdate").hide();
                 $("#btnsave").show();
                 GetData();
+                LoadCategoryDropdown();
+                alert(data);
             });
         }
     });
@@ -57,6 +67,24 @@ $(function () {
 
 });
 
+//Load Asset Category Dropdown
+function LoadCategoryDropdown() {
+    $.getJSON("../AssetType/getAssetCategoryList", function (data) {
+        $('#GroupMasterId').kendoDropDownList({
+            dataTextField: "GroupName",
+            dataValueField: "mGroupMasterId",
+            filter: "contains",
+            dataSource: data,
+            suggest: true,
+            index: 2
+        });
+        var GroupMasterId = $("#GroupMasterId").data("kendoDropDownList");
+        if (GroupMasterId) {
+            GroupMasterId.value(-1);
+        }
+    });
+}
+
 //Get Data
 function GetData() {
     var table = $('#tbl').DataTable();
@@ -69,6 +97,7 @@ function GetData() {
             "aaData": data,
             "aoColumns": [
                  { "mData": "mIteamTypeMasterId" },
+                { "mData": "GroupName" },
                 { "mData": "IteamType" },
                {
                    'mRender': function (aaData, type, row, meta) {
@@ -88,11 +117,17 @@ $(document).on('click', '#Editbtn', function (e) {
         $("#btnsave").hide();
         $("#btnupdate").show();
         $("#lbltext").text("Edit Data");
+        LoadCategoryDropdown();
         $.getJSON("/AssetType/getDataWithId", { ID: Ids }, function (data) {
             $.each(data, function (i, item) {
                 $("#mIteamTypeMasterId").val(item.mIteamTypeMasterId);
                 $("#IteamType").val(item.IteamType);
 
+                // Set Category dropdown
+                var categoryDropdown = $("#GroupMasterId").data("kendoDropDownList");
+                if (categoryDropdown && item.mGroupMasterId) {
+                    categoryDropdown.value(item.mGroupMasterId);
+                }
             });
         });
     }
@@ -107,6 +142,7 @@ $(document).on('click', '#Deletebtn', function (e) {
         $.get("../AssetType/DeleteData", { ID: Ids }, function (data) {
             console.log(data);
             GetData();
+            alert(data);
         });
     }
     else {

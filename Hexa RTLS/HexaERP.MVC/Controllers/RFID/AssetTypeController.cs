@@ -62,11 +62,16 @@ namespace HexaERP.MVC.Controllers.RFID
             {
                 var ObjData = db.mIteamTypeMasters
                     .Where(o => o.OrgInfoId == orgId && o.IsAction == true)
-                    .Select(o => new
-                    {
-                        mIteamTypeMasterId = o.mIteamTypeMasterId,
-                        IteamType = o.IteamType
-                    })
+                    .Join(db.mGroupMasters,
+                        itm => itm.mGroupMasterId,
+                        gm => gm.mGroupMasterId,
+                        (itm, gm) => new
+                        {
+                            mIteamTypeMasterId = itm.mIteamTypeMasterId,
+                            IteamType = itm.IteamType,
+                            GroupName = gm.GroupName,
+                            mGroupMasterId = gm.mGroupMasterId
+                        })
                     .ToList();
                 //Convert List Data to The Json Array          
                 return Json(ObjData, JsonRequestBehavior.AllowGet);
@@ -78,7 +83,7 @@ namespace HexaERP.MVC.Controllers.RFID
         }
         //Save New Departmnt
         [HttpPost]
-        public string SaveData(string _IteamType)
+        public string SaveData(string _IteamType, int _GroupMasterId)
         {
             var UserName = Session["AppUserName"]; int orgId = Convert.ToInt32(Session["OrgInfoId"]);
             mIteamTypeMaster obj = new mIteamTypeMaster();
@@ -93,6 +98,7 @@ namespace HexaERP.MVC.Controllers.RFID
                 {
                     obj.OrgInfoId = orgId;
                     obj.IteamType = _IteamType;
+                    obj.mGroupMasterId = _GroupMasterId;
                     obj.CreatedDate = DateTime.Now; obj.CreatedBy = UserName.ToString(); obj.IsAction = true;
                     db.mIteamTypeMasters.Add(obj);
                     db.SaveChanges();
@@ -111,24 +117,31 @@ namespace HexaERP.MVC.Controllers.RFID
             int orgId = Convert.ToInt32(Session["OrgInfoId"]);
             var datas = db.mIteamTypeMasters
                 .Where(o => o.mIteamTypeMasterId == ID && o.OrgInfoId == orgId)
-                .Select(o => new
-                {
-                    mIteamTypeMasterId = o.mIteamTypeMasterId,
-                    IteamType = o.IteamType
-                })
+                .Join(db.mGroupMasters,
+                    itm => itm.mGroupMasterId,
+                    gm => gm.mGroupMasterId,
+                    (itm, gm) => new
+                    {
+                        mIteamTypeMasterId = itm.mIteamTypeMasterId,
+                        IteamType = itm.IteamType,
+                        GroupName = gm.GroupName,
+                        mGroupMasterId = gm.mGroupMasterId
+                    })
                 .ToList();
             return Json(datas, JsonRequestBehavior.AllowGet);
         }
         //Update Department
         [HttpGet]
-        public string UpdateData(string _IteamType, int ID)
+        public string UpdateData(string _IteamType, int _GroupMasterId, int ID)
         {
             string msg = "";
             int orgId = Convert.ToInt32(Session["OrgInfoId"]); var UserName = Session["AppUserName"];
             var original = db.mIteamTypeMasters.FirstOrDefault(b => b.mIteamTypeMasterId == ID);
             if (original != null)
             {
-                original.IteamType = _IteamType; original.ModifiedBy = UserName.ToString(); original.ModifiedDate = DateTime.Now;
+                original.IteamType = _IteamType;
+                original.mGroupMasterId = _GroupMasterId;
+                original.ModifiedBy = UserName.ToString(); original.ModifiedDate = DateTime.Now;
                 db.SaveChanges();
                 msg = "Data Updated";
             }
@@ -155,6 +168,18 @@ namespace HexaERP.MVC.Controllers.RFID
                 msg = "Unable to Deleted";
             }
             return msg;
+        }
+
+        //Get Asset Categories for Dropdown
+        [HttpGet]
+        public JsonResult getAssetCategoryList()
+        {
+            int orgId = Convert.ToInt32(Session["OrgInfoId"]);
+            var data = db.mGroupMasters
+                .Where(x => x.OrgInfoId == orgId && x.IsAction == true)
+                .Select(c => new { c.mGroupMasterId, c.GroupName })
+                .ToList();
+            return Json(data, JsonRequestBehavior.AllowGet);
         }
     }
 }

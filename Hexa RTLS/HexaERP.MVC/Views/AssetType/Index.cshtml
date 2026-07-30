@@ -14,7 +14,7 @@
 
 <div id="page_content">
     <div id="page_content_inner">
-        <h3 class="heading_b uk-margin-bottom">Asset Sub Category Master</h3>
+        <h3 class="heading_b uk-margin-bottom">Asset Sub Category 1 Master</h3>
         <div class="md-card">
         </div>
         <div class="md-card uk-margin-medium-bottom">
@@ -43,7 +43,8 @@
                     <thead>
                         <tr>
                             <th>Id</th>
-                            <th>Asset Sub Category</th>                            
+                            <th>Asset Category</th>
+                            <th>Asset Sub Category 1</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -73,14 +74,20 @@
                             <input type="hidden" name="mIteamTypeMasterId" id="mIteamTypeMasterId" class="md-input" />
                         </div>
                         <div class="uk-width-medium-1-2">
-                            <div title="Asset Type" class="parsley-row">
-                                <label>Asset Sub Category<span class="req"> </span></label>
+                            <div class="parsley-row">
+                                <label>Asset Category<span class="req"> *</span></label>
+                                <input class="md-btn md-btn-wave waves-effect waves-button premium-input" id="GroupMasterId" name="GroupMasterId" placeholder="Select Asset Category" />
+                            </div>
+                        </div>
+                        <div class="uk-width-medium-1-2">
+                            <div title="Asset Sub Category 1" class="parsley-row">
+                                <label>Asset Sub Category 1<span class="req"> </span></label>
                                 <input type="text" value="" required id="IteamType" name="IteamType" class="md-input label-fixed" />
                             </div>
                         </div>
 
                         <div class="uk-width-medium-1-2">
-                            <div title="Asset Type" class="parsley-row">
+                            <div title="Asset Sub Category 1" class="parsley-row">
                                 <button type="button" id="btnsave" class="md-btn md-btn-primary">
                                     Save
                                 </button>
