@@ -234,6 +234,15 @@
                     </li>
                 }
 
+                @if (new string[] { "AD", "SA" }.Contains(Convert.ToString(Session["SortCode"])))
+                {
+                    <li class="uk-hidden-small">
+                        <a title="BLE Tag Battery Alerts" href="@Url.Action("", "BLEBatteryAlert")">
+                            <i class="material-icons">&#xE1A4;</i> BLE Tag Battery Alerts
+                        </a>
+                    </li>
+                }
+
                 <li data-uk-dropdown class="uk-hidden-small">
                     <a title="Employee Tracking"><i class="material-icons">&#xE56A;</i> Tracking</a>
                     <div class="uk-dropdown">
@@ -361,6 +370,14 @@
                                         </li>
                                     }
 
+                                    @if (new string[] { "AD", "SA" }.Contains(Convert.ToString(Session["SortCode"])))
+                                    {
+                                        <li class="uk-hidden-small">
+                                            <a title="BLE Tag Battery Alerts" href="@Url.Action("", "BLEBatteryAlert")">
+                                                <i class="material-icons">&#xE1A4;</i> BLE Tag Battery Alerts
+                                            </a>
+                                        </li>
+                                    }
 
                                     @if (new string[] { "AD", "SA" }.Contains(Convert.ToString(Session["SortCode"])))
                                     {

@@ -456,6 +456,7 @@
     <Compile Include="Controllers\RFID\AgencyMasterController.cs" />
     <Compile Include="Controllers\RFID\AssetCategoryController.cs" />
     <Compile Include="Controllers\RFID\AssetCalibrationController.cs" />
+    <Compile Include="Controllers\RFID\BLEBatteryAlertController.cs" />
     <Compile Include="Controllers\RFID\AssetIssueController.cs" />
     <Compile Include="Controllers\RFID\AssetIssueInvoiceController.cs" />
     <Compile Include="Controllers\RFID\AssetInspectionController.cs" />

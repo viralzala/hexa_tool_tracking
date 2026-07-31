@@ -1,0 +1,358 @@
+@{
+    ViewBag.Title = "BLE Tag Battery Alerts";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+
+@section head{
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.common-material.min.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/kendo-ui/styles/kendo.material.min.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/datatables/media/css/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/datatables/media/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <style>
+        /* Premium UI Custom Styles */
+        [ng\:cloak], [ng-cloak], .ng-cloak {
+            display: none !important;
+        }
+        .premium-page-banner {
+            background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
+            color: white;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .premium-page-banner .banner-icon {
+            font-size: 48px;
+            opacity: 0.9;
+            color: white;
+        }
+        .premium-page-banner h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 400;
+            color: white;
+        }
+        .premium-page-banner h1.text-white {
+            color: white;
+        }
+        .premium-page-banner .subtitle {
+            opacity: 0.85;
+            margin-top: 4px;
+            font-size: 14px;
+        }
+        .breadcrumb-nav {
+            background: rgba(255,255,255,0.15);
+            padding: 8px 16px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-top: 12px;
+            font-size: 12px;
+        }
+        .breadcrumb-nav a {
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+        }
+        .breadcrumb-nav span {
+            color: white;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-left: 4px solid #1a237e;
+            transition: all 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .stat-card .stat-icon {
+            font-size: 32px;
+            color: #1a237e;
+            opacity: 0.7;
+            float: left;
+            margin-right: 12px;
+        }
+        .stat-card .stat-value {
+            font-size: 28px;
+            font-weight: 600;
+            color: #1a237e;
+            margin: 0;
+        }
+        .stat-card .stat-label {
+            color: #666;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+        .stat-card.success { border-left-color: #2e7d32; }
+        .stat-card.success .stat-icon, .stat-card.success .stat-value { color: #2e7d32; }
+        .stat-card.warning { border-left-color: #ed6c02; }
+        .stat-card.warning .stat-icon, .stat-card.warning .stat-value { color: #ed6c02; }
+        .stat-card.danger { border-left-color: #c62828; }
+        .stat-card.danger .stat-icon, .stat-card.danger .stat-value { color: #c62828; }
+
+        /* Search Card */
+        .search-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        .search-card .search-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .search-card .search-title i {
+            color: #1a237e;
+        }
+
+        /* Data Table */
+        .premium-table-container {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .premium-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .premium-table thead {
+            background: #f5f7fa;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .premium-table thead th {
+            padding: 14px 12px;
+            font-weight: 600;
+            color: #333;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #e0e0e0;
+            text-align: left;
+        }
+        .premium-table tbody td {
+            padding: 12px;
+            font-size: 13px;
+            color: #555;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .premium-table tbody tr {
+            transition: background 0.2s;
+        }
+        .premium-table tbody tr:nth-child(even) {
+            background: #fafafa;
+        }
+        .premium-table tbody tr:hover {
+            background: #e8eaf6;
+        }
+
+        /* Badge */
+        .premium-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .premium-badge-success { background: #e8f5e9; color: #2e7d32; }
+        .premium-badge-warning { background: #fff3e0; color: #ed6c02; }
+        .premium-badge-danger { background: #ffebee; color: #c62828; }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255,255,255,0.8);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .loading-content {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .loading-content i {
+            font-size: 48px;
+            color: #1a237e;
+        }
+        .loading-content span {
+            display: block;
+            margin-top: 10px;
+            color: #666;
+        }
+
+        /* Responsive */
+        @@media (max-width: 968px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .premium-page-banner h1 {
+                font-size: 22px;
+            }
+            .premium-page-banner .banner-icon {
+                font-size: 36px;
+            }
+        }
+        @@media (max-width: 640px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .premium-page-banner {
+                padding: 16px;
+            }
+            .premium-page-banner h1 {
+                font-size: 18px;
+            }
+        }
+    </style>
+}
+
+<div id="page_content_inner" ng-controller="BLEBatteryAlertCtrl">
+    <!-- Premium Page Banner -->
+    <div class="premium-page-banner">
+        <div class="uk-grid" data-uk-grid-margin>
+            <div class="uk-width-small-1-1 uk-width-medium-1-8">
+                <i class="material-icons banner-icon">&#xE1A4;</i>
+            </div>
+            <div class="uk-width-small-1-1 uk-width-medium-7-8">
+                <h1 class="text-white">BLE Tag Battery Alerts</h1>
+                <p class="subtitle">Monitor battery levels of all BLE tags</p>
+                <div class="breadcrumb-nav">
+                    <a href="@Url.Action("", "EnterpriseAnalyticsDashboard")"><i class="material-icons">&#xE88A;</i> Home</a> /
+                    <span>BLE Tag Battery Alerts</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="stats-grid" ng-cloak>
+        <div class="stat-card">
+            <i class="material-icons stat-icon">&#xE1A4;</i>
+            <div>
+                <div class="stat-value" ng-bind="statTotal">0</div>
+                <div class="stat-label">Total BLE Tags</div>
+            </div>
+        </div>
+        <div class="stat-card success">
+            <i class="material-icons stat-icon">&#xE86C;</i>
+            <div>
+                <div class="stat-value" ng-bind="statHealthy">0</div>
+                <div class="stat-label">Healthy Battery</div>
+            </div>
+        </div>
+        <div class="stat-card warning">
+            <i class="material-icons stat-icon">&#xE001;</i>
+            <div>
+                <div class="stat-value" ng-bind="statMedium">0</div>
+                <div class="stat-label">Medium Battery</div>
+            </div>
+        </div>
+        <div class="stat-card danger">
+            <i class="material-icons stat-icon">&#xE5C9;</i>
+            <div>
+                <div class="stat-value" ng-bind="statLow">0</div>
+                <div class="stat-label">Low Battery</div>
+            </div>
+        </div>
+    </div>
+    <div class="loading-overlay" ng-if="statsLoading">
+        <div class="loading-content">
+            <i class="material-icons">&#xE86A;</i>
+            <span>Loading statistics...</span>
+        </div>
+    </div>
+
+    <!-- Search Section -->
+    <div class="search-card">
+        <div class="search-title">
+            <i class="material-icons">&#xE8B6;</i>
+            Search BLE Tags
+        </div>
+        <div class="uk-grid" data-uk-grid-margin>
+            <div class="uk-width-medium-1-3">
+                <div class="uk-input-group">
+                    <span class="uk-input-group-addon">
+                        <i class="material-icons">&#xE1A4;</i>
+                    </span>
+                    <input type="text" class="md-input" name="bleId" id="bleId" placeholder="BLE ID" ng-model="searchBLEId">
+                </div>
+            </div>
+            <div class="uk-width-medium-1-3">
+                <div class="uk-input-group">
+                    <span class="uk-input-group-addon">
+                        <i class="material-icons">&#xE873;</i>
+                    </span>
+                    <input type="text" class="md-input" name="assetName" id="assetName" placeholder="Asset Name" ng-model="searchAssetName">
+                </div>
+            </div>
+            <div class="uk-width-medium-1-3">
+                <button class="md-btn md-btn-primary md-btn-wave waves-effect waves-button" ng-click="searchData()">
+                    <i class="material-icons">&#xE8B6;</i> Search
+                </button>
+                <button class="md-btn md-btn-secondary md-btn-wave waves-effect waves-button" ng-click="refreshData()">
+                    <i class="material-icons">&#xE5D5;</i> Refresh
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- BLE Tags Table -->
+    <div class="premium-table-container">
+        <div class="md-card-toolbar">
+            <h3 class="md-card-toolbar-heading-text">
+                <i class="material-icons">&#xE1A4;</i> BLE Tags Battery Status
+            </h3>
+        </div>
+        <div class="md-card-content" style="padding: 0;">
+            <div class="table-responsive">
+                <table id="dt_tableExport" class="premium-table" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th class="uk-text-nowrap">BLE ID</th>
+                            <th class="uk-text-nowrap">Asset Name</th>
+                            <th class="uk-text-nowrap">Battery Level</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section foot{
+    <script src="~/Content/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/bower_components/datatables/media/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/Content/assets/js/kendoui_custom.min.js"></script>
+    <script src="~/Content/assets/js/pages/kendoui.min.js"></script>
+    <script src="~/Scripts/HexaAgular/BLEBatteryAlert.js?v=20260731"></script>
+}
