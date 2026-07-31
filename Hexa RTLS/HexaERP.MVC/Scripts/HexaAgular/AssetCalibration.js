@@ -306,10 +306,10 @@ app.controller("AssetCalibrationCtrl", function ($timeout, $scope, $http) {
                     { "mData": "CreatedBy" },
                     {
                         'mRender': function (aaData, type, row, meta) {
-                            return '<a id="EditCalibBtn" data-uk-tooltip="{cls:"uk-tooltip-small",pos:"left"}" title="Edit"> <i id="Editbtn" class="md-icon material-icons">&#xE254;</i></a>' +
-                                   '<a id="DeleteCalibBtn" data-uk-tooltip="{cls:"uk-tooltip-small",pos:"left"}" title="Delete"><i data-uk-tooltip="{cls:"uk-tooltip-small",pos:"left"}" title="Delete" class="md-icon material-icons">&#xE872;</i></a>';
+                            return'<a id="DeleteCalibBtn" data-uk-tooltip="{cls:"uk-tooltip-small",pos:"left"}" title="Delete"><i data-uk-tooltip="{cls:"uk-tooltip-small",pos:"left"}" title="Delete" class="md-icon material-icons">&#xE872;</i></a>';
                         }
                     }
+                    // <a id="EditCalibBtn" data-uk-tooltip="{cls:"uk-tooltip-small",pos:"left"}" title="Edit"> <i id="Editbtn" class="md-icon material-icons">&#xE254;</i></a>
                 ]
             });
         } else {
@@ -357,9 +357,9 @@ app.controller("AssetCalibrationCtrl", function ($timeout, $scope, $http) {
                     { "mData": "CreatedBy" },
                     {
                         'mRender': function (aaData, type, row, meta) {
-                            return '<a id="EditCalibBtn" data-uk-tooltip="{cls:"uk-tooltip-small",pos:"left"}" title="Edit"> <i id="Editbtn" class="md-icon material-icons">&#xE254;</i></a>' +
-                                   '<a id="DeleteCalibBtn" data-uk-tooltip="{cls:"uk-tooltip-small",pos:"left"}" title="Delete"><i data-uk-tooltip="{cls:"uk-tooltip-small",pos:"left"}" title="Delete" class="md-icon material-icons">&#xE872;</i></a>';
+                            return  '<a id="DeleteCalibBtn" data-uk-tooltip="{cls:"uk-tooltip-small",pos:"left"}" title="Delete"><i data-uk-tooltip="{cls:"uk-tooltip-small",pos:"left"}" title="Delete" class="md-icon material-icons">&#xE872;</i></a>';
                         }
+                        // '<a id="EditCalibBtn" data-uk-tooltip="{cls:"uk-tooltip-small",pos:"left"}" title="Edit"> <i id="Editbtn" class="md-icon material-icons">&#xE254;</i></a>'
                     }
                 ]
             });

@@ -227,11 +227,11 @@
 
                 @if (new string[] { "AD", "SA" }.Contains(Convert.ToString(Session["SortCode"])))
                 {
-                    <li class="uk-hidden-small">
+                    @* <li class="uk-hidden-small">
                         <a title="Visteon Alerts" href="@Url.Action("", "VisteonAlerts")">
                             <i class="material-icons">&#xE7F4;</i> Alerts
                         </a>
-                    </li>
+                    </li> *@
                 }
 
                 @if (new string[] { "AD", "SA" }.Contains(Convert.ToString(Session["SortCode"])))

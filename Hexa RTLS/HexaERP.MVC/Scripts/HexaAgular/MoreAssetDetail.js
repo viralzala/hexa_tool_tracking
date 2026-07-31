@@ -373,9 +373,10 @@ app.controller("MoreAssetDetailCtrl", function ($timeout, $scope, $http) {
                     { "mData": "Note" },
                     {
                         'mRender': function (aaData, type, row, meta) {
-                            return '<a id="EditMaintBtn" data-uk-tooltip="{cls:"uk-tooltip-small",pos:"left"}" title="Edit"> <i id="Editbtn" class="md-icon material-icons">&#xE254;</i></a>' +
+                            return  +
                                    '<a id="DeleteMaintBtn" data-uk-tooltip="{cls:"uk-tooltip-small",pos:"left"}" title="Delete"><i data-uk-tooltip="{cls:"uk-tooltip-small",pos:"left"}" title="Delete" class="md-icon material-icons">&#xE872;</i></a>';
                         }
+                        // <a id="EditMaintBtn" data-uk-tooltip="{cls:"uk-tooltip-small",pos:"left"}" title="Edit"> <i id="Editbtn" class="md-icon material-icons">&#xE254;</i></a>'
                     }
                 ]
             });
@@ -425,8 +426,8 @@ app.controller("MoreAssetDetailCtrl", function ($timeout, $scope, $http) {
                     { "mData": "Note" },
                     {
                         'mRender': function (aaData, type, row, meta) {
-                            return '<a id="EditMaintBtn" data-uk-tooltip="{cls:"uk-tooltip-small",pos:"left"}" title="Edit"> <i id="Editbtn" class="md-icon material-icons">&#xE254;</i></a>' +
-                                   '<a id="DeleteMaintBtn" data-uk-tooltip="{cls:"uk-tooltip-small",pos:"left"}" title="Delete"><i data-uk-tooltip="{cls:"uk-tooltip-small",pos:"left"}" title="Delete" class="md-icon material-icons">&#xE872;</i></a>';
+                            return '<a id="DeleteMaintBtn" data-uk-tooltip="{cls:"uk-tooltip-small",pos:"left"}" title="Delete"><i data-uk-tooltip="{cls:"uk-tooltip-small",pos:"left"}" title="Delete" class="md-icon material-icons">&#xE872;</i></a>';
+                        // '<a id="EditMaintBtn" data-uk-tooltip="{cls:"uk-tooltip-small",pos:"left"}" title="Edit"> <i id="Editbtn" class="md-icon material-icons">&#xE254;</i></a>' +
                         }
                     }
                 ]
