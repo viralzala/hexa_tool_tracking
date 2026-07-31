@@ -30,6 +30,7 @@ $(function () {
         }
     });
     $("#btnNew").click(function () {
+        document.getElementById("page_settings").reset();
         $("#btnupdate").hide();
         $("#btnsave").show();
         $("#lbltext").text("Create New");
@@ -140,7 +141,7 @@ function GetData() {
                 { "mData": "Description" },
                 {
                     'mRender': function (aaData, type, row, meta) {
-                        return '<a id="btnNew" href="#mailbox_new_message" data-uk-tooltip="{cls:\"uk-tooltip-small\",pos:\"left\"}" title="Create New" data-uk-modal="{center:true}"> <i id="Editbtn" class="md-icon material-icons">&#xE254;</i></a>  <i id="Deletebtn" class="md-icon material-icons">&#xE872;</i>';
+                        return '<i id="Editbtn" class="md-icon material-icons" style="cursor:pointer;" title="Edit">&#xE254;</i>  <i id="Deletebtn" class="md-icon material-icons" style="cursor:pointer;" title="Delete">&#xE872;</i>';
                     }
                 },
             ]
@@ -156,8 +157,6 @@ $(document).on('click', '#Editbtn', function (e) {
         $("#btnsave").hide();
         $("#btnupdate").show();
         $("#lbltext").text("Edit Data");
-        LoadCategoryDropdown();
-        LoadSubCategoryDropdown();
         $.getJSON("/AssetSubCategory2/getDataWithId", { ID: Ids }, function (data) {
             $.each(data, function (i, item) {
                 $("#AssetSubCategory2Id").val(item.AssetSubCategory2Id);

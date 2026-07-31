@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Admin.cshtml";
 }
@@ -15,8 +14,50 @@
 <div id="page_content">
     <div id="page_content_inner">
         <h3 class="heading_b uk-margin-bottom">Asset Sub Category 1 Master</h3>
-        <div class="md-card">
-        </div>
+
+        <form class="uk-form-stacked" id="page_settings">
+            <div class="md-card uk-margin-medium-bottom">
+                <div class="md-card-content">
+                    <div class="uk-grid" data-uk-grid-margin>
+                        <div class="uk-width-medium-1-1">
+                            <div class="uk-grid" data-uk-grid-margin>
+
+                                <div class="uk-input-group">
+                                    <div class="parsley-row">
+                                        <input type="hidden" name="mIteamTypeMasterId" id="mIteamTypeMasterId" />
+                                        <input class="md-btn md-btn-wave waves-effect waves-button premium-input" id="GroupMasterId" name="GroupMasterId" placeholder="Select Asset Category" />
+                                        <span class="uk-form-help-block"><b>Asset Category</b></span>
+                                    </div>
+                                </div>
+
+                                <div class="uk-input-group">
+                                    <div class="parsley-row">
+                                        <label><b> Asset Sub Category 1</b><span class="req"> *</span></label>
+                                        <input type="text" value="" required id="IteamType" name="IteamType" class="md-input label-fixed" />
+                                    </div>
+                                </div>
+
+                                <div class="uk-input-group">
+                                    <div class="parsley-row">
+                                        <button title="Add" type="button" id="btnsave" class="md-btn md-btn-primary">
+                                            Save
+                                        </button>
+                                        <button title="Update" type="button" id="btnupdate" class="md-btn md-btn-primary">
+                                            Update
+                                        </button>
+                                        @* <button type="reset" id="btnNew" class="md-btn md-btn-primary">
+                                            New
+                                        </button> *@
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
         <div class="md-card uk-margin-medium-bottom">
             <div class="md-card-content">
                 <div class="uk-grid" data-uk-grid-margin>
@@ -52,72 +93,11 @@
             </div>
         </div>
     </div>
+</div>
 
-</div>
-<div class="md-fab-wrapper">
-    <a class="md-fab md-fab-accent" id="btnNew" href="#mailbox_new_message" data-uk-tooltip="{cls:'uk-tooltip-small',pos:'left'}" title="Create New" data-uk-modal="{center:true}"><i class="material-icons">&#xE145;</i></a>
-</div>
 
 @section foot
 {
-    <div>
-        <input type="hidden" id="custid" />
-        <form class="uk-form-stacked" id="page_settings">
-            <div class="uk-modal" id="mailbox_new_message">
-                <div class="uk-modal-dialog uk-modal-dialog-large">
-                    <button class="uk-modal-close uk-close" type="button"></button>
-                    <div class="uk-modal-header">
-                        <span id="lbltext" class="uk-badge uk-badge-primary"></span>
-                    </div>
-                    <div class="uk-grid" data-uk-grid-margin>
-                        <div class="parsley-row" hidden="hidden">
-                            <input type="hidden" name="mIteamTypeMasterId" id="mIteamTypeMasterId" class="md-input" />
-                        </div>
-                        <div class="uk-width-medium-1-2">
-                            <div class="parsley-row">
-                                <label>Asset Category<span class="req"> *</span></label>
-                                <input class="md-btn md-btn-wave waves-effect waves-button premium-input" id="GroupMasterId" name="GroupMasterId" placeholder="Select Asset Category" />
-                            </div>
-                        </div>
-                        <div class="uk-width-medium-1-2">
-                            <div title="Asset Sub Category 1" class="parsley-row">
-                                <label>Asset Sub Category 1<span class="req"> </span></label>
-                                <input type="text" value="" required id="IteamType" name="IteamType" class="md-input label-fixed" />
-                            </div>
-                        </div>
-
-                        <div class="uk-width-medium-1-2">
-                            <div title="Asset Sub Category 1" class="parsley-row">
-                                <button type="button" id="btnsave" class="md-btn md-btn-primary">
-                                    Save
-                                </button>
-                                <button type="button" id="btnupdate" class="md-btn md-btn-primary">
-                                    Update
-                                </button>
-                                <button type="reset" id="user_edit_delete" class="md-btn md-btn-primary">
-                                    Reset
-                                </button>
-                            </div>
-                        </div>
-
-                    </div>
-                    <br />
-                    @*<div class="uk-modal-footer">
-                        <div class="md-fab-wrapper">
-                            <div class="md-fab md-fab-toolbar md-fab-small md-fab-accent">
-                                <i class="material-icons"></i>
-                                <div class="md-fab-toolbar-actions">
-                                    <button type="button" id="btnupdate" style="display: none" data-uk-tooltip="{cls:'uk-tooltip-small',pos:'bottom'}" title="Update"><i class="material-icons md-color-white"></i></button>
-                                    <button type="button" id="btnsave" style="display: block" data-uk-tooltip="{cls:'uk-tooltip-small',pos:'bottom'}" title="Save"><i class="material-icons md-color-white"></i></button>
-                                    <button type="reset" id="user_edit_delete" data-uk-tooltip="{cls:'uk-tooltip-small',pos:'bottom'}" title="Delete"><i class="material-icons md-color-white"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>*@
-                </div>
-            </div>
-        </form>
-    </div>
     <!-- page specific plugins -->
     <script src="~/Content/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
     <script src="~/Content/bower_components/datatables/media/js/dataTables.bootstrap.min.js"></script>
@@ -127,7 +107,3 @@
     <!--  kendoui functions -->
     <script src="~/Content/assets/js/pages/kendoui.min.js"></script>
 }
-
-
-
-
