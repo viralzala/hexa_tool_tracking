@@ -63,11 +63,76 @@ namespace HexaERP.MVC.Controllers.RFID
                 }
                 else
                 {
-                    GetAssetInfoEnitity _AssetList = db.Database.SqlQuery<GetAssetInfoEnitity>("spGetAssetInfo {0}, {1}, {2}, {3}, {4}, {5}",
-                    new object[] { obj.RFID, obj.BarCode, obj.IteamName, obj.Model, obj.ModelNo, obj.UID }).ToList().FirstOrDefault();
+                    GetAssetInfoEnitity _AssetList = (from tag in db.tAssetTags
+                        join vendor in db.mVendors on tag.mVendorId equals vendor.mVendorId into vendorJoin
+                        from vendor in vendorJoin.DefaultIfEmpty()
+                        join groupMaster in db.mGroupMasters on tag.mGroupMasterId equals groupMaster.mGroupMasterId into groupJoin
+                        from groupMaster in groupJoin.DefaultIfEmpty()
+                        join iteamType in db.mIteamTypeMasters on tag.mIteamTypeMasterId equals iteamType.mIteamTypeMasterId into typeJoin
+                        from iteamType in typeJoin.DefaultIfEmpty()
+                        join unit in db.mUnitMasters on tag.mUnitMasterId equals unit.mUnitMasterId into unitJoin
+                        from unit in unitJoin.DefaultIfEmpty()
+                        join status in db.mStatusMasters on tag.mStatusMasterId equals status.mStatusMasterId into statusJoin
+                        from status in statusJoin.DefaultIfEmpty()
+                        join empTag in db.tEmployeeTags on tag.tEmployeeTagId equals empTag.tEmployeeTagId into empJoin
+                        from empTag in empJoin.DefaultIfEmpty()
+                        join site in db.mSiteMasters on tag.mSiteMasterId equals site.mSiteMasterId into siteJoin
+                        from site in siteJoin.DefaultIfEmpty()
+                        join zone in db.mZones on tag.mZoneId equals zone.mZoneId into zoneJoin
+                        from zone in zoneJoin.DefaultIfEmpty()
+                        join floor in db.mFloorMasters on tag.mFloorMasterId equals floor.mFloorMasterId into floorJoin
+                        from floor in floorJoin.DefaultIfEmpty()
+                        join room in db.mRoomMasters on tag.mRoomMasterId equals room.mRoomMasterId into roomJoin
+                        from room in roomJoin.DefaultIfEmpty()
+                        where (!string.IsNullOrEmpty(obj.RFID) && tag.RFID == obj.RFID)
+                           || (!string.IsNullOrEmpty(obj.BarCode) && tag.BarCode == obj.BarCode)
+                           || (!string.IsNullOrEmpty(obj.IteamName) && tag.IteamName.Contains(obj.IteamName))
+                           || (!string.IsNullOrEmpty(obj.Model) && tag.Model.Contains(obj.Model))
+                           || (!string.IsNullOrEmpty(obj.ModelNo) && tag.ModelNo.Contains(obj.ModelNo))
+                           || (!string.IsNullOrEmpty(obj.UID) && tag.UID == obj.UID)
+                        select new GetAssetInfoEnitity
+                        {
+                            tAssetTagId = tag.tAssetTagId,
+                            IteamName = tag.IteamName,
+                            Model = tag.Model,
+                            ModelNo = tag.ModelNo,
+                            SerialNo = tag.SerialNo,
+                            Manufacturer = tag.Manufacturer,
+                            BarCode = tag.BarCode,
+                            RFID = tag.RFID,
+                            PurchaseCost = tag.PurchaseCost,
+                            CreatedDate = tag.CreatedDate,
+                            InvNo = tag.InvNo,
+                            Depreciation = tag.Depreciation,
+                            Receivedby = tag.Receivedby,
+                            bStock = tag.bStock,
+                            DefaultWarranty = tag.DefaultWarranty,
+                            IteamDescription = tag.IteamDescription,
+                            VendorName = vendor.VendorName,
+                            GroupName = groupMaster.GroupName,
+                            IteamType = iteamType.IteamType,
+                            UnitName = unit.UnitName,
+                            StatusName = status.StatusName,
+                            EmployeeName = empTag.EmployeeName,
+                            EmployeeId = empTag.EmployeeId,
+                            ContactNo = empTag.ContactNo,
+                            EmailId = empTag.EmailId,
+                            tEmployeeTagId = empTag.tEmployeeTagId,
+                            IssueDate = tag.IssueDate,
+                            ReturnDate = tag.ReturnDate,
+                            Site = site.Site,
+                            Zone = zone.Zone,
+                            FloorName = floor.FloorName,
+                            RoomName = room.RoomName,
+                            img = tag.img
+                        }).FirstOrDefault();
 
                     if (_AssetList != null)
                     {
+                        _AssetList.EngDays = _AssetList.IssueDate.HasValue && _AssetList.ReturnDate.HasValue
+                            ? (int?)(_AssetList.ReturnDate.Value - _AssetList.IssueDate.Value).Days
+                            : null;
+
                         var CalibData = (from cal in db.tAssetCalibrations
                                          join itm in db.mIteamMasters on cal.AssetId equals itm.mIteamMasterId
                                          where ((cal.OrgInfoId == orgId && cal.IsAction == true) && cal.AssetId == _AssetList.tAssetTagId)
