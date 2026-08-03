@@ -41,6 +41,46 @@
             </div>
         </div>
 
+        <!-- BLE Search Bar -->
+        <div class="md-card uk-margin-medium-bottom">
+            <div class="md-card-content">
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <input type="text" 
+                           ng-model="bleSearch" 
+                           placeholder="Search BLE Tag by Asset ID, Asset Name or BLE MAC Address..."
+                           class="md-input"
+                           style="flex: 1;"
+                           ng-keypress="($event.which === 13) && searchBleTag()" />
+                    <button class="md-btn md-btn-primary" style="background-color: #2196f3; border-color: #2196f3;" ng-click="searchBleTag()" ng-disabled="bleSearching">
+                        <i class="material-icons">&#xE8B6;</i> BLE SEARCH
+                    </button>
+                </div>
+
+                <!-- Loading Spinner -->
+                <div ng-show="bleSearching" style="margin-top: 15px; text-align: center; padding: 15px;">
+                    <img src="../Content/assets/img/spinners/spinner.gif" alt="Loading..." style="width: 32px; height: 32px;" />
+                    <span style="margin-left: 10px; color: #2196f3; font-weight: 500;">Searching BLE Tag and triggering LED...</span>
+                </div>
+
+                <!-- Success Message -->
+                <div ng-show="bleSearchSuccess" style="margin-top: 15px; padding: 12px 15px; background: #e8f5e9; border-left: 4px solid #4caf50; border-radius: 4px;">
+                    <i class="material-icons" style="color: #4caf50; vertical-align: middle; margin-right: 8px;">&#xE86C;</i>
+                    <span style="color: #2e7d32; font-weight: 500;">{{bleSearchMessage}}</span>
+                    <div ng-if="bleSearchResult" style="margin-top: 8px; font-size: 12px; color: #616161;">
+                        <span ng-if="bleSearchResult.AssetName"><strong>Asset:</strong> {{bleSearchResult.AssetName}} | </span>
+                        <span ng-if="bleSearchResult.AssetID"><strong>ID:</strong> {{bleSearchResult.AssetID}} | </span>
+                        <span ng-if="bleSearchResult.BleMacAddress"><strong>BLE MAC:</strong> {{bleSearchResult.BleMacAddress}}</span>
+                    </div>
+                </div>
+
+                <!-- Error Message -->
+                <div ng-show="bleSearchError" style="margin-top: 15px; padding: 12px 15px; background: #ffebee; border-left: 4px solid #f44336; border-radius: 4px;">
+                    <i class="material-icons" style="color: #f44336; vertical-align: middle; margin-right: 8px;">&#xE000;</i>
+                    <span style="color: #c62828; font-weight: 500;">{{bleSearchMessage}}</span>
+                </div>
+            </div>
+        </div>
+
         <!-- Asset Not Found Message -->
         <div class="no-data-message" ng-show="assetNotFound" style="margin-bottom: 20px;">
             <i class="material-icons" style="font-size: 48px; color: #f44336; display: block; margin-bottom: 12px;">&#xE8B0;</i>
@@ -210,7 +250,7 @@
 {
 
 
-    <script src="~/Scripts/HexaAgular/IndoorMap.js"></script>
+    <script src="~/Scripts/HexaAgular/IndoorMap.js?v=@DateTime.Now.Ticks"></script>
 
     <style type="text/css">
 

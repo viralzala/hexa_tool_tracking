@@ -1,7 +1,10 @@
 ﻿using HexaERP.MVC.Models;
 using System;
+using System.Configuration;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -397,6 +400,137 @@ namespace HexaERP.MVC.Controllers.RFID
             }
 
             return result;
+        }
+
+        // GET: IndoorMap/SearchBleTag
+        // BLE Search: Searches asset in DB, gets BLETAGNo (BLE MAC Address), executes Python script via Process.Start()
+        [HttpGet]
+        public JsonResult SearchBleTag(string search)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(search))
+                {
+                    return Json(new { Success = false, Message = "Please enter a value in the BLE Search box." }, JsonRequestBehavior.AllowGet);
+                }
+
+                string searchTerm = search.Trim();
+
+                // Search the asset in the database by Asset ID, Asset Name, or BLE MAC Address (RFID)
+                var asset = db.tAssetTags
+                    .Where(x => (x.IsAction == true || x.IsAction == null)
+                        && ((x.AssetID != null && x.AssetID.Contains(searchTerm))
+                            || (x.IteamName != null && x.IteamName.Contains(searchTerm))
+                            || (x.RFID != null && x.RFID.Contains(searchTerm))
+                            || (x.BLETagSerialNumber != null && x.BLETagSerialNumber.Contains(searchTerm))
+                            || (x.BLEMacAddress != null && x.BLEMacAddress.Contains(searchTerm))))
+                    .OrderByDescending(x => x.ModifiedDate)
+                    .FirstOrDefault();
+
+                if (asset == null)
+                {
+                    return Json(new
+                    {
+                        Success = false,
+                        Message = "Asset not found. Please check the Asset ID, Asset Name or BLE MAC Address."
+                    }, JsonRequestBehavior.AllowGet);
+                }
+
+                // Get the asset's BLE MAC Address from the BLEMacAddress column (NVARCHAR(50))
+                string bleMacAddress = asset.BLEMacAddress != null ? asset.BLEMacAddress.Trim() : string.Empty;
+
+                if (string.IsNullOrWhiteSpace(bleMacAddress))
+                {
+                    return Json(new
+                    {
+                        Success = false,
+                        Message = "BLE MAC Address is not configured for this asset."
+                    }, JsonRequestBehavior.AllowGet);
+                }
+
+                // Get the Python script path from Web.config
+                string pythonScriptPath = ConfigurationManager.AppSettings["BlePythonScriptPath"];
+                if (string.IsNullOrWhiteSpace(pythonScriptPath))
+                {
+                    return Json(new
+                    {
+                        Success = false,
+                        Message = "Python BLE script path is not configured (BlePythonScriptPath in Web.config)."
+                    }, JsonRequestBehavior.AllowGet);
+                }
+
+                // FIXED: Use fully qualified System.IO.File.Exists instead of File.Exists
+                // to avoid CS0119 naming conflict with the inherited Controller.File() method.
+                if (!System.IO.File.Exists(pythonScriptPath))
+                {
+                    return Json(new
+                    {
+                        Success = false,
+                        Message = "Python BLE script not found at: " + pythonScriptPath
+                    }, JsonRequestBehavior.AllowGet);
+                }
+
+                try
+                {
+                    // Execute the existing Python BLE script using Process.Start()
+                    // Pass the BLE MAC Address as a command-line argument
+                    ProcessStartInfo psi = new ProcessStartInfo();
+                    psi.FileName = "python";
+                    psi.Arguments = $"\"{pythonScriptPath}\" \"{bleMacAddress}\"";
+                    psi.UseShellExecute = false;
+                    psi.CreateNoWindow = true;
+                    psi.RedirectStandardOutput = true;
+                    psi.RedirectStandardError = true;
+
+                    using (Process process = Process.Start(psi))
+                    {
+                        // Read the output from the script
+                        string scriptOutput = process.StandardOutput.ReadToEnd();
+                        string scriptError = process.StandardError.ReadToEnd();
+                        process.WaitForExit();
+
+                        if (process.ExitCode == 0)
+                        {
+                            return Json(new
+                            {
+                                Success = true,
+                                Message = "BLE Tag Found. LED Blinking.",
+                                BleMacAddress = bleMacAddress,
+                                AssetName = asset.IteamName,
+                                AssetID = asset.AssetID,
+                                ScriptOutput = scriptOutput
+                            }, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            return Json(new
+                            {
+                                Success = false,
+                                Message = "Python BLE script execution failed. " + scriptError,
+                                BleMacAddress = bleMacAddress,
+                                ScriptOutput = scriptOutput,
+                                ScriptError = scriptError
+                            }, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return Json(new
+                    {
+                        Success = false,
+                        Message = "Failed to execute Python BLE script. " + ex.Message
+                    }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new
+                {
+                    Success = false,
+                    Message = "BLE Search failed. " + ex.Message
+                }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         // POST: IndoorMap/GetIndoorMaps

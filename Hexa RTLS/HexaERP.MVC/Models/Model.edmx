@@ -996,6 +996,7 @@ warning 6002: The table/view 'HexaRTLSdb.dbo.mEmployeeJobOrderAudit' does not ha
           <Property Name="EndDate" Type="datetime" />
           <Property Name="AssetSubCategory2Id" Type="int" />
           <Property Name="BLETagSerialNumber" Type="nvarchar" MaxLength="100" />
+          <Property Name="BLEMacAddress" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="TC_Action">
           <Key>
@@ -3325,6 +3326,7 @@ warning 6002: The table/view 'HexaRTLSdb.dbo.mEmployeeJobOrderAudit' does not ha
           <Property Name="EndDate" Type="DateTime" Precision="3" />
           <Property Name="AssetSubCategory2Id" Type="Int32" />
           <Property Name="BLETagSerialNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="BLEMacAddress" Type="String" MaxLength="50" />
         </EntityType>
         <EntityType Name="TC_Action">
           <Key>
@@ -4916,6 +4918,7 @@ warning 6002: The table/view 'HexaRTLSdb.dbo.mEmployeeJobOrderAudit' does not ha
             <EntityTypeMapping TypeName="ERPModel.tAssetTag">
               <MappingFragment StoreEntitySet="tAssetTag">
                 <ScalarProperty Name="BLETagSerialNumber" ColumnName="BLETagSerialNumber" />
+                <ScalarProperty Name="BLEMacAddress" ColumnName="BLEMacAddress" />
                 <ScalarProperty Name="AssetSubCategory2Id" ColumnName="AssetSubCategory2Id" />
                 <ScalarProperty Name="EndDate" ColumnName="EndDate" />
                 <ScalarProperty Name="LaunchDate" ColumnName="LaunchDate" />

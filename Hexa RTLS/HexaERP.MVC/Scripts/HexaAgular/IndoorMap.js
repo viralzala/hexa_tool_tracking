@@ -1,4 +1,5 @@
 ﻿// ** Mudassar I **
+console.log("IndoorMap.js loaded - app defined:", typeof app !== 'undefined');
 app.filter('jsonDate', ['$filter', function ($filter) {
     return function (input, format) {
         return (input) ? $filter('date')(parseInt(input.substr(6)), format) : '';
@@ -6,6 +7,7 @@ app.filter('jsonDate', ['$filter', function ($filter) {
 }]);
 //
 app.controller("IndoorMapCtrl", function ($timeout, $scope, $http, $window) {
+    console.log("IndoorMapCtrl controller instantiated - searchBleTag registered:", typeof $scope.searchBleTag);
     initializeComponets();
     //
     function initializeComponets() {
@@ -105,6 +107,66 @@ app.controller("IndoorMapCtrl", function ($timeout, $scope, $http, $window) {
         $scope.assetMarker = null;
         $scope.showAssetMarker = false;
         $scope.assetNotFound = false;
+    };
+
+    // NEW: BLE Search Variables
+    $scope.bleSearch = '';
+    $scope.bleSearching = false;
+    $scope.bleSearchSuccess = false;
+    $scope.bleSearchError = false;
+    $scope.bleSearchMessage = '';
+    $scope.bleSearchResult = null;
+
+    // NEW: BLE Search Function
+    // Searches asset in DB, gets BLE MAC Address, calls IndoorMap/SearchBleTag AJAX action
+    $scope.searchBleTag = function () {
+        // Debug: verify searchBleTag is being called
+        console.log("searchBleTag() called - bleSearch:", $scope.bleSearch);
+
+        // Prevent empty search
+        if (!$scope.bleSearch || $scope.bleSearch.trim() === '') {
+            console.log("searchBleTag: empty search, returning");
+            return;
+        }
+
+        // Prevent double-click while already searching
+        if ($scope.bleSearching) {
+            return;
+        }
+
+        // Reset previous states
+        $scope.bleSearchSuccess = false;
+        $scope.bleSearchError = false;
+        $scope.bleSearchMessage = '';
+        $scope.bleSearchResult = null;
+        $scope.bleSearching = true;
+
+        // Call the controller action using AJAX
+        $http.get("../IndoorMap/SearchBleTag", {
+            params: { search: $scope.bleSearch }
+        }).then(function (response) {
+            $scope.bleSearching = false;
+            var data = response.data;
+
+            if (data && data.Success) {
+                $scope.bleSearchSuccess = true;
+                $scope.bleSearchError = false;
+                $scope.bleSearchMessage = data.Message || "BLE Tag Found. LED Blinking.";
+                $scope.bleSearchResult = data;
+                console.log("BLE SEARCH SUCCESS:", data);
+            } else {
+                $scope.bleSearchSuccess = false;
+                $scope.bleSearchError = true;
+                $scope.bleSearchMessage = (data && data.Message) ? data.Message : "BLE search failed. Please try again.";
+                console.log("BLE SEARCH ERROR:", data);
+            }
+        }, function (error) {
+            $scope.bleSearching = false;
+            $scope.bleSearchSuccess = false;
+            $scope.bleSearchError = true;
+            $scope.bleSearchMessage = "BLE search request failed. " + (error.statusText || "Network error");
+            console.log("BLE SEARCH HTTP ERROR:", error);
+        });
     };
     //
     function InitDataBind() {

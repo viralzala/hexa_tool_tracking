@@ -1,0 +1,5 @@
+$content = Get-Content 'HexaERP.MVC\Web.config' -Raw
+$content = $content.Replace('provider connection string="data source=localhost;initial catalog=HexaRTLSdb;User Id=sa; Password=user@123;MultipleActiveResultSets=True;App=EntityFramework"', 'provider connection string="data source=localhost;initial catalog=HexaRTLSdb;User Id=sa; Password=user@123;MultipleActiveResultSets=True;App=EntityFramework"')
+$content = $content.Replace('provider connection string="data source=localhost;initial catalog=HexaRTLSdb;user id=sa;password=user@123;encrypt=False;trustservercertificate=True;MultipleActiveResultSets=True;App=EntityFramework"', 'provider connection string="data source=localhost;initial catalog=HexaRTLSdb;user id=sa;password=user@123;encrypt=False;trustservercertificate=True;MultipleActiveResultSets=True;App=EntityFramework"')
+Set-Content 'HexaERP.MVC\Web.config' -Value $content -NoNewline -Encoding UTF8
+Write-Host 'Fixed Web.config connection strings'
